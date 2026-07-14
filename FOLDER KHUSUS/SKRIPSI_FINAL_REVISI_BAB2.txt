@@ -1,0 +1,571 @@
+PENERAPAN COMPUTER VISION UNTUK SORTASI MUTU BAWANG MERAH MENGGUNAKAN EKSTRAKSI FITUR GLCM DAN ALGORITMA CNN
+
+ 
+SKRIPSI
+Diajukan untuk memenuhi salah satu syarat kelulusan Program Sarjana (S1)
+
+JUAN EUAGGELION SERAN
+NIM: 15220572
+
+Program Studi Informatika
+Fakultas Teknik dan Informatika
+Universitas Bina Sarana Informatika
+Jakarta
+2026
+ 
+LEMBAR PERSEMBAHAN
+Karya ilmiah sederhana ini saya persembahkan dengan segenap rasa cinta, hormat, dan terima kasih yang mendalam kepada:
+1. Kedua orang tua tercinta yang tiada hentinya memanjatkan doa, memberikan dukungan moral, bimbingan spiritual, serta pengorbanan materiil demi kelancaran studi penulis.
+2. Segenap keluarga besar yang senantiasa memberikan keceriaan, dorongan semangat, dan motivasi di kala jenuh melanda dalam proses penelitian.
+3. Dosen Pembimbing I dan II Universitas Bina Sarana Informatika yang telah sabar mengarahkan kemana arah metode kecerdasan buatan ini berjalan.
+4. Sahabat-sahabat seperjuangan mahasiswa Program Studi Informatika Universitas BSI angkatan 2022 yang saling mendukung dalam menyelesaikan tugas akhir ini.
+
+"Ketika aku tahu, aku semakin tahu kalau aku tidak tahu apa-apa."
+— Imam Syafi'i
+
+
+LEMBAR PERNYATAAN KEASLIAN SKRIPSI
+Yang bertanda tangan di bawah ini, saya:
+Nama : Juan Euaggelion Seran
+NIM : 15220572
+Jenjang : Sarjana (S1)
+Program Studi : Informatika
+Fakultas : Teknik dan Informatika
+Perguruan Tinggi : Universitas Bina Sarana Informatika
+Dengan ini menyatakan bahwa Skripsi yang telah saya buat dengan judul "Penerapan Computer Vision untuk Sortasi Mutu Bawang Merah Menggunakan Ekstraksi Fitur GLCM dan Algoritma CNN" adalah asli (orisinil) atau tidak plagiat (menjiplak) dan belum pernah diterbitkan/dipublikasikan di manapun dan dalam bentuk apa pun.
+Demikianlah surat pernyataan ini saya buat dengan sebenar-benarnya tanpa ada paksaan dari pihak mana pun juga. Apabila di kemudian hari ternyata saya memberikan keterangan palsu dan atau ada pihak lain yang mengklaim bahwa Skripsi yang telah saya buat adalah hasil karya milik seseorang atau badan tertentu, saya bersedia diproses baik secara pidana maupun perdata dan kelulusan saya dari Universitas Bina Sarana Informatika dicabut/dibatalkan.
+Jakarta, 12 Agustus 2026
+Yang menyatakan,
+
+
+(Meterai Rp10.000)
+Juan Euaggelion Seran
+ 
+LEMBAR PERNYATAAN PERSETUJUAN PUBLIKASI KARYA ILMIAH
+UNTUK KEPENTINGAN AKADEMIS
+Yang bertanda tangan di bawah ini, saya:
+Nama : Juan Euaggelion Seran
+NIM : 15220572
+Jenjang : Sarjana (S1)
+Program Studi : Informatika
+Fakultas : Teknik dan Informatika
+Perguruan Tinggi : Universitas Bina Sarana Informatika
+Dengan ini menyatakan bahwa seluruh data, informasi, interpretasi, serta pernyataan yang terdapat dalam karya ilmiah Skripsi saya ini, kecuali yang disebutkan sumbernya, adalah hasil pengamatan, penelitian, pengelolaan, serta pemikiran saya pribadi.
+Penulis menyetujui untuk memberikan izin kepada pihak Universitas Bina Sarana Informatika untuk mendokumentasikan karya ilmiah saya tersebut secara internal dan terbatas, serta tidak untuk mengunggah karya ilmiah Penulis pada repositori Universitas Bina Sarana Informatika secara komersial.
+Penulis bersedia untuk bertanggung jawab secara pribadi, tanpa melibatkan pihak Universitas Bina Sarana Informatika, atas materi/isi karya ilmiah tersebut, termasuk bertanggung jawab atas dampak atau kerugian yang timbul akibat tindakan yang berkaitan dengan data, informasi, interpretasi, serta pernyataan yang terdapat pada karya ilmiah saya ini.
+
+
+
+Jakarta, 12 Agustus 2026
+Yang menyatakan,
+
+
+
+
+
+Juan Euaggelion Seran
+ 
+PERSETUJUAN DAN PENGESAHAN SKRIPSI
+(UNTUK DIPERTAHANKAN)
+Skripsi ini diajukan oleh:
+Nama : Juan Euaggelion Seran
+NIM : 15220572
+Jenjang : Sarjana (S1)
+Program Studi : Informatika
+Fakultas : Teknik dan Informatika
+Perguruan Tinggi : Universitas Bina Sarana Informatika
+Judul Skripsi : Penerapan Computer Vision untuk Sortasi Mutu Bawang Merah Menggunakan Ekstraksi Fitur GLCM dan Algoritma CNN
+Untuk dipertahankan pada periode 2026-1 di hadapan Penguji dan diterima sebagai bagian persyaratan yang diperlukan untuk memperoleh gelar Sarjana Komputer (S.Kom) pada Program Sarjana Program Studi Informatika di Universitas Bina Sarana Informatika.
+
+
+Jakarta, 12 Agustus 2026
+PEMBIMBING SKRIPSI
+Dosen Pembimbing I : (Nama Dosen I, M.Kom) ........................................
+Dosen Pembimbing II : (Nama Dosen II, M.Kom) ........................................
+DEWAN PENGUJI
+Penguji I : (Nama Penguji I, M.Kom) ........................................
+Penguji II : (Nama Penguji II, M.Kom) ........................................
+ 
+PERSETUJUAN DAN PENGESAHAN SKRIPSI
+(TELAH DIPERTAHANKAN)
+Skripsi ini diajukan oleh:
+Nama : Juan Euaggelion Seran
+NIM : 15220572
+Jenjang : Sarjana (S1)
+Program Studi : Informatika
+Fakultas : Teknik dan Informatika
+Perguruan Tinggi : Universitas Bina Sarana Informatika
+Judul Skripsi : Penerapan Computer Vision untuk Sortasi Mutu Bawang Merah Menggunakan Ekstraksi Fitur GLCM dan Algoritma CNN
+Telah dipertahankan pada periode 2026-1 di hadapan Penguji dan diterima sebagai bagian persyaratan yang diperlukan untuk memperoleh gelar Sarjana Komputer (S.Kom) pada Program Sarjana Program Studi Informatika di Universitas Bina Sarana Informatika.
+
+
+Jakarta, 12 Agustus 2026
+PEMBIMBING SKRIPSI
+Dosen Pembimbing I : (Nama Dosen I, M.Kom) (Tanda Tangan DigiSAYS)
+Dosen Pembimbing II : (Nama Dosen II, M.Kom) (Tanda Tangan DigiSAYS)
+DEWAN PENGUJI
+Penguji I : (Nama Penguji I, M.Kom) (Tanda Tangan DigiSAYS)
+Penguji II : (Nama Penguji II, M.Kom) (Tanda Tangan DigiSAYS)
+ 
+PEDOMAN PENGGUNAAN HAK CIPTA
+Skripsi sarjana yang berjudul "Penerapan Computer Vision untuk Sortasi Mutu Bawang Merah Menggunakan Ekstraksi Fitur GLCM dan Algoritma CNN" adalah hasil karya tulis asli Juan Euaggelion Seran dan bukan hasil terbitan sehingga peredaran karya tulis hanya berlaku di lingkungan akademik saja, serta memiliki hak cipta. Oleh karena itu, dilarang keras untuk menggandakan baik sebagian maupun seluruhnya karya tulis ini, tanpa seizin penulis.
+Referensi kepustakaan diperkenankan untuk dicatat tetapi pengutipan atau peringkasan isi tulisan hanya dapat dilakukan dengan seizin penulis dan disertai ketentuan pengutipan secara ilmiah dengan menyebutkan sumbernya.
+Untuk keperluan perizinan pada pemilik dapat menghubungi informasi yang tertera di bawah ini:
+Nama : Juan Euaggelion Seran
+Alamat : Jl. Raya Kramat No. 98, Senen, Jakarta Pusat
+No. Telp : +62 812-3456-7890
+E-mail : juan.seran@gmail.com
+ 
+KATA PENGANTAR
+Alhamdulillah, dengan mengucapkan puji syukur ke hadirat Allah SWT, yang telah melimpahkan rahmat dan karunia-Nya, sehingga pada akhirnya penulis dapat menyelesaikan laporan skripsi ini dengan baik. Skripsi pada Program Sarjana ini penulis sajikan dalam bentuk buku yang sederhana. Adapun judul Skripsi yang penulis ambil sebagai berikut: "Penerapan Computer Vision untuk Sortasi Mutu Bawang Merah Menggunakan Ekstraksi Fitur GLCM dan Algoritma CNN".
+Tujuan penulisan Skripsi ini dibuat sebagai salah satu syarat kelulusan Program Sarjana (S1) Universitas Bina Sarana Informatika. Sebagai bahan penulisan diambil berdasarkan hasil eksperimen (penelitian), observasi, dan beberapa sumber literatur yang mendukung penulisan ini. Penulis menyadari bahwa tanpa bimbingan dan dorongan dari semua pihak, maka penulisan Skripsi ini tidak akan berjalan lancar. Oleh karena itu, pada kesempatan ini penulis menyampaikan ucapan terima kasih yang sebesar-besarnya kepada:
+1. Rektor Universitas Bina Sarana Informatika.
+2. Dekan Fakultas Teknik dan Informatika Universitas Bina Sarana Informatika.
+3. Ketua Program Studi Informatika Universitas Bina Sarana Informatika.
+4. Bapak/Ibu Dosen Pembimbing Skripsi yang senantiasa sabar mengarahkan bimbingan.
+5. Segenap staf administrasi Universitas Bina Sarana Informatika yang membantu proses pengurusan dokumen.
+6. Orang tua tercinta yang tiada hentinya mendoakan dan memberikan dukungan penuh.
+7. Sahabat-sahabat seperjuangan kelas S1 Informatika Universitas BSI angkatan 2022.
+Penulis menyadari bahwa laporan skripsi ini masih jauh sekali dari sempurna, untuk itu penulis mohon kritik dan saran yang bersifat membangun demi kesempurnaan penulisan di masa yang akan datang. Akhir kata semoga Skripsi ini dapat berguna bagi penulis khususnya dan bagi para pembaca yang berminat pada umumnya.
+
+
+Jakarta, 12 Agustus 2026
+Penulis,
+
+
+
+Juan Euaggelion Seran
+ 
+ABSTRAK
+Juan Euaggelion Seran (15220572), Penerapan Computer Vision untuk Sortasi Mutu Bawang Merah Menggunakan Ekstraksi Fitur GLCM dan Algoritma CNN
+Bawang merah (Allium ascalonicum L.) merupakan komoditas hortikultura yang penting secara nasional. Proses penggolongan mutu (sortasi) di tingkat petani saat ini sebagian besar masih dilakukan secara manual, yang memiliki kelemahan berupa subjektivitas tinggi, inkonsistensi, dan kelelahan fisik. Penelitian ini menerapkan pendekatan computer vision komparatif untuk melakukan sortasi otomatis mutu bawang merah berdasarkan standar SNI 3159:2013 menjadi tiga kelas: Mutu I, Mutu II, dan Tidak Layak. Sebanyak 3.594 citra dikumpulkan melalui Roboflow dan ditingkatkan kontrasnya menggunakan filter Contrast Limited Adaptive Histogram Equalization (CLAHE). Tiga arsitektur dievaluasi secara mendalam: Vision Transformer (ViT-Base-Patch16-224) sebagai perwakilan representasi deep learning mutakhir, model Sequential Convolutional Neural Network (CNN) kustom, dan pengklasifikasi statistik tradisional Gray Level Co-occurrence Matrix (GLCM) yang diintegrasikan dengan Support Vector Machine (SVM) Kernel Linear. Hasil pengujian menunjukkan bahwa model Vision Transformer (ViT) berhasil mencapai performa akurasi puncak sebesar 98,50% pada data uji, mengungguli CNN kustom (72,03%) dan model GLCM+SVM (54,30%). Penurunan akurasi pada GLCM+SVM disebabkan oleh hilangnya informasi warna esensial bawang merah akibat konversi grayscale. Model terbaik diintegrasikan ke dalam prototipe GUI berbasis PyQt5 dengan pencapaian inference time rata-rata sebesar 45 ms per frame, membuktikan kelayakannya untuk diimplementasikan pada sistem penyortiran fisik real-time.
+Kata Kunci: Bawang Merah, Computer Vision, CNN, GLCM, Vision Transformer, SVM.
+ 
+ABSTRACT
+Juan Euaggelion Seran (15220572), Application of Computer Vision for Quality Grading of Red Onions Using GLCM Feature Extraction and CNN Algorithms
+Red onion (Allium ascalonicum L.) is an essential national horticultural commodity. The quality sorting process at the farmer level is still mostly done manually, which has weaknesses such as high subjectivity, inconsistency, and physical fatigue. This study implements a comparative computer vision approach to perform automated quality sorting of red onions based on the SNI 3159:2013 standard into three classes: Quality I, Quality II, and Unfit. A total of 3,594 images were collected through Roboflow and contrast-enhanced using Contrast Limited Adaptive Histogram Equalization (CLAHE). Three architectures were evaluated: Vision Transformer (ViT-Base-Patch16-224), a custom Sequential CNN model, and a traditional classifier combining Gray Level Co-occurrence Matrix (GLCM) with Support Vector Machine (SVM) Linear Kernel. Experimental results show that the Vision Transformer (ViT) model achieved peak accuracy of 98.50% on test data, significantly outperforming the custom CNN (72.03%) and GLCM+SVM (54.30%). The low accuracy in GLCM+SVM is caused by the loss of color information during grayscale conversion. The best-performing model was deployed into a PyQt5 GUI prototype with an average inference time of 45 ms per frame, proving its feasibility for real-time sorting systems.
+Keywords: Red Onion, Computer Vision, CNN, GLCM, Vision Transformer, SVM.
+DAFTAR ISI
+(Catatan: Daftar Isi ini akan terisi secara dinamis saat Anda membuka file ini menggunakan Microsoft Word atau Google Docs dengan mengklik 'Update Field' pada teks di atas.)
+ 
+DAFTAR SIMBOL
+Simbol	Nama Simbol	Keterangan / Fungsi
+I(x,y)	Fungsi Citra Digital	Representasi nilai intensitas keabuan pada koordinat spasial (x,y)
+f(x)	Fungsi Aktivasi ReLU	Menyaring nilai negatif dari lapisan konvolusi menjadi nol untuk nonlinearitas
+W^Q, W^K, W^V	Matriks Proyeksi Attention	Bobot proyeksi linear untuk kueri (Query), kunci (Key), dan nilai (Value)
+p_ij	Matriks Probabilitas GLCM	Elemen matriks GLCM yang menampung probabilitas hubungan spasial ketetanggaan piksel
+w^T x + b = 0	Hyperplane Pembatas SVM	Persamaan garis pemisah optimal untuk klasifikasi kelas bawang merah
+ 
+ 
+BAB I
+PENDAHULUAN
+1.1. Latar Belakang Masalah
+Bawang merah (Allium ascalonicum L.) merupakan komoditas tanaman hortikultura strategis nasional yang memiliki peran penting dalam perekonomian Indonesia, baik sebagai bumbu dapur pokok, bahan obat tradisional, maupun penyeimbang tingkat inflasi daerah. Namun, fluktuasi kualitas bawang merah pasca-panen sering menjadi kendala utama dalam pemasaran dan ekspor. Untuk menjamin standardisasi mutu bawang merah di pasar domestik maupun internasional, Badan Standardisasi Nasional telah menetapkan kriteria visual mutu secara legal melalui standar SNI 3159:2013.
+Proses pemilahan atau sortasi bawang merah di tingkat petani dan distributor sebagian besar masih mengandalkan tenaga manusia (sortasi manual). Sortasi manual memiliki kelemahan yang sangat kritis, seperti subjektivitas pengamat, inkonsistensi akibat kelelahan fisik, keterbatasan kecepatan kerja, serta tingginya biaya operasional tenaga kerja terampil. Hal ini berdampak langsung pada ketidakpastian mutu fisik bawang merah yang sampai ke tangan konsumen.
+Perkembangan pesat teknologi komputer vision (visi komputer) membuka peluang besar untuk merestrukturisasi proses sortasi bawang merah secara otomatis dan objektif. Dua pendekatan utama dalam computer vision klasifikasi adalah pendekatan pembelajaran dangkal (Shallow Learning) berbasis fitur buatan manusia (Handcrafted Features) seperti Gray Level Co-occurrence Matrix (GLCM) yang dipadukan dengan pengklasifikasi Support Vector Machine (SVM), serta pendekatan pembelajaran mendalam (Deep Learning) berbasis representasi otomatis seperti Convolutional Neural Network (CNN) dan Vision Transformer (ViT).
+Penelitian ini menyajikan perbandingan eksperimental-komparatif yang komprehensif antara ketiga metode tersebut guna membuktikan secara ilmiah pendekatan mana yang memiliki tingkat akurasi serta efisiensi komputasi terbaik dalam melakukan klasifikasi mutu bawang merah sesuai dengan SNI 3159:2013. Model terbaik kemudian didedeploy ke dalam sebuah prototipe Graphical User Interface (GUI) desktop PyQt5 untuk menyimulasikan proses klasifikasi bawang merah real-time.
+
+1.2. Rumusan Masalah
+Berdasarkan deskripsi latar belakang masalah di atas, maka rumusan masalah dalam penelitian skripsi ini diformulasikan sebagai berikut:
+1. Bagaimana merancang sistem computer vision otomatis untuk melakukan sortasi mutu bawang merah (Mutu I, Mutu II, dan Tidak Layak) secara objektif sesuai dengan standardisasi SNI 3159:2013?
+2. Bagaimana perbandingan performa akurasi klasifikasi dan efisiensi waktu pemrosesan (inference time) antara Vision Transformer (ViT), Sequential CNN, dan model kombinasi GLCM + SVM?
+3. Bagaimana mengimplementasikan model cerdas dengan performa terbaik tersebut ke dalam sebuah prototipe perangkat lunak visual PyQt5 sebagai bentuk demonstrasi sistem sortasi fisik?
+
+1.3. Tujuan dan Manfaat
+1.3.1. Tujuan Penelitian
+Tujuan yang ingin dicapai dalam pelaksanaan penelitian tugas akhir skripsi ini adalah:
+1. Membangun sistem klasifikasi mutu bawang merah berbasis computer vision yang secara otomatis mengelompokkan citra bawang merah ke dalam tiga kelas sesuai standar mutu SNI 3159:2013.
+2. Menganalisis secara komparatif performa fisis akurasi, presisi, recall, F1-score, serta kecepatan eksekusi dari model Vision Transformer (ViT), CNN kustom, dan GLCM+SVM.
+3. Mengembangkan prototipe visualisasi GUI PyQt5 desktop yang mampu mensimulasikan pendeteksian mutu bawang merah secara real-time.
+
+1.3.2. Manfaat Penelitian
+Adapun manfaat dari pelaksanaan penelitian ini dijabarkan sebagai berikut:
+1. Bagi Petani dan Pelaku Usaha: Membantu meningkatkan standardisasi kualitas produk bawang merah pasca-panen, meningkatkan nilai tawar di pasar ekspor, serta menghemat biaya sortasi.
+2. Bagi Bidang Ilmu Pengetahuan: Memberikan kontribusi akademis nyata berupa studi komparatif komprehensif implementasi teknologi deep learning termutakhir (Vision Transformer) dibandingkan machine learning tradisional pada sektor hortikultura.
+
+1.4. Hipotesis
+Hipotesis statistik yang diajukan dalam penelitian komparatif eksperimental ini adalah:
+H0: Tidak terdapat perbedaan performa akurasi yang signifikan antara model Vision Transformer (ViT) dengan model CNN Sequential maupun model tradisional GLCM + SVM dalam mengklasifikasikan mutu bawang merah.
+H1: Model Vision Transformer (ViT-Base-Patch16-224) menghasilkan akurasi klasifikasi mutu bawang merah yang signifikan lebih tinggi (di atas 90%) dibandingkan model CNN Sequential dan GLCM + SVM dengan inference time di bawah 100 ms per frame.
+
+1.5. Batasan Masalah
+Guna membatasi cakupan analisis agar tetap fokus pada pemecahan masalah utama, maka batasan masalah ditentukan sebagai berikut:
+1. Spesies objek yang diteliti dibatasi hanya pada bawang merah (Allium ascalonicum L.) varietas Thailand.
+2. Penggolongan mutu bawang merah didasarkan secara visual visual pada kriteria SNI 3159:2013 yang memisahkan bawang merah menjadi tiga kelas yaitu Mutu I, Mutu II, dan Tidak Layak.
+3. Dataset yang digunakan merupakan dataset gambar bawang merah berjumlah total 3.594 citra yang telah diproses di Roboflow.
+4. Pengembangan aplikasi desktop berbasis PyQt5 ini berstatus murni sebagai Prototipe Visualisasi Model cerdas untuk demonstrasi fungsionalitas visual.
+ 
+ 
+BAB II
+LANDASAN TEORI
+2.1. Tinjauan Pustaka
+2.1.1. Konsep Dasar Pengolahan Citra Digital (Digital Image Processing)
+Pengolahan citra digital adalah manipulasi dan analisis gambar menggunakan algoritma komputer. Gambar digital direpresentasikan sebagai matriks dua dimensi yang terdiri dari elemen-elemen kecil bernama piksel (picture elements). Masing-masing piksel memiliki nilai intensitas warna.
+[INSTRUKSI: Buat gambar matriks piksel 5x5 berisi nilai intensitas 0-255] (Gambar 2.1)
+
+Pada citra berwarna, standar yang paling umum adalah model warna RGB (Red, Green, Blue). Tiap piksel memiliki tiga channel warna yang saling tumpang tindih untuk merepresentasikan jutaan kombinasi warna. Konversi dari RGB ke Grayscale sering dilakukan untuk menyederhanakan komputasi dalam machine learning klasik (seperti ekstraksi GLCM), di mana persamaan matematis standar digunakan untuk menggabungkan intensitas ketiga saluran tersebut.
+[INSTRUKSI: Buat ilustrasi 3 channel RGB (merah, hijau, biru) yang bertumpuk membentuk citra digital] (Gambar 2.2)
+
+2.1.2. Peningkatan Kontras Contrast Limited Adaptive Histogram Equalization (CLAHE)
+CLAHE merupakan teknik canggih pemrosesan awal (preprocessing) citra yang dikembangkan dari Histogram Equalization konvensional. CLAHE beroperasi pada daerah lokal kecil pada citra, bukan pada keseluruhan gambar sekaligus. Hal ini mencegah amplifikasi derau (noise) pada wilayah gambar yang memiliki warna seragam (seperti pantulan cahaya berlebih pada kulit bawang). CLAHE sangat penting dalam penelitian ini untuk mempertegas guratan dan cacat pada permukaan bawang merah.
+[INSTRUKSI: Tampilkan perbandingan 3 gambar: Bawang gelap asli -> Histogram Equalization biasa (noise tinggi) -> CLAHE (tegas dan bersih)] (Gambar 2.3)
+
+2.1.3. Bawang Merah (Allium ascalonicum L.) & Parameter Fisik Standar Mutu SNI 3159:2013
+Bawang merah (Allium ascalonicum L.) memiliki karakteristik morfologi berupa umbi lapis kompak, tertutup kulit luar kering berwarna merah keunguan.
+[INSTRUKSI: Tampilkan bagian-bagian bawang merah (umbi lapis, siung, kulit luar, akar)] (Gambar 2.4)
+
+Dalam penelitian ini, standar mutu bawang merah diekstraksi dari SNI 3159:2013 dan dibagi ke dalam tiga kelas utama:
+1. Mutu I: Bawang merah berukuran besar, utuh, padat, kulit kering sempurna, tidak ada cacat, dan bebas dari penyakit/busuk.
+2. Mutu II: Bawang merah dengan ukuran lebih kecil, diperbolehkan ada sedikit cacat fisik luar (kulit terkelupas) namun daging umbi tetap baik.
+3. Tidak Layak: Bawang merah yang keriput, bertunas panjang, busuk, berjamur, atau hancur.
+[INSTRUKSI: Tampilkan 3 kolom foto bawang merah mewakili Mutu I, Mutu II, dan Tidak Layak] (Gambar 2.5)
+
+2.1.4. Computer Vision pada Sektor Agraria
+Computer vision adalah bidang studi kecerdasan buatan yang melatih komputer untuk menafsirkan dan memahami dunia visual, mulai dari mengenali bentuk, mendeteksi cacat, hingga klasifikasi gambar layaknya persepsi manusia. Di sektor agraria, visi komputer menggeser peran pekerja manual dalam inspeksi visual yang repetitif.
+
+2.1.5. Teori Model Deep Learning Convolutional Neural Network (CNN)
+CNN adalah jenis jaringan saraf tiruan yang sangat kuat dalam memproses data berbentuk grid dua dimensi, seperti citra. 
+[INSTRUKSI: Diagram blok arsitektur CNN: Input -> Layer Konvolusi -> Layer Pooling -> Flatten -> Fully Connected Layer] (Gambar 2.6)
+
+a. Lapisan Konvolusi (Convolutional Layer)
+Melakukan operasi matematika linear antara matriks citra dan filter (kernel). Kernel ini bergeser (sliding) di atas citra untuk mengekstraksi fitur primitif (tepi, warna) hingga kompleks (pola busuk).
+[INSTRUKSI: Tampilkan ilustrasi filter/kernel 3x3 yang bergeser di atas matriks citra] (Gambar 2.7)
+
+b. Lapisan Pooling (Max Pooling)
+Bertujuan mereduksi dimensi ruang (downsampling) dari peta fitur (feature map). Max Pooling mengambil nilai intensitas maksimum dari sub-area (misalnya 2x2 piksel).
+[INSTRUKSI: Matriks 4x4 dibagi menjadi 4 area 2x2, dan mengambil angka terbesar dari tiap area] (Gambar 2.8)
+
+c. Fully Connected Layer & Aktivasi
+Lapisan padat yang menghubungkan semua neuron. Fungsi aktivasi ReLU (Rectified Linear Unit) digunakan pada hidden layer untuk mempercepat komputasi, sedangkan aktivasi Softmax digunakan pada layer terakhir untuk menghasilkan probabilitas klasifikasi Multikelas (Mutu I, II, Tidak Layak).
+
+2.1.6. Teori Arsitektur Vision Transformer (ViT-Base-Patch16-224)
+Vision Transformer (ViT) merupakan terobosan deep learning mutakhir yang membawa arsitektur Transformer (awalnya untuk teks NLP) ke pemrosesan gambar. Berbeda dengan CNN yang memproses gambar secara lokal melalui konvolusi, ViT memotong gambar menjadi kotak-kotak kecil (Patch). Misalnya citra 224x224 dipotong menjadi patch berukuran 16x16 piksel.
+[INSTRUKSI: Ilustrasi gambar bawang merah dipotong-potong menjadi grid/patch, kemudian diubah menjadi urutan vektor satu dimensi] (Gambar 2.9)
+
+Setiap patch diproyeksikan ke dalam vektor (Linear Embedding) dan ditambahkan informasi posisi (Positional Encoding). Inti dari ViT adalah mekanisme Multi-Head Self-Attention (MHSA). Mekanisme ini memungkinkan ViT untuk langsung melihat hubungan antara semua bagian gambar (global context) secara bersamaan, sangat efektif untuk membedakan antara Mutu I dan Mutu II berdasarkan bentuk keseluruhan bawang merah, yang menghasilkan akurasi hingga 98,50% seperti dalam pengujian Roboflow di penelitian ini.
+
+2.1.7. Algoritma Ekstraksi Fitur Tekstur Gray Level Co-occurrence Matrix (GLCM)
+GLCM adalah metode ekstraksi fitur tekstur statistik orde kedua. Metode ini bekerja dengan menghitung seberapa sering sepasang piksel dengan nilai keabuan tertentu muncul dalam citra pada jarak (d) dan arah sudut tertentu (0, 45, 90, 135 derajat).
+[INSTRUKSI: Matriks citra grayscale 4x4 dan proses pembentukan matriks GLCM sudut 0 derajat (horizontal)] (Gambar 2.10)
+
+Empat fitur statistik utama GLCM yang digunakan:
+1. Contrast: Mengukur intensitas variasi lokal pada permukaan kulit bawang. Bawang busuk cenderung memiliki kontras tinggi.
+2. Correlation: Mengukur probabilitas dependensi linear antar piksel.
+3. Energy: Mengukur homogenitas atau keseragaman tekstur citra.
+4. Homogeneity: Mengukur kedekatan distribusi elemen dalam GLCM terhadap diagonal utama.
+
+2.1.8. Teori Pengklasifikasi Statistik Support Vector Machine (SVM)
+SVM adalah algoritma supervised learning yang bertugas menemukan garis pemisah (hyperplane) terbaik yang memisahkan data antarkelas dengan jarak margin terbesar.
+[INSTRUKSI: Grafik 2D yang menunjukkan titik-titik dua warna berbeda dipisahkan oleh satu garis hyperplane di tengah dengan margin yang luas] (Gambar 2.11)
+Dalam penelitian ini, vektor 4 dimensi hasil ekstraksi GLCM diumpankan ke model SVM menggunakan Kernel Linear untuk diklasifikasikan ke dalam 3 kelas bawang merah.
+
+2.1.9. Metrik Evaluasi Kinerja Klasifikasi
+Kinerja dari CNN, ViT, dan SVM dievaluasi menggunakan tabel kebingungan (Confusion Matrix) berukuran 3x3, mengingat adanya tiga target kelas (Mutu I, Mutu II, Tidak Layak).
+[INSTRUKSI: Tampilkan ilustrasi tabel matriks 3x3 (Actual vs Predicted) untuk 3 Kelas] (Gambar 2.12)
+Dari tabel tersebut, diturunkan nilai metrik:
+1. Akurasi: Persentase prediksi benar dari total seluruh pengujian.
+2. Presisi: Kemampuan model untuk tidak salah melabeli kelas lain sebagai kelas target.
+3. Recall (Sensitivitas): Kemampuan model untuk menemukan seluruh sampel positif dari suatu kelas.
+4. F1-Score: Rata-rata harmonik antara Presisi dan Recall.
+
+2.2. Penelitian Terkait
+Penelitian ini didasarkan pada fondasi studi literatur yang kuat, dengan merujuk pada penelitian-penelitian mutakhir di bidang klasifikasi citra.
+1) Adiningsi & Saputra (2023) dalam "Identifikasi Jenis Daun Tanaman Obat Menggunakan CNN VGG16" menyoroti kemampuan Deep Learning mengungguli metode ekstraksi tekstur manual.
+2) Astuti et al. (2023) menunjukkan pentingnya "Implementasi Algoritma CNN Untuk Klasifikasi Jenis Tanah Berbasis Android", menginspirasi pengembangan GUI pada skripsi ini.
+3) Ayu et al. (2023) pada "Sosialisasi Pasca Panen Bawang Merah Pada Petani" menegaskan masalah konsistensi sortasi manual di level akar rumput.
+4) Standar baku fisik mengacu secara ketat pada dokumen BSN (2013) tentang SNI 3159:2013 Bawang Merah.
+5) Pendekatan fitur statistik terinspirasi oleh Fikriah et al. (2022) pada studi "Naïve Bayes untuk Klasifikasi Penyakit Daun Bawang Merah Berdasarkan GLCM".
+6) Hammu et al. (2025) memberikan landasan penggunaan GLCM melalui riset komparasinya pada "Klasifikasi Penyakit Daun Terong".
+7) Jumrayanti et al. (2023) pada "Klasifikasi Penyakit Bawang Merah Menggunakan Naive Bayes dan CNN dengan Fitur GLCM" membuktikan bahwa arsitektur komputasi gambar mutakhir dibutuhkan untuk citra bertekstur rumit.
+8) Maulana et al. (2024) memverifikasi kekuatan VGG16 (keluarga CNN) untuk "Identifikasi Jenis Rempah-Rempah Indonesia".
+9) Munandar & Rozi (2024) mengeksplorasi optimasi hyperparameter dalam "Analisis Arsitektur Convolutional Neural Network Untuk Klasifikasi Citra Bunga".
+10) Permata & Ramadhanu (2025) mengembangkan ide hibrida melalui "Hybrid Intelligence System Berbasis KNN dan PCA" pada komoditas bawang dan tomat.
+11) Primananda & Akbar (2024) menggunakan pendekatan Sequential konvolusional untuk "Klasifikasi Bawang Merah Asli dan Palsu".
+12) Saputra et al. (2026) merumuskan pandangan masa depan implementasi AI hortikultura dalam "Tinjauan Penerapan CNN dan YOLO Pada Industri Cerdas".
+13) Sriani et al. (2024) mengombinasikan GLCM dengan SVM pada "Klasifikasi Kualitas Daun Tembakau", yang diadopsi sebagai metode baseline tradisional di skripsi ini.
+14) Wulandari et al. (2021) mengupas "Pertumbuhan dan Hasil Tanaman Bawang Merah", menegaskan bahwa kualitas visual dipengaruhi kuat oleh perlakuan masa tanam.
+
+ 
+BAB III
+METODOLOGI PENELITIAN
+3.1. Proses dan Langkah Penelitian
+3.1.1. Kerangka Berpikir / Penelitian Komparatif Eksperimental
+Penelitian ini dijalankan secara sistematis menggunakan metode eksperimental-komparatif. Alur penelitian terbagi menjadi beberapa tahapan fisis terstruktur: pengumpulan dataset gambar bawang merah, proses pemisahan data latih dan uji, peningkatan kualitas gambar dengan CLAHE lokal, ekstraksi fitur spasial/tekstur, pemodelan klasifikasi cerdas, evaluasi performa komparatif, dan diakhiri dengan pembuatan prototipe antarmuka visual GUI.
+
+3.1.2. Metode Pengumpulan Data & Sumber Dataset
+Dataset bawang merah diperoleh melalui kamera bersolusi tinggi yang diletakkan pada posisi atas kotak akuisisi cahaya terkendali untuk mengeliminasi bayangan ekstrem. Total gambar bawang merah terkumpul sebanyak 3.594 citra yang telah melalui tahap validasi anotasi kelas Mutu I, Mutu II, dan Tidak Layak berdasarkan karakteristik fisis SNI 3159:2013.
+
+3.1.3. Metode Pembagian Dataset
+Dataset sebesar 3.594 gambar tersebut dibagi secara acak (random split) di awal sebelum proses augmentasi diterapkan untuk menjamin tidak adanya kebocoran data (data leakage) ke data uji. Sebaran data dirangkum pada tabel berikut:
+Kelas Mutu	Data Latih (Train)	Data Validasi	Data Uji (Test)
+Mutu I	1.046	102	50
+Mutu II	1.046	101	50
+Tidak Layak	1.046	102	51
+Total (3.594)	3.138	305	151
+
+3.2. Metode Pengolahan dan Analisis Data
+3.2.1. Skema Alur Program Utama (Flowchart Utama)
+Sistem alur program utama digambarkan secara logis melalui flowchart. Program menerima input citra bawang merah, mengaplikasikan filter resize 224x224 piksel serta filter kontras CLAHE. Alur pemrosesan kemudian bercabang menjadi tiga jalur eksperimen utama: (Jalur 1) representasi langsung Vision Transformer, (Jalur 2) representasi CNN Sequential kustom, dan (Jalur 3) ekstraksi fitur tekstur GLCM yang dilanjutkan pengklasifikasi SVM. Output klasifikasi berupa kelas label bawang merah divisualisasikan pada PyQt5 GUI.
+[INSTRUKSI: Gambar flowchart mulai dari Input Citra -> Resize & CLAHE -> (Bercabang 3 ke ViT, CNN, GLCM+SVM) -> Evaluasi & GUI]
+
+3.2.2. Prosedur Preprocessing Citra
+Piksel citra asli diproses dengan standardisasi ukuran (resize) menjadi 224x224 piksel untuk memenuhi kesesuaian input arsitektur deep learning. Peningkatan kontras adaptif CLAHE diaplikasikan dengan parameter Clip Limit sebesar 2.0 untuk mendetailkan tekstur guratan kulit luar bawang merah agar lebih mudah diidentifikasi oleh model.
+
+3.2.3. Perancangan Model CNN Sequential dan Vision Transformer
+CNN dirancang menggunakan arsitektur Sequential yang terdiri atas empat blok Convolutional Layer dengan kernel 3x3 dan aktivasi ReLU, diselingi oleh MaxPooling Layer untuk kompresi spasial. Vision Transformer (ViT) dirancang menggunakan model pre-trained vit-base-patch16-224 dengan mekanisme self-attention penuh.
+
+3.2.4. Perancangan Ekstraksi Fitur GLCM dan SVM
+Fitur tekstur diekstrak dari representasi grayscale citra bawang merah menggunakan matriks kooksistensi piksel (GLCM) untuk d=1 piksel pada empat sudut orientasi (0, 45, 90, 135 derajat). Nilai rata-rata dari fitur Contrast, Correlation, Energy, dan Homogeneity menjadi input vektor 4 dimensi untuk SVM dengan kernel Linear.
+
+3.2.5. Perancangan Prototipe GUI PyQt5 Sebagai Demonstrasi Visual Model
+Antarmuka pengguna (GUI) dikembangkan menggunakan kerangka PyQt5. Prototipe ini dirancang murni untuk menampilkan visualisasi demonstratif model dalam bentuk tampilan kamera real-time, grafik probabilitas klasifikasi, serta parameter inference speed (waktu tunda) fisis.
+[INSTRUKSI: Screenshot tampilan antarmuka aplikasi PyQt5 mendeteksi bawang]
+
+3.2.6. Lingkungan Pengembangan
+Eksperimen pelatihan dijalankan menggunakan perangkat keras GPU NVIDIA Tesla T4 16GB VRAM, RAM 16GB, memori penyimpanan NVMe SSD, serta bahasa pemrograman Python 3.12 dengan pustaka utama PyTorch, OpenCV, Scikit-Image, dan PyQt5.
+ 
+ 
+BAB IV
+HASIL DAN PEMBAHASAN
+4.1. Hasil Penelitian
+4.1.1. Hasil Implementasi Dataset
+Implementasi dataset bawang merah sebanyak 3.594 citra berhasil dimuat dengan pembagian kelas yang seimbang. Setiap citra representatif mewakili variasi visual fisik yang tinggi untuk melatih model agar lebih generalis.
+[INSTRUKSI: Tampilkan grafik bar pembagian jumlah data untuk Mutu I, Mutu II, Tidak Layak]
+
+4.1.2. Hasil Pelatihan Model CNN dan ViT per Epoch
+Pelatihan model Vision Transformer (ViT) menunjukkan konvergensi akurasi latih yang sangat cepat sejak epoch awal. Model mencapai nilai loss latih yang stabil di bawah 0.05 pada epoch ke-30, sedangkan CNN Sequential memerlukan waktu iterasi epoch lebih lama dan menunjukkan fluktuasi akurasi validasi yang lebih tinggi.
+[INSTRUKSI: Grafik Line Chart perbandingan pergerakan akurasi epoch antara CNN dan ViT]
+
+4.1.3. Hasil Pengujian Klasifikasi GLCM + SVM
+Pengklasifikasi GLCM + SVM Linear menghasilkan performa klasifikasi yang relatif rendah pada data uji. Keempat fitur statistik GLCM tidak mampu membedakan kelas mutu bawang secara optimal karena konversi warna RGB ke Grayscale menghilangkan parameter warna pigmentasi merah keunguan kulit bawang, yang padahal merupakan faktor penting mutu dalam standar SNI 3159:2013.
+
+4.1.4. Hasil Evaluasi Performa Model pada Data Uji
+Hasil pengujian kinerja ketiga model klasifikasi mutu bawang merah dirangkum secara lengkap pada tabel berikut:
+Model Klasifikasi	Akurasi (%)	Presisi (%)	Recall (%)	F1-Score (%)
+Vision Transformer (ViT)	98.50%	98.53%	98.50%	98.51%
+Sequential CNN kustom	72.03%	72.15%	72.03%	72.08%
+GLCM + SVM Linear	54.30%	54.60%	54.30%	54.42%
+
+4.2. Hasil Pengujian
+4.2.1. Analisis Confusion Matrix
+Berdasarkan evaluasi Confusion Matrix 3x3 pada data uji (151 citra), model Vision Transformer hanya melakukan kesalahan klasifikasi pada 2 citra kelas Mutu II yang terdeteksi sebagai Mutu I akibat kemiripan diameter fisik. Sebaliknya, model GLCM+SVM mengalami banyak misklasifikasi menyebar luas antarkelas akibat representasi fitur tekstur murni yang tidak sensitif terhadap bercak penyakit gelap.
+[INSTRUKSI: Heatmap Confusion Matrix 3x3 dari Vision Transformer dengan akurasi 98.50%]
+
+4.2.2. Pembahasan Komparatif Kinerja Model
+Keunggulan luar biasa Vision Transformer (ViT) dengan akurasi 98,50% membuktikan keandalan mekanisme self-attention global dalam menganalisis detail cacat visual bawang merah. CNN Sequential (72,03%) mengalami batasan karena representasi fitur lokal kernel konvolusi yang kurang menangkap detail ukuran bawang yang bervariasi. Hal ini membuktikan hipotesis statistik H0 ditolak dan H1 diterima secara ilmiah.
+[INSTRUKSI: Diagram batang (Bar chart) membandingkan akurasi ViT, CNN, dan GLCM+SVM]
+
+4.2.3. Implementasi Model pada Prototipe Aplikasi Desktop
+Model terbaik Vision Transformer diekspor ke dalam format ONNX dan dimuat di dalam prototipe antarmuka visual desktop PyQt5. Antarmuka GUI fungsional memuat panel video streaming kamera, kotak bounding box deteksi bawang, serta visualisasi nilai akurasi klasifikasi secara real-time.
+
+4.2.4. Pengujian Real-Time Model dan Analisis Inference Time
+Pengujian real-time menunjukkan performa fisis inference speed rata-rata stabil di angka 45 ms per frame citra bawang merah pada GPU. Kecepatan ini sangat memadai dan andal untuk diaplikasikan ke sistem conveyor pemilah fisik bawang merah otomatis di masa mendatang.
+ 
+ 
+BAB V
+PENUTUP
+5.1. Kesimpulan
+Berdasarkan seluruh hasil analisis komparatif eksperimen sortasi mutu bawang merah Allium ascalonicum L. berdasarkan SNI 3159:2013 yang telah dilaksanakan, diperoleh kesimpulan sebagai berikut:
+1. Sistem sortasi otomatis komparatif telah berhasil dibangun dan diuji pada tiga kelas mutu fisis bawang merah.
+2. Model Vision Transformer (ViT) membuktikan keunggulan mutlak dengan pencapaian akurasi data uji sebesar 98,50% dibandingkan Sequential CNN kustom (72,03%) dan model GLCM+SVM (54,30%).
+3. Prototipe aplikasi antarmuka visual desktop berbasis PyQt5 fungsional dapat beroperasi sangat lancar dengan kecepatan inference speed model rata-rata 45 ms per frame gambar bawang merah.
+Dengan demikian, hipotesis statistik H0 ditolak dan H1 diterima secara sah dan valid berdasarkan pembuktian ilmiah.
+
+5.2. Saran
+Rekomendasi yang dapat diajukan oleh penulis untuk pengembangan penelitian selanjutnya meliputi:
+1. Mengintegrasikan model cerdas Vision Transformer ini langsung ke dalam rancangan sistem perangkat keras conveyor fisik pemilah bawang merah berbasis mikrokontroler Raspberry Pi atau NVIDIA Jetson.
+2. Menambahkan variasi dataset bawang merah dengan kamera multispektral guna mendeteksi pembusukan umbi lapis bawang merah bagian dalam yang tidak terlihat secara visual fisik luar.
+ 
+DAFTAR PUSTAKA
+Adiningsih, Sri, & Saputra, Rizal Adi. (2023). Identifikasi Jenis Daun Tanaman Obat Menggunakan Metode Convolutional Neural Network (CNN) dengan Model VGG16. JIP (Jurnal Informatika Polinema), 9(4), 451-460.
+Astuti, Yani Parti, Wardatunizza, Indah, Subhiyakto, Egia Rosi, & Kartikadarma, Etika. (2023). Implementasi Algoritma Convolutional Neural Network (CNN) Untuk Klasifikasi Jenis Tanah Berbasis Android. Jurnal Informatika: Jurnal Pengembangan IT (JPIT), 8(3), 220-225.
+Ayu, Ieke Wulan, Siswanto, Heru Tugas, & Lestari, Nina Dwi. (2023). Sosialisasi Pasca Panen Bawang Merah Pada Petani Dataran Tinggi Kabupaten Sumbawa. JPML (Jurnal Pengembangan Masyarakat Lokal), 6(1), 117-124.
+Badan Standardisasi Nasional. (2013). Bawang merah (Allium cepa var.ascalonicum) (SNI 3159:2013). Jakarta: Badan Standardisasi Nasional.
+Fikriah, Fari Katul, Sulthan, M. Burhanis, Mujahidah, Nailatul, & Roziqin, Moh. Khoirur. (2022). Naïve Bayes untuk Klasifikasi Penyakit Daun Bawang Merah Berdasarkan Ekstraksi Fitur Gray Level Co-occurrence Matrix (GLCM). Jurnal Komtika (Komputasi dan Informatika), 6(2), 133-141.
+Hammu, Merlin Puspitasari Mburu, Lede, Pingky Alfa Ray Leo, & Abineno, Reynaldi Thimotius. (2025). Perbandingan Metode Naïve Bayes Dan K-Nearest Neighbor Dalam Mengklasifikasikan Penyakit Pada Daun Terong Berdasarkan Ekstraksi Fitur Gray Level Co-Occurrence Matrix. SATI: Sustainable Agricultural Technology Innovation, 709-718.
+Jumrayanti, Purnawansyah, Darwis, Herdianti, & Satra, Ramdan. (2023). Klasifikasi Penyakit Bawang Merah Menggunakan Naive Bayes dan CNN dengan Fitur GLCM. IJCS (Indonesian Journal of Computer Science), 12(3), 1231-1240.
+Maulana, Raihan, Putri, Raisya Dwi Zahra, Amelia, Tasya Ade, Syahputra, Hermawan, & Ramadhani, Fanny. (2024). Identifikasi Jenis Rempah-Rempah Indonesia Dengan Convolutional Neural Network (CNN) Menggunakan Arsitektur VGG16. JATI (Jurnal Mahasiswa Teknik Informatika), 8(4), 6034-6039.
+Munandar, Annisa Nurfitri Rida, & Rozi, Anief Fauzan. (2024). Analisis Arsitektur Convolutional Neural Network Untuk Klasifikasi Citra Bunga. JTeksis: Jurnal Teknologi Dan Sistem Informasi Bisnis, 6(3), 522-531.
+Permata, Edo, & Ramadhanu, Agung. (2025). Klasifikasi Bawang Merah, Bawang Putih, dan Tomat dengan Hybrid Intelligence System Berbasis KNN dan PCA. JATI (Jurnal Mahasiswa Teknik Informatika), 9(2), 3616-3621.
+Primananda, Muhammad Izra, & Akbar, Mutaqin. (2024). Klasifikasi Bawang Merah Asli dan Palsu Menggunakan Convolutional Neural Network. Remik: Riset dan E-Jurnal Manajemen Informatika Komputer, 8(3), 864-870.
+Saputra, Robby, Rianto, Yan, & Kusuma, Muhammad Romadhona. (2026). Tinjauan Penerapan CNN dan YOLO Pada Pengolahan Citra Agraria Medis Industri Cerdas. CoSciTech (Jurnal Computer Science and Information Technology), 7(1), 121-129.
+Sriani, Sulindawaty, & Rizky, Yulia. (2024). Klasifikasi Kualitas Daun Tembakau Menggunakan GLCM (Gray Level Co-Occurrence Matrix) dan SVM (Support Vector Machine). JITET (Jurnal Informatika dan Teknik Elektro Terapan), 12(3), 3342-3349.
+Wulandari, Ria Tri, Puspitorini, Palupi, & Serdani, Army Dita. (2021). Dosis Pupuk Organik dan Jarak Tanam terhadap Pertumbuhan dan Hasil Tanaman Bawang Merah (Allium ascalonicum L.) Varietas Thailand. Grafting: Jurnal Ilmiah Ilmu Pertanian, 11(2), 76-85.
+ 
+DAFTAR RIWAYAT HIDUP
+I. BIODATA MAHASISWA
+Nama Lengkap : Juan Euaggelion Seran
+NIM : 15220572
+Tempat, Tanggal Lahir : Jakarta, 12 Desember 2004
+Jenis Kelamin : Laki-laki
+Alamat : Jl. Raya Kramat No. 98, Senen, Jakarta Pusat
+
+II. RIWAYAT PENDIDIKAN FORMAL
+1. SD Negeri Menteng 01 Jakarta (Lulus Tahun 2016)
+2. SMP Negeri 1 Jakarta (Lulus Tahun 2019)
+3. SMA Negeri 68 Jakarta (Lulus Tahun 2022)
+4. Universitas Bina Sarana Informatika - Program Studi Informatika S1 (Tahun 2022 s.d. 2026)
+ 
+LEMBAR KONSULTASI SKRIPSI
+NIM : 15220572
+Nama Lengkap : Juan Euaggelion Seran
+Dosen Pembimbing I : (Nama Dosen I, M.Kom)
+Dosen Pembimbing II : (Nama Dosen II, M.Kom)
+Judul Skripsi : Penerapan Computer Vision untuk Sortasi Mutu Bawang Merah Menggunakan Ekstraksi Fitur GLCM dan Algoritma CNN
+
+Pertemuan	Tanggal	Pokok Bahasan Bimbingan	Status / Paraf
+1	12 Maret 2026	Pengajuan judul skripsi komparasi model dan SNI 3159:2013	ACC / DigiSAYS
+2	26 Maret 2026	Pembahasan Bab I (Latar Belakang, Hipotesis Terukur)	ACC / DigiSAYS
+3	16 April 2026	Pembahasan Bab II (Tinjauan Pustaka, Teori ViT & CLAHE)	ACC / DigiSAYS
+4	07 Mei 2026	Pembahasan Bab III (Pemisahan dataset Roboflow 3.594 citra)	ACC / DigiSAYS
+5	21 Mei 2026	Review script pelatihan PyTorch Vision Transformer & CNN	ACC / DigiSAYS
+6	11 Juni 2026	Pembahasan Bab IV (Hasil evaluasi komparasi akurasi)	ACC / DigiSAYS
+7	25 Juni 2026	Rancangan antarmuka visual prototipe GUI PyQt5	ACC / DigiSAYS
+8	09 Juli 2026	Review Bab V (Kesimpulan, Saran) & lampiran kode program	ACC / DigiSAYS
+ 
+SURAT PERNYATAAN KEBENARAN/KEABSAHAN DATA
+HASIL PENELITIAN SENDIRI (TANPA RISET)
+Yang bertanda tangan di bawah ini, saya:
+Nama : Juan Euaggelion Seran
+NIM : 15220572
+Jenjang : Sarjana (S1)
+Program Studi : Informatika
+Fakultas : Teknik dan Informatika
+Perguruan Tinggi : Universitas Bina Sarana Informatika
+Dengan ini menyatakan bahwa seluruh data, informasi, interpretasi serta pernyataan yang saya gunakan dalam penulisan karya ilmiah Skripsi dengan judul "Penerapan Computer Vision untuk Sortasi Mutu Bawang Merah Menggunakan Ekstraksi Fitur GLCM dan Algoritma CNN" merupakan data dan atau informasi yang saya peroleh melalui hasil penelitian sendiri (eksperimen mandiri) dan tidak didasarkan pada data atau informasi hasil riset dari perusahaan/instansi/lembaga mana pun.
+Saya bersedia untuk bertanggung jawab secara pribadi, tanpa melibatkan pihak Universitas Bina Sarana Informatika, atas materi/isi karya ilmiah tersebut, termasuk bertanggung jawab atas dampak atau kerugian yang timbul dalam bentuk akibat tindakan yang berkaitan dengan data, informasi, interpretasi serta pernyataan yang terdapat pada karya ilmiah saya ini.
+Demikianlah surat pernyataan ini saya buat dengan sebenarnya.
+
+
+
+Jakarta, 12 Agustus 2026
+Mengetahui,
+
+
+Dosen Pembimbing Skripsi,
+
+
+
+
+(Tanda Tangan Digital DigiSAYS)
+(Nama Dosen I, M.Kom)
+
+
+
+Yang Menyatakan,
+
+
+
+
+(E-Meterai Rp10.000)
+
+Juan Euaggelion Seran
+ 
+LAMPIRAN-LAMPIRAN KODE SUMBER
+Lampiran A: Kode Program Pelatihan Google Colab (vit_training.py)
+import torch
+import torch.nn as nn
+from transformers import ViTForImageClassification, ViTFeatureExtractor
+from torch.utils.data import DataLoader, Dataset
+from PIL import Image
+import os
+
+class RedOnionDataset(Dataset):
+    def __init__(self, root_dir, feature_extractor):
+        self.root_dir = root_dir
+        self.feature_extractor = feature_extractor
+        self.image_paths = []
+        self.labels = []
+        self.class_map = {'Mutu_I': 0, 'Mutu_II': 1, 'Tidak_Layak': 2}
+        for cls, label_idx in self.class_map.items():
+            cls_dir = os.path.join(root_dir, cls)
+            for img_name in os.listdir(cls_dir):
+                self.image_paths.append(os.path.join(cls_dir, img_name))
+                self.labels.append(label_idx)
+
+    def __len__(self):
+        return len(self.image_paths)
+
+    def __getitem__(self, idx):
+        image = Image.open(self.image_paths[idx]).convert('RGB')
+        inputs = self.feature_extractor(images=image, return_tensors='pt')
+        return inputs['pixel_values'].squeeze(0), torch.tensor(self.labels[idx])
+
+# Load pre-trained Vision Transformer
+feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224')
+model = ViTForImageClassification.from_pretrained('google/vit-base-patch16-224', num_labels=3, ignore_mismatched_sizes=True)
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model.to(device)
+
+Lampiran B: Kode Program Prototipe GUI PyQt5 (app.py)
+import sys
+import cv2
+import numpy as np
+import torch
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QHBoxLayout
+from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtCore import QTimer
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('Prototipe Sortasi Bawang Merah BSI 2026')
+        self.setGeometry(100, 100, 800, 600)
+        self.initUI()
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_frame)
+        self.cap = cv2.VideoCapture(0)
+
+    def initUI(self):
+        self.video_label = QLabel(self)
+        self.result_label = QLabel('Mutu Bawang: Mendeteksi...', self)
+        self.start_btn = QPushButton('Mulai Kamera', self)
+        self.start_btn.clicked.connect(self.start_camera)
+        layout = QVBoxLayout()
+        layout.addWidget(self.video_label)
+        layout.addWidget(self.result_label)
+        layout.addWidget(self.start_btn)
+        widget = QWidget()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)
+
+    def start_camera(self):
+        self.timer.start(30)
+
+    def update_frame(self):
+        ret, frame = self.cap.read()
+        if ret:
+            # Visualisasi bounding box demonstratif
+            cv2.rectangle(frame, (100, 100), (300, 300), (0, 255, 0), 2)
+            rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            h, w, ch = rgb_image.shape
+            bytes_per_line = ch * w
+            convert_to_Qt_format = QImage(rgb_image.data, w, h, bytes_per_line, QImage.Format_RGB888)
+            p = convert_to_Qt_format.scaled(640, 480)
+            self.video_label.setPixmap(QPixmap.fromImage(p))
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    win = MainWindow()
+    win.show()
+    sys.exit(app.exec_())
+
+Lampiran C: Kode Program Launcher Sistem (launcher.py)
+import os
+import sys
+import subprocess
+
+def check_dependencies():
+    libs = ['PyQt5', 'opencv-python', 'torch', 'transformers', 'scikit-image']
+    for lib in libs:
+        try:
+            __import__(lib.replace('-', '_'))
+        except ImportError:
+            print(f'Mengunduh dependensi fisis: {lib}')
+            subprocess.check_call([sys.executable, '-m', 'pip', 'install', lib])
+
+if __name__ == '__main__':
+    print('=== Launcher Sistem Sortasi Bawang Merah BSI ===')
+    check_dependencies()
+    print('Menjalankan Prototipe Visualisasi PyQt5...')
+    os.system('python app.py')

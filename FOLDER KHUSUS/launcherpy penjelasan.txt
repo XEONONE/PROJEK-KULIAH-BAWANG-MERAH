@@ -1,0 +1,234 @@
+====================================================================================================
+BEDAH KODE PROGRAM: launcher.py (STARTUP & DIAGNOSTIK)
+SISTEM SORTASI MUTU BAWANG MERAH AI - SNI 3159:2013
+====================================================================================================
+File ini adalah panduan lengkap membaca setiap bait kode (baris per baris) di dalam file launcher.py.
+Skrip ini bertindak sebagai "Pintu Gerbang Utama" yang harus dilalui sebelum aplikasi inti (app.py) 
+berjalan. Tujuannya adalah mendiagnosa masalah instalasi secara mandiri (Self-Healing) apabila 
+dijalankan pada komputer yang baru pertama kali mengunduh proyek ini dari GitHub.
+
+====================================================================================================
+BLOK 1: IMPORT PUSTAKA DASAR & PENGATURAN LOGGING
+====================================================================================================
+```python
+import os
+import sys
+import time
+import subprocess
+import threading
+import logging
+import tkinter as tk
+from tkinter import ttk, messagebox
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOG_FILE = os.path.join(BASE_DIR, "app_error.log")
+
+logging.basicConfig(
+    filename=LOG_FILE,
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] (LAUNCHER) %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+```
+PEMAHAMAN KRITIS:
+- Mengapa menggunakan pustaka bawaan (built-in)? 
+  Berbeda dengan app.py, launcher.py SANGAT DILARANG menggunakan pustaka eksternal pihak ketiga
+  (seperti cv2 atau tensorflow) pada bagian awal kode (import). Jika ia menggunakan pustaka eksternal,
+  maka launcher akan langsung "Crash/Error" sebelum sempat mendiagnosa karena pustaka tersebut
+  belum tentu terinstall di komputer penguji. Semua modul yang di-import di atas adalah modul
+  wajib bawaan bahasa Python (Standard Library).
+- `subprocess`: Modul yang sangat vital di sini. Ini ibarat tangan maya yang akan mengetikkan
+  perintah di terminal (CMD) secara diam-diam (seperti perintah 'pip install ...').
+- `logging.basicConfig`: Menyiapkan alat pencatat otomatis. Tag `(LAUNCHER)` disematkan agar di
+  dalam file log kita bisa membedakan mana error yang terjadi saat "Booting" (launcher) dan
+  mana error yang terjadi saat "Analisis" (app.py).
+
+====================================================================================================
+BLOK 2: DATA META (KAMUS DIAGNOSTIK)
+====================================================================================================
+```python
+PACKAGES = [
+    ("numpy", "numpy", "Pengolahan Array"),
+    ("cv2", "opencv-python", "Computer Vision"),
+    ("PIL", "Pillow", "Pemrosesan UI Gambar"),
+    ("sklearn", "scikit-learn", "Machine Learning (SVM)"),
+    ("skimage", "scikit-image", "Ekstraksi Fitur GLCM"),
+    ("joblib", "joblib", "Pemuat Model SVM")
+]
+
+MODEL_FILES = [
+    "Model_CNN_Fixed.h5",
+    "Model_CNN_Bawang_Final.h5", 
+    "Model_SVM_GLCM.pkl"
+]
+```
+PEMAHAMAN KRITIS:
+- `PACKAGES`: Adalah daftar (List of Tuples). Kolom pertama adalah nama modul (import name),
+  kolom kedua adalah nama paket instalasi PIP (install name), dan kolom ketiga adalah deskripsi.
+  Sistem ini sangat rapi karena nama import kadang berbeda dengan nama instalasi (Contoh: kita 
+  meng-import "cv2", tapi nama instalasinya di pip adalah "opencv-python").
+- Perhatikan bahwa "tensorflow" sengaja dipisahkan atau tidak dimasukkan ke dalam paket auto-install
+  karena ukuran TensorFlow mencapai lebih dari 500 MB. Melakukan auto-install file raksasa secara 
+  diam-diam berisiko menyebabkan laptop penguji hang atau kehabisan kuota internet.
+- `MODEL_FILES`: Syarat mutlak. AI butuh otaknya. Jika otak (file .h5/.pkl) tidak ada di folder,
+  program menolak memberikan izin peluncuran aplikasi.
+
+====================================================================================================
+BLOK 3: INISIALISASI JENDELA DIAGNOSTIK (UI SENSOR AWAL)
+====================================================================================================
+```python
+class LauncherWindow:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("System Diagnostic & Launcher")
+        self.root.geometry("650x450")
+        self.root.configure(bg="#0d1117")
+        self.root.resizable(False, False)
+        
+        # ... pembuatan title label (System Diagnostic)
+        # ... pembuatan canvas text (Live Terminal)
+        # ... pembuatan progress bar dan tombol luncurkan
+```
+PEMAHAMAN KRITIS:
+- Kelas `LauncherWindow`: Dibuat terisolasi agar rapi berbasis Objek (Object Oriented).
+- `bg="#0d1117"`: Warna dasar layar. Ini adalah warna hex yang persis dengan warna latar belakang 
+  GitHub Dark Mode. Memberikan kesan hacker tingkat lanjut.
+- Berbeda dari app.py yang bisa di-resize, ukuran launcher dikunci (`resizable(False, False)`)
+  agar layout bar diagnostik selalu proporsional di tengah layar layaknya kotak dialog instalasi game.
+- Layar dibekali objek `tk.Text(state='disabled')`. Status 'disabled' bermaksud agar user/pengguna 
+  tidak bisa mengetik atau menghapus teks proses yang sedang berjalan.
+
+====================================================================================================
+BLOK 4: FUNGSI KOMUNIKASI VISUAL (CETAK LOG KE LAYAR)
+====================================================================================================
+```python
+    def log_to_ui(self, msg, color="#ffffff"):
+        self.log_area.config(state='normal')
+        self.log_area.insert(tk.END, msg + "\n")
+        
+        # Mencari baris terakhir yang diisi
+        last_line = self.log_area.index("end-2c").split(".")[0]
+        self.log_area.tag_add(f"color_{last_line}", f"{last_line}.0", f"{last_line}.end")
+        self.log_area.tag_config(f"color_{last_line}", foreground=color)
+        
+        self.log_area.see(tk.END)
+        self.log_area.config(state='disabled')
+        self.root.update_idletasks()
+```
+PEMAHAMAN KRITIS:
+- Fungsi `log_to_ui` adalah pengganti perintah `print()` biasa.
+- Sistem harus membuka gembok area teks (`state='normal'`), memasukkan teks, mewarnai baris tersebut
+  sesuai level (Kuning, Hijau, Merah, dsb), lalu menggemboknya kembali (`state='disabled'`).
+- `self.log_area.see(tk.END)`: Sangat penting! Ini memaksa layar terminal selalu menggulir (scroll) 
+  ke baris paling bawah. Jika ini tidak ada, proses analisis yang panjang akan tertutup di bagian
+  atas kotak dan pengguna tidak tahu apa yang sedang terjadi di bawah.
+- `update_idletasks()`: Memaksa komputer segera me-refresh kartu grafis (GPU/Layar) saat itu juga.
+  Tanpa ini, animasi di layar Tkinter akan "Macet" (Freeze) selama program memikirkan diagnostik.
+
+====================================================================================================
+BLOK 5: MESIN PENGGERAK DIAGNOSTIK (INTI PROGRAM)
+====================================================================================================
+```python
+    def mulai_diagnostik(self):
+        # Jalankan di thread terpisah agar UI tidak freeze
+        threading.Thread(target=self._jalankan_diagnostik, daemon=True).start()
+
+    def _jalankan_diagnostik(self):
+        # TAHAP 1: CEK PYTHON VERSION
+        if sys.version_info < (3, 8): ...
+        
+        # TAHAP 2: CEK LIBRARY DEPENDENSI
+        to_install = []
+        for imp_name, pip_name, desc in PACKAGES:
+            try:
+                __import__(imp_name)
+                self.log_to_ui(f" [OK] {desc} ({pip_name}) terdeteksi.", "#2ecc71")
+            except ImportError:
+                to_install.append(pip_name)
+                self.log_to_ui(f" [WARNING] {desc} tidak ditemukan. Akan diinstall.", "#f1c40f")
+        ...
+```
+PEMAHAMAN KRITIS:
+- `threading.Thread(..., daemon=True)`: Sama seperti di app.py. Jika `_jalankan_diagnostik` 
+  berjalan di alur utama (main thread), maka Progress Bar dan kelip-kelip teks akan membeku. 
+  Thread adalah solusi multatasking. `daemon=True` memastikan thread ini otomatis bunuh diri
+  apabila jendela launcher ditutup paksa (X) oleh pengguna.
+- Logika `__import__(imp_name)`: Menggunakan metode ajaib (magic method) python. Ia mencoba 
+  menarik modul ke memori. Jika Python menjawab "ImportError" (tidak ketemu), maka sistem 
+  langsung memasukkan nama pip-nya ke antrian `to_install`.
+
+====================================================================================================
+BLOK 6: AUTO-INSTALLER (MEKANISME SELF-HEALING)
+====================================================================================================
+```python
+        if to_install:
+            self.log_to_ui(f"\n> MEMULAI INSTALASI OTOMATIS: {len(to_install)} modul...", "#00d2ff")
+            try:
+                subprocess.run(
+                    [sys.executable, "-m", "pip", "install"] + to_install,
+                    check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+                )
+                self.log_to_ui(f" [SUKSES] Seluruh modul berhasil diinstall!\n", "#2ecc71")
+            except subprocess.CalledProcessError as e:
+                self.log_to_ui(f" [ERROR] Instalasi gagal: {e}", "#e74c3c")
+                self.root.after(0, lambda: self.btn_launch.config(state="disabled"))
+```
+PEMAHAMAN KRITIS:
+- `subprocess.run`: Ini adalah "Jurus Rahasia" dari script ini. Ia tidak memanggil "pip" biasa.
+- Mengapa `sys.executable`? Pada sebuah PC, seringkali ada banyak versi Python yang bertabrakan 
+  (misal Python 3.8 dan Python 3.10). `sys.executable` akan mendapatkan rute pasti letak Python 
+  mana yang *sedang* membuka jendela saat ini. Hal ini memastikan modul tidak "nyasar" ke 
+  instalasi Python versi lain yang ada di laptop penguji.
+- Bila perintah CMD ini gagal (`CalledProcessError`), misalnya karena tidak ada internet, 
+  tombol hijau luncurkan aplikasi (btn_launch) akan di-matikan secara permanen (`disabled`).
+
+====================================================================================================
+BLOK 7: VERIFIKASI FILE OTACK AI (MODEL H5 & PKL)
+====================================================================================================
+```python
+        for mf in MODEL_FILES:
+            if os.path.exists(mf):
+                ukuran = os.path.getsize(mf) / (1024 * 1024)  # konversi ke MB
+                self.log_to_ui(f" [OK] Model '{mf}' ditemukan ({ukuran:.2f} MB).", "#2ecc71")
+            else:
+                self.log_to_ui(f" [FATAL] Model '{mf}' TIDAK DITEMUKAN!", "#e74c3c")
+                fatal_error = True
+```
+PEMAHAMAN KRITIS:
+- Mengapa selain mencari eksistensi `os.path.exists`, sistem juga menghitung `getsize`?
+  Dalam dunia machine learning, file berformat `.h5` sering rusak saat diunggah (corrupt). 
+  Menampilkan ukuran Megabyte (MB) kepada pengguna di terminal sangat membantu untuk verifikasi
+  apakah file modelnya utuh (sekitar puluhan/ratusan MB) atau file rusak (ukurannya 0 KB).
+- Bila satu saja model hilang, flag `fatal_error = True` dinyalakan.
+
+====================================================================================================
+BLOK 8: SISTEM LUNCURKAN APLIKASI (TRANSISI PERTUKARAN ROH/PROSES)
+====================================================================================================
+```python
+    def luncurkan_app(self):
+        try:
+            self.root.destroy()
+            app_path = os.path.join(BASE_DIR, "app.py")
+            os.execv(sys.executable, [sys.executable, app_path])
+        except Exception as e:
+            messagebox.showerror("Launcher Error", f"Gagal meluncurkan aplikasi utama:\n{e}")
+```
+PEMAHAMAN KRITIS:
+- Logika eksekusi: Tombol Hijau ditekan.
+- `self.root.destroy()`: Menghancurkan jendela Launcher dari memori. Ia pamit mundur diri.
+- `os.execv()`: Ini adalah bagian komputasi tingkat rendah (Unix/Windows system call).
+  Ia TIDAK memanggil "subprocess" (membuka terminal baru). Fungsi `execv` akan mengeksekusi script
+  app.py, kemudian mentransfer total sisa napas proses ID (PID) launcher.py saat ini kepada app.py.
+  Sederhananya: "Tubuh" proses launcher diubah menjadi "Tubuh" app.py dalam satu jalur memori.
+  Ini sangat efisien dan mencegah adanya proses zombie / penumpukan aplikasi ganda di background Task Manager.
+
+====================================================================================================
+KESIMPULAN UMUM UNTUK PRESENTASI SIDANG (UNTUK LAUNCHER.PY)
+====================================================================================================
+File `launcher.py` membuktikan bahwa Sistem Sortasi Mutu Bawang Merah ini tidak hanya dirancang
+dari kacamata "Mahasiswa yang hanya peduli hasil akurasi AI", melainkan sudah menyentuh aspek
+"Software Engineering". Program mampu beradaptasi pada komputer baru, mendiagnosa penyakitnya 
+sendiri (Self-Diagnosis), menambal kekurangan dependensi secara otonom (Self-Healing via PIP),
+dan menyediakan sistem transisi RAM yang aman menuju modul inti. Hal ini sangat bernilai di
+mata dewan penguji sebagai aplikasi yang 'Deployment-Ready' (siap edar/dipakai).
+====================================================================================================

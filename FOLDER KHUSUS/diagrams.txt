@@ -1,0 +1,38 @@
+==== FLOWCHART ====
+<div class="flowchart">
+<div class="fc-node start-end">🚀 START</div><div class="fc-arrow"></div>
+<div class="fc-node">📋 Identifikasi Masalah<br/><small style="font-weight:400">Sortasi manual tidak konsisten dengan SNI 3159:2013</small></div><div class="fc-arrow"></div>
+<div class="fc-node">📚 Studi Literatur CNN, ViT, GLCM, SVM, Roboflow</div><div class="fc-arrow"></div>
+<div class="fc-node">🗄️ Pengumpulan &amp; Anotasi Dataset via Roboflow — 3.594 Citra Bawang Merah</div><div class="fc-arrow"></div>
+<div class="fc-node">⚙️ Preprocessing Roboflow: Auto-Orient | Resize Stretch 224×224<br/><small style="font-weight:400">+ Augmentasi: 3× Output | Rotate 90° | Rotate ±28° | Noise 1.6%</small></div><div class="fc-arrow"></div>
+<div style="display:flex;gap:16px;width:100%;justify-content:center;margin:8px 0;flex-wrap:wrap">
+<div class="fc-node" style="flex:1;min-width:180px;max-width:220px;border-color:#7c3aed;background:linear-gradient(135deg,rgba(124,58,237,.1),rgba(109,40,217,.05))">🤖 ViT Training<br/><small style="font-weight:400">vit-base-patch16-224<br/>via Roboflow Cloud</small></div>
+<div class="fc-node" style="flex:1;min-width:180px;max-width:220px">🧠 CNN Training<br/><small style="font-weight:400">15 Epoch + Class Weights<br/>Google Colab GPU</small></div>
+<div class="fc-node" style="flex:1;min-width:180px;max-width:220px;border-color:var(--clr-accent)">📊 GLCM Ekstraksi<br/>→ SVM Linear</div>
+</div>
+<div class="fc-arrow"></div>
+<div class="fc-node">📈 Evaluasi &amp; Komparasi: ViT vs CNN vs GLCM+SVM</div><div class="fc-arrow"></div>
+<div class="fc-node">🖥️ Implementasi Aplikasi Desktop Python-Tkinter</div><div class="fc-arrow"></div>
+<div class="fc-node start-end">🏁 Kesimpulan &amp; Saran</div>
+</div>
+
+==== ARCH ====
+<div class="arch-diagram">
+<div class="arch-block"><div class="arch-layer input" style="height:120px">Input<br/>224×224×3</div><div class="arch-label">Input</div></div>
+<div class="arch-arrow">→</div>
+<div class="arch-block"><div class="arch-layer conv" style="height:108px">Conv2D<br/>32 filter<br/>3×3 ReLU</div><div class="arch-label">222×222×32</div></div>
+<div class="arch-arrow">→</div>
+<div class="arch-block"><div class="arch-layer pool" style="height:86px">MaxPool<br/>2×2</div><div class="arch-label">111×111×32</div></div>
+<div class="arch-arrow">→</div>
+<div class="arch-block"><div class="arch-layer conv" style="height:96px">Conv2D<br/>64 filter<br/>3×3 ReLU</div><div class="arch-label">109×109×64</div></div>
+<div class="arch-arrow">→</div>
+<div class="arch-block"><div class="arch-layer pool" style="height:76px">MaxPool<br/>2×2</div><div class="arch-label">54×54×64</div></div>
+<div class="arch-arrow">→</div>
+<div class="arch-block"><div class="arch-layer conv" style="height:88px">Conv2D<br/>128 filter<br/>3×3 ReLU</div><div class="arch-label">52×52×128</div></div>
+<div class="arch-arrow">→</div>
+<div class="arch-block"><div class="arch-layer pool" style="height:68px">MaxPool<br/>2×2</div><div class="arch-label">26×26×128</div></div>
+<div class="arch-arrow">→</div>
+<div class="arch-block"><div class="arch-layer dense" style="height:60px">Dense<br/>128 ReLU</div><div class="arch-label">Flatten→128</div></div>
+<div class="arch-arrow">→</div>
+<div class="arch-block"><div class="arch-layer out" style="height:52px">Output<br/>3 Kelas<br/>Softmax</div><div class="arch-label">Mutu I/II/TL</div></div>
+</div>

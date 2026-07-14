@@ -1,0 +1,38 @@
+Baik, mari kita bedah gambar aplikasi (GUI) yang Anda lampirkan ini murni dari kacamata *programming* dan analisis *Machine Learning*. Sesuai janji, saya akan fokus pada analisis program agar Anda bisa belajar dan bisa menjelaskannya dengan sangat lancar saat sidang nanti.
+
+Berikut adalah analisa untuk masing-masing warna yang Anda tandai:
+
+### 1. Garis Warna Biru (Pojok Kanan Atas)
+
+* **Sebutan di Program:** Ini disebut **"Title Bar"** atau **"Window Manager Controls"** (Tombol *Minimize, Maximize, Close*).
+* **Analisa:** Bagian ini sebenarnya **bukan** sesuatu yang Anda *coding* secara manual di Python. Saat Anda membuat aplikasi menggunakan pustaka GUI seperti `Tkinter` (yang Anda gunakan di `app.py`), sistem operasi komputer (dalam hal ini Windows) secara otomatis memberikan bingkai dan tombol-tombol tersebut agar aplikasi Anda bisa ditutup atau dikecilkan layaknya *software* Windows pada umumnya.
+
+### 2. Garis Warna Merah (Area Atas & Tengah)
+
+* **Sebutan di Program:** Ini adalah kumpulan **"Widgets"** (elemen-elemen visual) yang dibungkus di dalam sebuah **"Frame"**.
+* **Analisa Komponen:**
+* Teks "SISTEM SORTASI MUTU BAWANG MERAH..." itu dibuat menggunakan widget **`Label`** di Tkinter.
+* Kotak abu-abu besar yang menampilkan foto bawang merah beserta teks *path file* di bawahnya (`File: 27_100...jpg`) biasanya dibuat menggunakan widget **`Canvas`** atau **`Label`** yang diisi dengan objek gambar (`PhotoImage`).
+* Secara keseluruhan, area merah ini berfungsi sebagai **Area Input/Display Visual**. Program membaca file gambar dari direktori komputer Anda dan menampilkannya ke layar sebelum diproses oleh algoritma.
+
+
+
+### 3. Garis Warna Hijau (Masalah Utama: Kenapa GLCM salah tebak jadi Mutu 1?)
+
+Di sinilah letak analisis Machine Learning-nya. Gambar bawang tersebut jelas memiliki bercak-bercak hitam (jamur/busuk), yang mana **CNN berhasil menebak dengan sangat akurat (100% Tidak Layak)**. Lalu kenapa GLCM+SVM malah menebaknya sebagai "Kelas I - Mutu Baik"?
+
+Ini adalah bukti nyata (visualisasi) dari kelemahan GLCM yang sudah dibahas di dokumen Anda sebelumnya. Berikut analisis mengapa program GLCM Anda melakukan kesalahan fatal tersebut:
+
+* **GLCM itu "Buta Warna" (Grayscale Conversion):**
+Sesuai dengan cara kerja program GLCM, langkah pertama sebelum menghitung tekstur adalah mengubah gambar berwarna (RGB) menjadi hitam-putih (*Grayscale*). Ketika bawang merah yang berwarna ungu gelap ini diubah menjadi abu-abu, bercak hitam di permukaannya kemungkinan besar "menyatu" dengan warna kulit bawang yang gelap tersebut. Karena warnanya menyatu, matriks GLCM tidak melihat adanya perbedaan tekstur yang kasar.
+* **GLCM Hanya Menghitung Statistik, Bukan Melihat Bentuk Jamur:**
+Seperti yang tercatat dalam dokumen Anda, GLCM tidak melihat gambar secara utuh seperti mata manusia atau CNN, melainkan hanya menghitung seberapa sering pasangan piksel muncul berdampingan. Jika bercak hitam itu rata/mulus secara piksel saat diubah ke grayscale, maka nilai *Contrast* (ketajaman tekstur) akan tetap rendah, dan nilai *Homogeneity* (keseragaman) akan tetap tinggi.
+* **SVM Tertipu oleh Angka Statistik:**
+Model SVM bertugas sebagai "otak" pengambil keputusan. Karena GLCM menyetorkan angka statistik yang menunjukkan "tekstur bawang ini homogen dan kontrasnya rendah (mulus)", maka SVM langsung menyimpulkan, *"Oh, kalau angkanya mulus begini, berarti ini Kelas I (Mutu Baik)"*. SVM tidak tahu kalau kemulusan itu aslinya adalah bercak jamur.
+* **Bukti Keunggulan CNN (Deep Learning):**
+Sebaliknya, CNN memproses gambar dalam bentuk berwarna (RGB) dan bisa mengekstrak fitur bentuk serta warna secara otomatis melalui lapisan konvolusi. Filter CNN mendeteksi adanya anomali pola dan warna (bercak hitam pada latar belakang ungu/putih) yang ia pelajari dari folder data `Tidak_Layak` saat proses *training*, sehingga CNN bisa mantap menjawab 100% Tidak Layak.
+
+**Kesimpulan untuk Anda Belajar & Bahan Sidang:**
+Gambar *screenshot* aplikasi ini adalah **"Harta Karun"** yang sangat berharga untuk Bab 4 Skripsi Anda. Jika dosen bertanya mengapa akurasi GLCM rendah, Anda cukup tunjukkan gambar ini dan jelaskan:
+
+*"Bapak/Ibu, ini adalah contoh nyata kelemahan GLCM. Pada gambar bawang yang busuk/berjamur ini, CNN berhasil menebak 'Tidak Layak' karena mengenali pola bercak visualnya. Namun, GLCM+SVM salah menebak menjadi 'Mutu Baik'. Hal ini karena GLCM mengonversi gambar ke Grayscale sehingga warna jamur menyatu dengan warna kulit bawang, membuat matriks tekstur mengira permukaannya mulus (Homogeneity tinggi). Inilah bukti analitis mengapa pendekatan Deep Learning (CNN) jauh lebih disarankan untuk kasus penyortiran standar SNI dibandingkan metode ekstraksi fitur tradisional."*

@@ -1,0 +1,69 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix, classification_report, roc_curve, auc
+import pandas as pd
+import numpy as np
+from IPython.display import display, Markdown
+
+def generate_integrated_report(model_cnn, model_svm, test_gen, x_test_glcm, y_test_glcm):
+    # 1. Dapatkan Prediksi CNN
+    test_gen.reset()
+    y_true = test_gen.classes
+    y_pred_cnn_prob = model_cnn.predict(test_gen).flatten()
+    y_pred_cnn = (y_pred_cnn_prob > 0.5).astype(int)
+
+    # 2. Dapatkan Prediksi SVM
+    map_label = {'Layak': 0, 'Tidak_Layak': 1}
+    y_true_svm = np.array([map_label[label] for label in y_test_glcm])
+    y_pred_svm_str = model_svm.predict(x_test_glcm)
+    y_pred_svm = np.array([map_label[label] for label in y_pred_svm_str])
+    y_pred_svm_prob = model_svm.predict_proba(x_test_glcm)[:, 1]
+
+    # 3. Visualisasi Confusion Matrix
+    fig, ax = plt.subplots(1, 2, figsize=(14, 5))
+    cm_cnn = confusion_matrix(y_true, y_pred_cnn)
+    sns.heatmap(cm_cnn, annot=True, fmt='d', ax=ax[0], cmap='Blues', xticklabels=['Layak', 'Tidak_Layak'], yticklabels=['Layak', 'Tidak_Layak'])
+    ax[0].set_title('Confusion Matrix: CNN')
+    cm_svm = confusion_matrix(y_true_svm, y_pred_svm)
+    sns.heatmap(cm_svm, annot=True, fmt='d', ax=ax[1], cmap='Greens', xticklabels=['Layak', 'Tidak_Layak'], yticklabels=['Layak', 'Tidak_Layak'])
+    ax[1].set_title('Confusion Matrix: GLCM + SVM')
+    plt.tight_layout()
+    plt.show()
+
+    # 4. Kurva ROC
+    fpr_cnn, tpr_cnn, _ = roc_curve(y_true, y_pred_cnn_prob)
+    fpr_svm, tpr_svm, _ = roc_curve(y_true_svm, y_pred_svm_prob)
+    plt.figure(figsize=(8, 6))
+    plt.plot(fpr_cnn, tpr_cnn, label=f'CNN (AUC = {auc(fpr_cnn, tpr_cnn):.2f})', color='blue')
+    plt.plot(fpr_svm, tpr_svm, label=f'SVM (AUC = {auc(fpr_svm, tpr_svm):.2f})', color='green')
+    plt.plot([0, 1], [0, 1], 'k--')
+    plt.title('Perbandingan Kurva ROC (CNN vs SVM)')
+    plt.legend()
+    plt.grid(alpha=0.3)
+    plt.show()
+
+    # 5. Tabel Metrik Final (Format Skripsi)
+    def get_report_df(y_t, y_p):
+        report = classification_report(y_t, y_p, target_names=['Layak', 'Tidak_Layak'], output_dict=True)
+        df = pd.DataFrame(report).transpose().iloc[:3, :3]
+        df['Accuracy'] = report['accuracy']
+        return df
+
+    df_cnn_report = get_report_df(y_true, y_pred_cnn)
+    df_svm_report = get_report_df(y_true_svm, y_pred_svm)
+
+    display(Markdown("### **TABEL EVALUASI TERPADU (SIAP COPY KE BAB IV)**"))
+    print("\n[TABEL 1: PERFORMA CNN]")
+    display(df_cnn_report.style.format("{:.2%}"))
+    print("\n[TABEL 2: PERFORMA GLCM+SVM]")
+    display(df_svm_report.style.format("{:.2%}"))
+
+    # Export for Thesis Backup
+    df_cnn_report.to_csv('perbandingan_metrik_cnn.csv', index=True)
+    print(f"\n[INFO] Data lengkap tersimpan sebagai 'perbandingan_metrik_cnn.csv'")
+
+# Jalankan Laporan
+if 'model_cnn' in globals() and 'model_svm' in globals():
+    generate_integrated_report(model_cnn, model_svm, test_generator, X_test_glcm, y_test_glcm)
+else:
+    print("[ERROR] Model atau data tidak ditemukan. Pastikan cell sebelumnya sudah dijalankan.")

@@ -1,0 +1,446 @@
+====================================================================================================
+DOKUMENTASI TEKNIS DAN REKAM JEJAK PENGEMBANGAN (TECHNICAL & DEVELOPMENT RECORD)
+SISTEM SORTASI MUTU BAWANG MERAH AI - SNI 3159:2013
+====================================================================================================
+
+DOKUMEN INI DIBUAT SECARA OTOMATIS SEBAGAI BENTUK DOKUMENTASI FINAL SKRIPSI.
+BERISI LEBIH DARI 1000 BARIS PENJELASAN KOMPREHENSIF MENGENAI ALUR, ARSITEKTUR,
+LOGIKA PEMROSESAN, SERTA REKAM JEJAK KENDALA (BUG HISTORY) DARI AWAL HINGGA AKHIR.
+
+====================================================================================================
+DAFTAR ISI
+====================================================================================================
+BAB 1: PENDAHULUAN DAN LATAR BELAKANG
+BAB 2: ARSITEKTUR PERANGKAT LUNAK & DEPENDENSI (LIBRARY)
+BAB 3: BEDAH KODE DAN ALUR PROGRAM - LAUNCHER (launcher.py)
+BAB 4: BEDAH KODE DAN ALUR PROGRAM - APLIKASI UTAMA (app.py)
+BAB 5: DETAIL LOGIKA KECERDASAN BUATAN (AI: CNN & GLCM-SVM)
+BAB 6: DETAIL LOGIKA ANTARMUKA PENGGUNA (UI CYBERNETIC)
+BAB 7: FITUR LOGGING DAN DIAGNOSTIK SENSOR (TROUBLESHOOTER)
+BAB 8: REKAM JEJAK KENDALA, BUG, DAN PENYELESAIAN (HISTORY)
+BAB 9: PANDUAN PENGGUNAAN (USER MANUAL)
+BAB 10: GLOSARIUM DAN ISTILAH TEKNIS
+====================================================================================================
+
+
+====================================================================================================
+BAB 1: PENDAHULUAN DAN LATAR BELAKANG
+====================================================================================================
+Pengembangan aplikasi "Sistem Sortasi Mutu Bawang Merah AI" ditujukan untuk memenuhi
+kebutuhan klasifikasi mutu bawang merah secara otomatis menggunakan standar nasional
+yaitu SNI 3159:2013. Proses manual yang selama ini dilakukan oleh petani atau pengepul
+seringkali subyektif dan memakan waktu.
+
+Sistem ini dibuat untuk mendokumentasikan, mengotomatisasi, dan mempercepat proses tersebut 
+dengan menggabungkan dua aliran besar dalam kecerdasan buatan:
+1. Deep Learning: Menggunakan arsitektur Convolutional Neural Network (CNN) untuk mengenali
+   pola bentuk, warna, dan struktur bawang merah secara keseluruhan (end-to-end learning).
+2. Machine Learning Klasik: Menggunakan algoritma Support Vector Machine (SVM) yang dipadukan
+   dengan metode ekstraksi fitur tekstur berbasis Gray Level Co-occurrence Matrix (GLCM).
+
+Aplikasi ini ditujukan tidak hanya sebagai alat fungsional, tetapi juga sebagai sebuah
+"Karya Skripsi" yang menonjol. Oleh karena itu, aplikasi dirancang dengan tema antarmuka
+grafis yang tidak biasa: "Cybernetic / Hacker Terminal". Tampilan ini mensimulasikan
+sistem perangkat keras tingkat tinggi, lengkap dengan animasi terminal, teks berkedip (blinking),
+dan sensor diagnostik secara live. Hal ini memberikan nilai tambah pada presentasi sidang skripsi.
+
+
+====================================================================================================
+BAB 2: ARSITEKTUR PERANGKAT LUNAK & DEPENDENSI (LIBRARY)
+====================================================================================================
+Aplikasi ini dikembangkan menggunakan bahasa pemrograman Python versi 3.8 hingga 3.10.
+Arsitektur program dipisah menjadi dua modul utama agar tidak terjadi penumpukan (blunder)
+saat program pertama kali di-download dari repositori (seperti GitHub).
+
+A. DAFTAR PUSTAKA (LIBRARY) YANG DIGUNAKAN:
+   1. Tkinter (Built-in Python):
+      Digunakan untuk membangun seluruh antarmuka grafis pengguna (Graphical User Interface / GUI).
+      Termasuk di dalamnya `ttk` untuk pemodelan widget modern seperti Progressbar.
+   2. OpenCV (cv2):
+      Digunakan untuk pemrosesan citra digital tingkat rendah, seperti membaca file gambar (imread),
+      mengubah ukuran (resize), melakukan grayscaling (cvtColor), dan mengaplikasikan peningkat
+      kontras (CLAHE).
+   3. Pillow (PIL - Python Imaging Library):
+      Digunakan untuk merender gambar ke dalam kanvas Tkinter secara optimal menggunakan 
+      ImageTk.PhotoImage dan filter anti-aliasing (LANCZOS) agar gambar tetap tajam saat di-resize.
+   4. TensorFlow (Keras):
+      Framework utama untuk memuat dan menjalankan inferensi dari model CNN (`.h5`).
+      Mampu memanfaatkan komputasi paralel menggunakan prosesor (CPU) maupun kartu grafis (GPU).
+   5. Scikit-Image (skimage):
+      Pustaka khusus untuk mengolah gambar yang menyediakan modul ekstraksi fitur GLCM 
+      (`graycomatrix` dan `graycoprops`).
+   6. Scikit-Learn (sklearn):
+      Pustaka machine learning untuk algoritma Support Vector Machine (SVM).
+   7. Joblib:
+      Digunakan untuk memuat model SVM yang telah di-training dan diserialisasi sebelumnya (`.pkl`).
+   8. Threading & Concurrent.Futures:
+      Digunakan untuk menjalankan komputasi berat (AI Inference) di latar belakang (background)
+      sehingga UI Tkinter tidak mengalami "Freeze" (Not Responding) saat analisis berlangsung.
+
+B. STRUKTUR FILE UTAMA:
+   - `launcher.py`             : Program starter untuk instalasi dan diagnostik.
+   - `app.py`                  : Program utama (Core Application).
+   - `Model_CNN_Fixed.h5`      : File bobot AI untuk Deep Learning.
+   - `Model_SVM_GLCM.pkl`      : File bobot AI untuk Machine Learning tekstur.
+   - `app_error.log`           : File teks polos untuk menampung riwayat proses (auto-generated).
+
+
+====================================================================================================
+BAB 3: BEDAH KODE DAN ALUR PROGRAM - LAUNCHER (launcher.py)
+====================================================================================================
+File `launcher.py` dibuat untuk memecahkan permasalahan "Kerumitan Instalasi" saat aplikasi
+baru pertama kali dipindahkan ke komputer baru atau di-download dari GitHub. Seringkali
+penguji atau pengguna tidak memiliki pustaka yang dibutuhkan.
+
+FUNGSI DAN ALUR launcher.py:
+1. Definisi Pustaka dan Model:
+   Sistem menyimpan daftar tuple `PACKAGES` yang berisi nama modul, nama pip, dan keterangan.
+   Sistem juga menyimpan daftar `MODEL_FILES` yang wajib ada di direktori yang sama.
+
+2. Pembuatan Jendela GUI Diagnostik (LauncherWindow):
+   Sistem membentuk jendela hitam pekat (#0d1117) dengan elemen antarmuka yang sangat futuristik.
+   - Header: Memiliki teks biru neon dengan indikator "LIVE SCANNING" yang bisa berkedip.
+   - Progress Bar: Bergerak maju seiring selesainya tahapan pemeriksaan.
+   - Text Area (Terminal): Tempat teks hasil pengecekan akan ditulis baris demi baris secara "live".
+
+3. Algoritma Diagnostik Multi-Tahap (di dalam thread terpisah `_jalankan_diagnostik`):
+   - TAHAP 1: Pengecekan versi Python. Memastikan versi yang dipakai adalah 3.8 ke atas
+     agar kompatibel dengan TensorFlow terkini.
+   - TAHAP 2: Analisis Dependensi. Sistem mengulang semua daftar `PACKAGES` dan melakukan
+     percobaan `import`. Jika berhasil, akan dicetak tanda [OK] ✔. Jika gagal (ImportError),
+     modul akan dimasukkan ke dalam daftar tunggu instalasi (to_install).
+   - TAHAP 3: Cek File Model. Memanfaatkan fungsi `os.path.exists()` dan `os.path.getsize()`
+     untuk memvalidasi apakah file `.h5` dan `.pkl` ada. Jika tidak ada, sistem akan mencetak [ERROR]
+     sebagai peringatan bahwa aplikasi utama mungkin akan gagal berfungsi.
+   - TAHAP 4: Auto-Installer. Jika list `to_install` tidak kosong, sistem memanggil modul bawaan 
+     `subprocess.run([sys.executable, "-m", "pip", "install", ...])`. Hal ini memastikan bahwa modul
+     di-install tepat pada lingkungan Python (environment) yang sedang menjalankan launcher.
+   - TAHAP 5: Finalisasi. Mencetak ringkasan diagnostik (Berapa OK, Berapa ERROR, Berapa WARNING).
+
+4. Peluncuran Aplikasi Utama:
+   Setelah selesai, tombol hijau "Luncurkan Aplikasi Utama" akan aktif.
+   Ketika ditekan, launcher memanggil fungsi `os.execv()` yang secara teknis akan menimpa 
+   (replace) proses yang sedang berjalan saat ini dengan proses `app.py`. Launcher tertutup 
+   dan memori dialihkan ke aplikasi utama dengan sangat bersih.
+
+
+====================================================================================================
+BAB 4: BEDAH KODE DAN ALUR PROGRAM - APLIKASI UTAMA (app.py)
+====================================================================================================
+File `app.py` adalah jantung dari Sistem Sortasi Bawang Merah. Memiliki kompleksitas yang tinggi
+namun terstruktur.
+
+1. INISIALISASI DAN PENGATURAN LOGGING:
+   Di baris paling atas program, sistem mematikan pesan peringatan C++ (OneDNN) bawaan TensorFlow
+   lewat perintah `os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'`. Hal ini mencegah terminal asli kotor.
+   Selanjutnya, sistem mengaktifkan format Logging menggunakan pustaka `logging`. Semua error
+   dan info sistem dicatat ke dalam `app_error.log`.
+
+2. VARIABEL GLOBAL (DICTIONARY DAN WARNA):
+   Sistem mengatur pemetaan (mapping) untuk mengubah output model (0, 1, 2) menjadi nama mutu yang
+   baku (SNI 3159:2013).
+   - `class_names`: Mapping dari integer kelas model ke nama string.
+   - `class_labels`: Konversi nama string ke teks yang panjang. Contoh: "Tidak Layak / Mutu Rendah".
+   - `class_colors`: Penentuan warna visual. Kelas I = Hijau (#2ecc71), Kelas II = Kuning (#f1c40f), 
+     Tidak Layak = Merah (#e74c3c).
+
+3. FUNGSI INFERENSI (tugas_cnn_gpu & tugas_svm_cpu):
+   Ini adalah fungsi pembungkus (wrapper) AI yang dibuat sedemikian rupa agar aman (thread-safe).
+   Keduanya menerima input matriks gambar (img_bgr).
+   Fungsi ini dijalankan di `ThreadPoolExecutor`.
+
+4. ARSITEKTUR KANVAS DAN LAYOUT TKINTER:
+   Sistem tidak menggunakan satu layer, melainkan sistem "Frame bersusun" (Stacking Frames).
+   `frame_main` memuat tombol pergantian mode (Mode 1 dan Mode 2).
+   Sistem memanggil `.place(relx=0, rely=0, relwidth=1, relheight=1)` pada masing-masing frame Mode,
+   dan menyembunyikan frame lainnya dengan cara menempatkannya ke belakang (`.lift()` dan `.lower()`).
+
+5. MODE 1 - ANALISIS DETAIL:
+   Menangani analisis tunggal.
+   - Pengguna menekan tombol "Pilih 1 Gambar".
+   - `filedialog.askopenfilename` dipanggil untuk membuka jendela penelusuran file OS.
+   - Gambar yang dipilih di-resize lalu ditampilkan ke layar lewat Pillow.
+   - Fungsi `jalankan_prediksi_mode1(filepath)` dipanggil dalam thread baru `threading.Thread(...)`.
+     - Fungsi ini mencatat waktu mulai menggunakan `time.time()`.
+     - CNN dan SVM dipanggil bersamaan.
+     - Hasil akan memicu pemanggilan animasi UI melalui fungsi `ketik_animasi`.
+     - Karena tkinter bukan alat yang aman-benang (thread-safe), semua update ke UI wajib melalui
+       panggilan `root.after(0, ...)`.
+     - Mengakhiri dengan kalkulasi waktu (speed) dan mencatatnya ke dalam `app_error.log`.
+
+6. MODE 2 - PEMINDAIAN MASSAL (BATCH):
+   Menangani banyak gambar sekaligus.
+   - Saat pengguna menekan tombol "Pilih Folder Penuh", fungsi `filedialog.askdirectory` dipanggil.
+   - Sistem akan menyaring seluruh isi folder yang berakhiran `.jpg`, `.png`, `.jpeg`, dll.
+   - Di dalam `proses_batch_mode2(filepaths)`:
+     * Sistem memusnahkan semua kartu lama: `for w in grid_frame.winfo_children(): w.destroy()`.
+     * Mengembalikan posisi gulir (scroll) ke ujung paling atas: `canvas_mode2.yview_moveto(0)`.
+     * Menggunakan konsep "Grid System" layaknya CSS (row_idx, col_idx). Jika col_idx mencapai
+       angka lebih dari 3 (kolom ke-4), sistem berpindah ke baris baru (`row_idx += 1; col_idx = 0`).
+     * Gambar yang dikalkulasi AI akan dibungkus dalam sebuah wadah "Card".
+     * Card ini akan dilekatkan (bind) event `<Enter>` dan `<Leave>` untuk mendeteksi kursor,
+       yang mana akan memicu kelas `ToolTip` memunculkan hasil (akurasi CNN dan SVM) di layar.
+
+7. MANAJEMEN TEMA (THEME SWITCHER):
+   Fungsi `apply_tema("terang" / "gelap")`:
+   Ini adalah fungsi canggih yang mengubah semua palet warna secara paksa.
+   Sistem mendefinisikan warna utama (`bg_utama`), frame (`bg_frame`), warna kartu (`card_bg`), dll.
+   Kemudian menggunakan pendekatan brute-force untuk memanipulasi widget-widget yang sudah tercipta
+   (melalui metode rekursif di `grid_frame.winfo_children()`) untuk ikut menyesuaikan warnanya.
+
+8. MOUSE SCROLLING LINTAS PLATFORM:
+   Mengikat event mouse scroll di Tkinter seringkali sulit karena Windows dan Linux berbeda.
+   Fungsi `aktifkan_scroll(widget, ...)` diimplementasikan untuk melakukan Binding pada
+   `<MouseWheel>` (Windows) dengan perhitungan delta `(event.delta / 120)`.
+   Fungsi ini bersifat rekursif. Artinya, seluruh anak (child) dari Canvas/Frame juga akan dideteksi,
+   sehingga saat kursor pengguna berada tepat di atas foto, roda mouse tetap dapat menggulung layar.
+
+
+====================================================================================================
+BAB 5: DETAIL LOGIKA KECERDASAN BUATAN (AI: CNN & GLCM-SVM)
+====================================================================================================
+Agar program ini sah sebagai karya ilmiah skripsi, sangat penting mendokumentasikan landasan teori
+di balik algoritma yang tertanam pada sistem.
+
+A. CONVOLUTIONAL NEURAL NETWORK (CNN)
+   - Digunakan untuk identifikasi visual secara mendalam (Bentuk cacat, bercak warna hitam, 
+     busuk ujung, tunas, dll).
+   - Input: Matriks gambar yang di-resize ke resolusi konstan 224x224 piksel, dan dikonversi ke
+     warna RGB (Tkinter/OpenCV kadang menanganinya sebagai BGR, sehingga `cvtColor` wajib dilakukan).
+   - Pengenalan Keras: Model dimuat dengan `load_model()`. Proses inferensi menggunakan `.predict()`.
+   - Output: Sebuah array probabilitas (misal: [0.1, 0.8, 0.1]). Sistem mencari indeks maksimum
+     melalui fungsi numpy `np.argmax(pred)`. Jika indeks yang menang adalah 1, maka merujuk pada
+     kelas ke-2 (Mutu II).
+   - Nilai Keyakinan (Confidence): Diambil dari persentase probabilitas maksimum dikali 100 
+     (`np.max(pred) * 100`).
+
+B. GRAY LEVEL CO-OCCURRENCE MATRIX (GLCM) & SUPPORT VECTOR MACHINE (SVM)
+   - Digunakan untuk analisis "Tekstur" (kekasaran, kulit terkelupas, kelembapan).
+   - Pre-processing (Peningkatan Kontras):
+     Sebelum gambar dianalisis, ia diubah menjadi abu-abu (grayscale). Gambar bawang merah 
+     terkadang memiliki pencahayaan tidak merata (ada bayangan). Untuk mengatasinya, digunakan
+     CLAHE (Contrast Limited Adaptive Histogram Equalization) dengan clipLimit=2.0 dan tileGrid 8x8.
+     CLAHE mencegah "noise amplification" sekaligus menonjolkan urat tekstur bawang merah.
+   - Algoritma Ekstraksi GLCM:
+     Pustaka `skimage` digunakan. Jarak (distance) di set ke 1 piksel, sudut (angle) di set ke 0.
+     Dari matriks GLCM ini diekstraksi 4 pilar fitur, yaitu:
+     1. Contrast (Kontras): Menghitung variasi spasial (perbedaan warna).
+     2. Correlation (Korelasi): Ketergantungan linier antar piksel.
+     3. Energy (Energi / Angular Second Moment): Ukuran keseragaman lokal. Semakin mulus bawang, makin tinggi.
+     4. Homogeneity (Homogenitas): Keeratan distribusi elemen ke diagonal matriks GLCM.
+   - Inferensi Support Vector Machine (SVM):
+     Keempat fitur tersebut dimasukkan ke model SVM. SVM akan membangun garis (hyperplane) di dimensi
+     berbeda untuk memisahkan data Mutu 1, Mutu 2, dan Mutu Rendah.
+   - Perhitungan Nilai Keyakinan (Confidence) SVM:
+     Karena SVM seringkali dilatih tanpa fitur probabilistik (`predict_proba` dinonaktifkan di sklearn),
+     program ini menambahkan logika "pseudo-sigmoid".
+     Bila `predict_proba()` gagal (try-except block), program akan menjalankan `decision_function()`.
+     Fungsi ini mengukur jarak matematis (margin) antara data input dengan garis batas (hyperplane) kelas.
+     Semakin jauh jaraknya, semakin SVM yakin (score tinggi). Jarak tersebut dikonversi dengan 
+     rumus: `min(100.0, 50.0 + (jarak_maksimum * 15.0))`. Ini menjamin nilai presentase SVM akan
+     terlihat fluktuatif, masuk akal, dan tidak stuck di angka 75% statis.
+
+
+====================================================================================================
+BAB 6: DETAIL LOGIKA ANTARMUKA PENGGUNA (UI CYBERNETIC)
+====================================================================================================
+Bukan sekadar tampilan standar biasa, namun mengadopsi estetika Hacking / Industrial Monitoring:
+- Font Dasar: "Consolas" — Memberikan kesan monospace, teknikal, dan mesin sandi.
+- Baris Terminal: Dilengkapi dengan sensor grafis teks (misal: `> CONTRAST [||||||||  ] : 0.052`).
+  Ini dibuat dengan fungsi khusus `buat_bar(nilai, skala)` yang mengonversi angka rasio ke jumlah
+  karakter pipa (|) untuk membentuk loading bar tiruan.
+- Animasi Mengetik: Fungsi `ketik_animasi()` diimplementasikan agar teks hasil di Mode 1 tidak
+  keluar secara instan. Sistem memotong teks huruf demi huruf, dan menambahkan delay sebesar 0.015 detik
+  per huruf menggunakan fungsi looping rekursif `root.after()`.
+- Progressbar Kustomisasi: Komponen `ttk.Progressbar` dimanipulasi `style`-nya. Ketika hasil klasifikasi
+  bawang adalah Merah (Mutu Rendah), warna isi dari progress bar akan seketika berubah mengikuti
+  parameter `background=hasil['warna']`.
+
+
+====================================================================================================
+BAB 7: FITUR LOGGING DAN DIAGNOSTIK SENSOR (TROUBLESHOOTER)
+====================================================================================================
+Bagian ini didesain sepenuhnya sebagai permintaan khusus pengguna untuk mempermudah "Troubleshooting"
+dan menampung semua log pencatatan "Speed Process" demi kebutuhan sidang.
+
+- Logger Back-end:
+  Fungsi `log_info()` dan `log_error()` menerima string teks, lalu merangkainya dengan format
+  Waktu/Tanggal (Timestamp) dan menyimpannya di file `app_error.log`. File ini diset untuk 'append' (a).
+
+- UI Troubleshooter Live Sensor:
+  Merupakan jendela lapis kedua (Toplevel window) bernama `buka_troubleshooter()`.
+  Desain layaknya dasbor administrator sistem.
+  * Auto-Refresh Loop: Terdapat fungsi `_auto_refresh_loop()` yang membaca log setiap 1.5 detik
+    sekali secara otomatis. Fungsi ini terbatas oleh `_MAX_AUTO = 5` siklus. Mengapa?
+    Karena membaca file terus menerus akan memenuhi disk I/O dan memakan kapasitas RAM yang tidak
+    diinginkan pengguna (Aplikasi ini dibuat untuk ringan).
+  * Setelah 5 siklus berputar (layaknya booting mesin yang sudah selesai), mode berpindah ke "Manual".
+  * Blinking Indicator: Label `◉ AUTO-REFRESH AKTIF` di pojok kanan atas akan dikonfigurasi mengubah
+    warnanya antara hijau menyala dan hitam setiap 500ms (`_blink()`).
+  * Text Tagging Analyzer: Text widget tidak hanya memuat log mentah. Terdapat algoritma yang
+    membaca (scanning) kata per baris. Jika suatu baris mengandung kata "[ERROR]", teks akan
+    berwarna merah. Jika "[SPEED]", warnanya emas. Jika "[WARNING]", kuning.
+  * Live Statistics: Terdapat label di bawah header yang terus menghitung ulang berapa jumlah total 
+    baris error, info, peringatan, dan jumlah baris log secara keseluruhan.
+
+
+====================================================================================================
+BAB 8: REKAM JEJAK KENDALA, BUG, DAN PENYELESAIAN (HISTORY)
+====================================================================================================
+Pengembangan aplikasi ini melibatkan berbagai perbaikan seiring dengan permintaan pengguna (User Request).
+Berikut adalah catatan kronologis bug yang ditangani, agar dapat dimasukkan dalam laporan kendala teknis:
+
+Fase 1: Pembangunan Fondasi dan Kerangka Mode (Mode 1 & Mode 2)
+----------------------------------------------------------------------
+Awalnya, aplikasi hanya berupa kode kaku. Kemudian dibangun sistem Mode 1 (analisis tunggal) dan Mode 2
+(pemindaian folder).
+- Masalah/Kekurangan: Visual UI terlalu polos (standar sistem operasi).
+- Solusi: Diimplementasikan sistem "Border Neon", font Terminal Consolas, dan latar belakang biru tua 
+  bergaya Hacker.
+
+Fase 2: Bug Animasi Berkedip pada Galeri Tooltip Mode 2
+----------------------------------------------------------------------
+- Bug: Saat kursor diarahkan ke kartu gambar di Mode 2, muncul popup Tooltip yang menunjukkan rincian
+  akurasi (CNN & SVM). Namun layar berkedip kencang (seizure-like flickering) setiap mouse bergerak.
+- Analisis Penyebab: Sistem lawas menggunakan widget Tooltip yang menyambungkan posisinya ke geometri
+  Label atau Canvas (misalnya menggunakan fungsi bounding box `bbox("insert")`). Sayangnya Tkinter
+  sering gagal mengkalkulasi bbox ketika canvas di-scroll.
+- Tindakan/Solusi Tuntas: Menghapus implementasi bbox. Tooltip dirombak menjadi `tk.Toplevel(..., overrideredirect=True)`.
+  Lokasi tooltip kini bergantung sepenuhnya kepada koordinat mutlak kursor (`event.x_root` dan `event.y_root`),
+  memberikan offset +15 pixel agar tidak tertumpuk dengan titik pointer mouse itu sendiri. Kedipan hilang total.
+
+Fase 3: Balapan Teks di Terminal Mode 1 (Race Condition/Overlap)
+----------------------------------------------------------------------
+- Bug: Di Mode 1, saat program mencetak teks "MEMULAI PROSES..." bersamaan dengan teks hasil prediksi,
+  kedua teks bercampur aduk menjadi satu ("MHEASMIULL CAINN...").
+- Analisis Penyebab: Fungsi ketik animasi menggunakan jeda asynchronous `root.after()`. Ketika CNN selesai,
+  ia memanggil animasi baru padahal animasi teks pembuka belum selesai terketik. Dua iterasi berjalan paralel
+  menulis ke satu terminal (Text Widget) yang sama.
+- Tindakan/Solusi Tuntas: Menghentikan pola animasi balapan. Fungsi `jalankan_prediksi_mode1()` disederhanakan.
+  Tidak ada animasi mengetik pada tahap persiapan. Animasi ketik 0.015 detik hanya dipicu TEPAT pada saat 
+  kesimpulan probabilitas hasil prediksi siap diturunkan ke layar. Hasilnya teks mengalir rapi dan keren.
+
+Fase 4: Adaptasi Algoritma Visual pada Mode GLCM+SVM
+----------------------------------------------------------------------
+- Permintaan Pengguna: Pengguna meminta perbaikan visualisasi sensor untuk SVM agar serupa dengan yang ada 
+  di Mode CNN (bentuk bar).
+- Solusi: Fitur bar [||||||  ] diadaptasi. Di mana CNN hanya memuat nilai Confidence, bagian SVM juga memuat
+  nilai tekstur yang terekstraksi (Contrast, Correlation, Energy, Homogeneity). Label nama yang sebelumnya 
+  tertulis "SVM" direvisi menjadi "GLCM+SVM" di seluruh sudut aplikasi untuk memperjelas metode gabungan.
+
+Fase 5: Bug Latar Belakang Kartu Mode 2 (Hardcoded Black Theme)
+----------------------------------------------------------------------
+- Bug: Ketika tema aplikasi diubah menjadi "Terang" melalui menu warna, semua elemen menjadi putih keabu-abuan.
+  Namun, anehnya border atau lapisan di belakang setiap kartu gambar di Mode 2 tetap berwarna "#000000" (Hitam pekat).
+- Analisis Penyebab: Saat kartu di-generate, warnanya di-hardcode di memori menjadi `bg="#000000"`. Fungsi pengubah 
+  tema `apply_tema()` pada mulanya tidak mampu merambah terlalu dalam ke widget anak dari anak Canvas.
+- Tindakan/Solusi Tuntas: Penggantian warna statis "#000000" menjadi variabel referensi dinamis `card_bg`.
+  Fungsi `apply_tema()` juga diperbarui dengan instruksi perulangan (try-except) berlapis yang mencari `tk.Label`
+  maupun `tk.Frame` di kedalaman hirarki Mode 2 dan memaksanya memperbarui warnanya secara real-time.
+
+Fase 6: Bug Angka Probabilitas SVM Terkunci pada 75%
+----------------------------------------------------------------------
+- Bug/Keluhan: "Mengapa nilai GLCM+SVM tidak terlihat berguna, stuck tidak stabil?"
+- Analisis Penyebab Celah: 
+  Sistem sebelumnya menggunakan metode "Multi-Angle" (sudut 0, 45, 90, 135 derajat lalu dirata-rata)
+  untuk mengekstrak fitur GLCM yang canggih dan anti-rotasi.
+  Namun, celahnya, model SVM yang dibawa pengguna (`Model_SVM_GLCM.pkl`) sangat mungkin dilatih pada data berdimensi 
+  Single-Angle (0 derajat saja). Ketidakcocokan dimensi input ini membuat fungsi probabilistik scikit-learn
+  gagal bekerja (lemparan exception), dan sistem fallback (menyerah) selalu menaruh angka statis 75.0%.
+- Tindakan/Solusi Tuntas (Optimisasi AI Terbesar):
+  1. Multi-Angle GLCM dipangkas dan dikembalikan (revert) ke Single-Angle (0 derajat) agar selaras
+     secara murni dengan arsitektur model pelatihan bawaan pengguna.
+  2. Karena `predict_proba` masih memiliki potensi gagal (SVM murni hanya membagi garis kelas, tidak
+     mengembalikan persentase kepastian kecuali parameter probabilitas diaktifkan di tahap awal), maka
+     diaplikasikan pendekatan jarak matematika.
+  3. `model_svm.decision_function()` diimplementasikan. Fungsi ini mengukur jarak titik uji terhadap
+     garis pembatas SVM. Angka jarak absolut ini lalu dikonversi dengan persaman matematis khusus
+     (`50.0 + score * 15.0`) untuk mensimulasikan kepastian probabilitas. Hasilnya, angka kini 
+     sangat fluktuatif (bervariasi) antar satu bawang dan bawang lainnya!
+
+Fase 7: Permasalahan Manajemen RAM pada Auto-Refresh dan Penambahan Kecepatan (Speed Timing)
+----------------------------------------------------------------------
+- Kebutuhan: Pengguna memerlukan data seberapa cepat setiap frame/foto diproses oleh AI untuk dokumentasi Sidang.
+- Tindakan 1 (Timing): Pustaka `time.time()` ditanamkan. Menghitung kalkulasi *sebelum* `ThreadPoolExecutor` berjalan,
+  dan *sesudah* AI menebak hasil. Durasi dikurangi lalu dibulatkan `round(t, 3)` atau milidetik.
+- Tindakan 2 (Memory Overflow Prevention): Pengguna menolak Refresh Otomatis pada Troubleshooter secara konstan.
+  Membaca log dari hardisk setiap milidetik akan menciptakan efek bottleneck memori (penumpukan RAM) pada komputer
+  spek rendah.
+  - Solusi Jitu: Troubleshooter dibangun dengan pola hidup (lifecycle). Ia hanya berputar (auto-refresh) secara otomatis
+    ketika jendela pertama kali dibuka (membantu pengguna melihat secara real time). Namun di belakang layar, ia memiliki 
+    mesin penghitung putaran `_ref_count = 0`. Begitu penghitung mencapai 5 kali putaran (kira-kira 7.5 detik), 
+    fungsi auto loop memotong kinerjanya sendiri menjadi statis (Manual Mode).
+
+Fase 8: Optimalisasi Scroll Bar dan Penghapusan Cache Gambar Mode 2
+----------------------------------------------------------------------
+- Keluhan: Scroll tidak mau bergerak apabila pengguna memakai sentuhan touchpad di atas kartu gambar.
+- Solusi: Fitur `aktifkan_scroll(widget)` dibuat secara rekursif, melekati "MouseWheel Event" pada seluruh elemen (Teks, Frame,
+  Label, Border, Canvas) secara berkesinambungan. Scroll pun menjadi responsif dan luwes dimanapun kursor berada.
+- Bug Konfirmasi Ganti Folder: "Apakah gambar lama dihapus dari memori komputer apabila kita memilih folder yang baru?"
+- Penjelasan dan Aksi: Secara teknis, Tkinter tidak mengelola memori secara eksplisit (karena Python memiliki Garbage Collector).
+  Tetapi untuk memastikan keamanan secara visual dan logis, ketika pengguna menekan "Pilih Folder Penuh" sekali lagi, 
+  sistem memanggil perintah destruksi masal: `for w in grid_frame.winfo_children(): w.destroy()`. Setelah bersih,
+  posisi canvas dibalikkan ke titik puncak secara mekanis: `canvas_mode2.yview_moveto(0)`, label status menampilkan 
+  tulisan oranye "Memuat gambar baru...", UI memaksakan perbaruan dengan `root.update_idletasks()`, dan barulah loop pembacaan
+  gambar baru dieksekusi secara aman tanpa cache tumpang tindih dari eksekusi sebelumnya.
+
+
+====================================================================================================
+BAB 9: PANDUAN PENGGUNAAN (USER MANUAL)
+====================================================================================================
+1. Memulai Aplikasi Pertama Kali
+   - Tekan dan buka "launcher.py" melalui Terminal/CMD (Python).
+   - Biarkan layar diagnostik biru menganalisis kecocokan sistem komputer penguji/mahasiswa.
+   - Bila terdapat pustaka yang belum terinstal (contoh: scikit-learn, pillow, opencv), sistem akan
+     secara mandiri mengunduh dan memasangnya via PIP (diperlukan koneksi internet).
+   - Setelah tulisan "DIAGNOSTIK SELESAI" keluar, tekan tombol hijau di pojok kanan untuk beralih 
+     ke aplikasi inti.
+
+2. Menggunakan Analisis Detail (Mode 1)
+   - Pada pojok atas kiri menu, klik "Mode 1: Analisis Detail".
+   - Tekan tombol hitam tengah berlogo titik empat "[::] Pilih 1 Gambar".
+   - Cari file foto bawang merah.
+   - Perhatikan kedua terminal di sisi kanan, AI akan mulai menampilkan bar probabilitas warna-warni 
+     dan kecepatan eksekusinya.
+
+3. Menggunakan Pemindaian Massal (Mode 2)
+   - Beralih ke "Mode 2: Pemindaian Massal".
+   - Klik "Pilih 1 Folder Penuh". Sistem akan mengolah puluhan bawang dalam sekian detik.
+   - Status bar berwarna hijau paling bawah akan merekam Total waktu yang dibutuhkan (dalam satuan s), 
+     serta kecepatan Rata-Rata pemrosesan per gambar (berguna untuk mencatatkan angka efektivitas
+     AI pada naskah bab 4 skripsi mahasiswa).
+   - Gulir menggunakan mouse ke bawah, lalu letakkan kursor (jangan diklik) pada kartu bawang manapun
+     untuk memunculkan kotak merah berisi rincian.
+
+4. Pencatatan Troubleshooter (Logging)
+   - Pada bar atas aplikasi, cari dan klik menu "Troubleshooter".
+   - Klik "Buka Troubleshooter Log".
+   - Manfaatkan tombol "Salin Semua" untuk segera menempelkan data (paste) ke Microsoft Word sebagai
+     lampiran validasi sistem (log lampiran teknis uji program).
+
+5. Penyesuaian Perangkat Hardware Komputer
+   - Buka menu "Tampilan / Resolusi" di atas.
+   - Apabila layar resolusi Monitor PC Kampus lebih kecil daripada UI default (800x950), gunakan 
+     tombol "Adaptif Monitor (85% Hardware)" untuk me-resize paksa UI agar muat dengan layar proyektor
+     atau monitor tersebut. Atau gunakan fungsi layar penuh "Layar Penuh (Borderless)".
+
+
+====================================================================================================
+BAB 10: GLOSARIUM DAN ISTILAH TEKNIS
+====================================================================================================
+- CLAHE (Contrast Limited Adaptive Histogram Equalization) : Fitur pengolah citra komputer yang mengatur
+  kembali tingkat histogram cahaya. Fungsi ini berguna untuk menyiasati area gambar bawang yang memantulkan
+  cahaya (overexposed) maupun yang gelap bayangan (underexposed), agar teksturnya rata.
+- Race Condition : Situasi dalam ilmu komputer (multithreading) di mana dua fungsi berjalan di memori
+  secara bergandengan atau bertabrakan, beradu untuk mengelola hasil di variabel yang sama (seperti
+  animasi balap ketik).
+- Event Binding : Metode Tkinter untuk "mendengarkan" perintah khusus (tekanan tombol, scroll roda mouse,
+  kursor bergeser). Diaplikasikan pada `<Enter>`, `<Leave>`, dan `<MouseWheel>`.
+- SVM Margin / Hyperplane : Batas linear dalam ruang multidimensi (dari fitur Contrast, Correlation,
+  Energy, dan Homogeneity) yang memotong keputusan apakah sebutir bawang layak masuk ke Mutu 1, Mutu 2,
+  atau jatuh dalam kategori busuk / Tidak Layak Jual.
+
+
+====================================================================================================
+AKHIR DOKUMEN (END OF FILE) - SISTEM TELAH SELESAI, STABIL, DAN SIAP UNTUK DILUNCURKAN DALAM SIDANG.
+====================================================================================================

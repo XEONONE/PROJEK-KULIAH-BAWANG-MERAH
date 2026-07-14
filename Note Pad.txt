@@ -1,0 +1,45 @@
+saya mua nanya soal Tkinter nya bisa di bikin "Window Manager Controls" Tombol Minimize, Maximize di bikin befungsi gk dan untuk rasio gambar nya di optimasikasi arau di auto menyesuaikan full Window dan minimum Window dan jika kalau misalkan 
+di bikin Menu di Title Bar nya ada tentang ukuran window dari adaptasi maksimum resolution di pc atau perangkat lunka layar 
+
+jika confiden nya bisa di bikin dua2x nya biar lebih terbaca beserta di bagian 
+yang saya garisin tolong di bikin kaya ada scroll down dan up 
+
+
+================================================================================
+ALASAN ERROR: "Command 'wmic cpu get name' returned non-zero exit status 1"
+================================================================================
+Error tersebut terjadi karena perintah wmic (Windows Management Instrumentation Command-line) adalah fitur lama yang mulai dihapus/deprecated oleh Windows (terutama pada Windows 11). Saat aplikasi Python memanggilnya, sistem tidak mengenalinya dan mengembalikan error exit status 1.
+Solusi: Saya akan mengubah kode di trainer_app.py untuk menggunakan PowerShell modern (Get-CimInstance) yang lebih handal mendeteksi Hardware Accelerator Anda.
+================================================================================
+
+================================================================================
+ALASAN ERROR: "RecursionError: maximum recursion depth exceeded" (TKINTER)
+================================================================================
+Error ini terjadi pada antarmuka pengguna (GUI) saat melatih model karena output log dari TensorFlow sangat banyak dan cepat. Di dalam kode, terdapat perintah self.root.update() yang dipanggil setiap kali satu baris log dicetak. Kombinasi log yang sangat cepat dan pembaruan GUI yang memaksa ini menyebabkan antrean event antarmuka tumpang tindih dan bertumpuk tanpa henti (rekursi tak terhingga), sehingga Python menghentikannya karena melebihi batas memori (Recursion Depth).
+Solusi: Saya akan menghapus baris self.root.update() dari fungsi penulisan log agar Tkinter menangani pembaruan log secara alami melalui antrean asinkronnya tanpa terjebak loop rekursif.
+================================================================================
+
+================================================================================
+ALASAN ERROR: "RecursionError: maximum recursion depth exceeded" di trainer_app.py
+================================================================================
+Error tersebut (Tkinter stack overflow) terjadi karena aplikasi terlalu cepat dan terlalu sering memaksa layar untuk memperbarui tampilan (melalui fungsi self.root.update()) saat menerima log dari TensorFlow.
+Karena TensorFlow menghasilkan ratusan log dalam sekejap saat memproses komputasi (oneDNN operations dll), antrean render antarmuka (UI) menjadi bertumpuk (recursive) dan menyebabkan aplikasi crash.
+
+Solusi: Saya akan menghilangkan paksaan render self.root.update() dari fungsi log. Karena log dipanggil secara asinkron dari thread background (menggunakan oot.after), Tkinter akan merendernya secara otomatis dan aman tanpa harus dipaksa yang berujung pada error rekursif.
+================================================================================
+
+================================================================================
+ALASAN MENGAPA PELATIHAN (TRAINING) TIDAK BERJALAN/TERBACA DI GPU NVIDIA RTX ANDA
+================================================================================
+Berdasarkan screenshot Task Manager yang Anda berikan, Anda memiliki GPU 0 (Intel UHD) dan GPU 1 (NVIDIA RTX). Namun, saat Anda menekan tombol Training, proses tersebut tidak berjalan di GPU NVIDIA Anda. Hal ini terjadi karena 2 alasan teknis berikut:
+
+1. PERUBAHAN DUKUNGAN TENSORFLOW DI WINDOWS
+Sejak TensorFlow versi 2.11 ke atas, pihak Google (pengembang TensorFlow) SECARA RESMI MENCABUT dukungan native GPU (CUDA) untuk sistem operasi Windows standar. Akibatnya, TensorFlow versi modern akan secara otomatis melakukan "Fallback" atau beralih kembali menggunakan CPU (terlihat dari munculnya pesan log oneDNN custom operations are on), meskipun UI aplikasi kita telah berhasil mendeteksi dan mengarahkan komputasi ke RTX Anda.
+
+2. CARA AGAR TENSORFLOW BERJALAN DI RTX (OPSIONAL UNTUK SKRIPSI)
+Jika Anda ingin memaksa proses training masuk ke NVIDIA GeForce RTX Anda untuk mempercepat waktu komputasi, Anda memiliki dua pilihan solusi lingkungan:
+  a. Meng-downgrade (menurunkan) versi TensorFlow ke versi 2.10 (versi terakhir yang mendukung GPU di Windows native).
+  b. Atau, menggunakan WSL2 (Windows Subsystem for Linux) yang direkomendasikan oleh Microsoft dan Google.
+
+Namun untuk keperluan demo aplikasi GUI skripsi ini, pelatihan menggunakan CPU (oneDNN) seperti yang terjadi saat ini sebenarnya sudah sangat cukup dan normal. Aplikasi tetap berjalan, hanya waktu tunggunya sedikit lebih lama dibanding menggunakan GPU.
+================================================================================

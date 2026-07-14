@@ -1,0 +1,193 @@
+╔═════════════════════════════════════════════════════════════════════════════════════════════╗
+║                             UNIVERSITAS BINA SARANA INFORMATIKA                             ║
+║                               FAKULTAS TEKNIK DAN INFORMATIKA                               ║
+║                 PROGRAM STUDI REKAYASA PERANGKAT LUNAK / TEKNOLOGI INFORMASI                ║
+╚═════════════════════════════════════════════════════════════════════════════════════════════╝
+
+
+
+PENERAPAN COMPUTER VISION UNTUK SORTASI MUTU BAWANG MERAH (ALLIUM ASCALONICUM L.) BERDASARKAN SNI 3159:2013 MENGGUNAKAN EKSTRAKSI FITUR GLCM DAN ALGORITMA CNN
+
+
+    Diajukan untuk memenuhi salah satu syarat kelulusan Program Studi Strata Satu (S1)
+
+
+Lembar Persetujuan dan Pengesahan Skripsi
+
+
+    Halaman ii
+
+    Skripsi ini diajukan oleh:
+
+    Jakarta, ………………………… 2026
+
+    Disetujui oleh:
+
+    Diketahui oleh:
+
+
+Lembar Pernyataan Keaslian Skripsi
+
+
+    Halaman iv
+
+    Yang bertanda tangan di bawah ini:
+
+    Menyatakan bahwa Skripsi ini merupakan karya tulis saya sendiri dan bukan merupakan tiruan,
+    salinan, atau duplikat dari Skripsi yang telah dipergunakan untuk mendapatkan gelar sarjana di
+    lingkungan Universitas Bina Sarana Informatika maupun di Perguruan Tinggi atau Instansi
+    manapun, serta belum pernah dipublikasikan.
+
+    Informasi yang berasal atau dikutip dari karya yang diterbitkan maupun tidak diterbitkan dari
+    penulis lain telah disebutkan dalam teks dan dicantumkan dalam Daftar Pustaka di bagian akhir
+    Skripsi ini.
+
+    Jakarta, …………………………… 2026
+
+
+Kata Pengantar
+
+
+    Halaman v
+
+    Puji syukur kepada Tuhan Yang Maha Esa atas segala rahmat dan karunia-Nya sehingga penulis
+    dapat menyelesaikan penyusunan Skripsi dengan judul "Penerapan Computer Vision untuk Sortasi
+    Mutu Bawang Merah ( Allium ascalonicum L. ) Berdasarkan SNI 3159:2013 Menggunakan Ekstraksi
+    Fitur GLCM dan Algoritma CNN" ini tepat pada waktunya.
+
+    Skripsi ini disusun sebagai salah satu syarat kelulusan Program Studi Strata Satu (S1) pada
+    Universitas Bina Sarana Informatika. Penulis mengucapkan terima kasih yang sebesar-besarnya
+    kepada:
+
+    1.  Rektor Universitas Bina Sarana Informatika atas seluruh fasilitas dan kebijakan akademik.
+    2.  Dekan Fakultas Teknik dan Informatika yang telah memberikan kepercayaan kepada penulis.
+    3.  Ketua Program Studi Teknik Informatika yang telah memberikan arahan dalam menyelesaikan
+        studi.
+    4.  Ibu Giantika, S.Kom., M.Kom. selaku Dosen Pembimbing yang dengan sabar dan penuh
+        kebijaksanaan memberikan bimbingan, arahan, dan ilmu kepada penulis.
+    5.  Seluruh Dosen Universitas Bina Sarana Informatika yang telah mentransfer ilmu pengetahuan
+        selama masa perkuliahan.
+    6.  Kedua orang tua dan keluarga tercinta yang selalu memberikan doa, kasih sayang, semangat,
+        dan dukungan moral maupun material yang tidak ternilai harganya.
+    7.  Rekan-rekan mahasiswa angkatan 2025/2026 yang telah memberikan kebersamaan dan semangat.
+
+    Penulis menyadari bahwa Skripsi ini masih jauh dari sempurna. Oleh karena itu, penulis sangat
+    mengharapkan kritik dan saran yang membangun dari semua pihak demi perbaikan di masa mendatang.
+
+    Jakarta, Juli 2026
+
+    Juan Euaggelion Seran
+
+
+Abstrak / Abstract
+
+
+    Halaman vi
+
+
+ABSTRAK
+
+    Bawang merah ( Allium ascalonicum L. ) merupakan komoditas hortikultura strategis di Indonesia
+    yang sangat berpengaruh terhadap ketahanan pangan nasional dan fluktuasi harga di pasaran.
+    Proses sortasi mutu bawang merah secara manual seringkali bersifat subjektif, tidak konsisten,
+    dan memerlukan tenaga kerja yang besar. Standar Nasional Indonesia (SNI) 3159:2013 telah
+    menetapkan klasifikasi mutu bawang merah ke dalam tiga kelas: Mutu I, Mutu II, dan Tidak Layak.
+    Penelitian ini bertujuan merancang dan mengimplementasikan sistem Computer Vision berbasis
+    kecerdasan buatan yang mampu mengklasifikasikan mutu bawang merah secara otomatis dan objektif.
+
+    Sistem yang dibangun mengintegrasikan tiga pendekatan AI secara komparatif: pertama, Vision
+    Transformer (ViT-Base-Patch16-224) yang dilatih melalui platform Roboflow menggunakan dataset
+    3.594 citra (3.138 latih, 305 validasi, 151 uji) dengan augmentasi canggih; kedua, Deep
+    Learning konvensional menggunakan arsitektur CNN Sequential tiga blok konvolusi (32, 64, dan
+    128 filter) yang dilatih di Google Colab; ketiga, Machine Learning klasik menggunakan GLCM
+    sebagai ekstraktor fitur tekstur yang diklasifikasikan menggunakan SVM berkernel linear. Hasil
+    evaluasi: model ViT (Roboflow) mencapai akurasi 98,5% ; model CNN mencapai akurasi 72,03% ;
+    model GLCM+SVM mencapai akurasi 39,85% . Sistem diimplementasikan ke dalam aplikasi desktop
+    Python-Tkinter real-time.
+
+
+ABSTRACT
+
+    Shallot ( Allium ascalonicum L. ) is a strategic horticultural commodity in Indonesia, greatly
+    influencing national food security and market price fluctuations. Indonesian National Standard
+    (SNI) 3159:2013 has established shallot quality classifications into three categories: Grade I,
+    Grade II, and Unqualified. This study integrates three AI approaches: Vision Transformer/ViT
+    via Roboflow ( 98.5% accuracy ), CNN Sequential via Google Colab (72.03% accuracy), and
+    GLCM+SVM (39.85% accuracy), implemented as a real-time Python-Tkinter desktop application.
+
+
+Daftar Isi
+
+
+    Halaman viii
+
+    -   Lembar Persetujuan dan Pengesahan Skripsi ii
+    -   Lembar Pernyataan Keaslian Skripsi iv
+    -   Kata Pengantar v
+    -   Abstrak / Abstract vi
+    -   Daftar Isi viii
+    -   BAB I   PENDAHULUAN 1
+    -   BAB II   LANDASAN TEORI 10
+    -   BAB III   METODE PENELITIAN 62
+    -   BAB IV   HASIL DAN PEMBAHASAN 85
+    -   BAB V   PENUTUP 117
+    -   DAFTAR PUSTAKA
+
+[1] Adiningsi, Sri, & Saputra, Rizal Adi. (2023). Identifikasi Jenis Daun Tanaman Obat
+Menggunakan Metode Convolutional Neural Network (CNN) dengan Model VGG16.JIP (Jurnal
+Informatika Polinema), 9(4), 451–460.
+
+[2] Astuti, Yani Parti, Wardatunizza, Indah, Subhiyakto, Egia Rosi, & Kartikadarma, Etika.
+(2023). Implementasi Algoritma Convolutional Neural Network (CNN) Untuk Klasifikasi Jenis Tanah
+Berbasis Android.Jurnal Informatika: Jurnal Pengembangan IT (JPIT), 8(3), 220–225.
+
+[3] Ayu, Ieke Wulan, Siswanto, Heru Tugas, & Lestari, Nina Dwi. (2023). Sosialisasi Pasca Panen
+Bawang Merah Pada Petani Dataran Tinggi Kabupaten Sumbawa.JPML (Jurnal Pengembangan Masyarakat
+Lokal), 6(1), 117–124.
+
+[4] Badan Standardisasi Nasional. (2013).Bawang merah (Allium cepa var. ascalonicum) (SNI
+3159:2013). Jakarta: Badan Standardisasi Nasional.
+
+[5] Fikriah, Fari Katul, Sulthan, M. Burhanis, Mujahidah, Nailatul, & Roziqin, Moh. Khoirur.
+(2022). Naïve Bayes untuk Klasifikasi Penyakit Daun Bawang Merah Berdasarkan Ekstraksi Fitur
+Gray Level Co-occurrence Matrix (GLCM).Jurnal Komtika (Komputasi dan Informatika), 6(2),
+133–141.
+
+[6] Hammu, Merlin Puspitasari Mburu, Lede, Pingky Alfa Ray Leo, & Abineno, Reynaldi Thimotius.
+(2025). Perbandingan Metode Naïve Bayes Dan K-Nearest Neighbor Dalam Mengklasifikasikan
+Penyakit Pada Daun Terong Berdasarkan Ekstraksi Fitur Gray Level Co-Occurrence Matrix.SATI:
+Sustainable Agricultural Technology Innovation, 709–718.
+
+[7] Jumrayanti, Purnawansyah, Darwis, Herdianti, & Satra, Ramdan. (2023). Klasifikasi Penyakit
+Bawang Merah Menggunakan Naive Bayes dan CNN dengan Fitur GLCM.IJCS (Indonesian Journal of
+Computer Science), 12(3), 1231–1240.
+
+[8] Maulana, Raihan, Putri, Raisya Dwi Zahra, Amelia, Tasya Ade, Syahputra, Hermawan, &
+Ramadhani, Fanny. (2024). Identifikasi Jenis Rempah-Rempah Indonesia Dengan Convolutional
+Neural Network (CNN) Menggunakan Arsitektur VGG16.JATI (Jurnal Mahasiswa Teknik Informatika),
+8(4), 6034–6039.
+
+[9] Munandar, Annisa Nurfitri Rida, & Rozi, Anief Fauzan. (2024). Analisis Arsitektur
+Convolutional Neural Network Untuk Klasifikasi Citra Bunga.JTeksis: Jurnal Teknologi Dan Sistem
+Informasi Bisnis, 6(3), 522–531.
+
+[10] Permata, Edo, & Ramadhanu, Agung. (2025). Klasifikasi Bawang Merah, Bawang Putih, dan
+Tomat dengan Hybrid Intelligence System Berbasis KNN dan PCA.JATI (Jurnal Mahasiswa Teknik
+Informatika), 9(2), 3616–3621.
+
+[11] Primananda, Muhammad Izra, & Akbar, Mutaqin. (2024). Klasifikasi Bawang Merah Asli dan
+Palsu Menggunakan Convolutional Neural Network.Remik: Riset dan E-Jurnal Manajemen Informatika
+Komputer, 8(3), 864–870.
+
+[12] Saputra, Robby, Rianto, Yan, & Kusuma, Muhammad Romadhona. (2026). Tinjauan Penerapan CNN
+dan YOLO Pada Pengolahan Citra Agraria Medis Industri Cerdas.CoSciTech (Jurnal Computer Science
+and Information Technology), 7(1), 121–129.
+
+[13] Sriani, Sulindawaty, & Rizky, Yulia. (2024). Klasifikasi Kualitas Daun Tembakau
+Menggunakan GLCM (Gray Level Co-Occurrence Matrix) dan SVM (Support Vector Machine).JITET
+(Jurnal Informatika dan Teknik Elektro Terapan), 12(3), 3342–3349.
+
+[14] Wulandari, Ria Tri, Puspitorini, Palupi, & Serdani, Army Dita. (2021). Dosis Pupuk Organik
+dan Jarak Tanam terhadap Pertumbuhan dan Hasil Tanaman Bawang Merah (Allium ascalonicum L.)
+Varietas Thailand.Grafting: Jurnal Ilmiah Ilmu Pertanian, 11(2), 76–85.
+

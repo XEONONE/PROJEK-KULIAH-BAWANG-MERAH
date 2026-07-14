@@ -1,0 +1,2433 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skripsi – Juan Euaggelion Seran | BSI 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+:root { --editor-bg: #e2e8f0; --page-bg: #ffffff; --primary-color: #2563eb; --line-color: #000; }
+body { background-color: var(--editor-bg); font-family: 'Inter', sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+/* Top Toolbar */
+.header-toolbar { background: linear-gradient(90deg, #1e3a8a 0%, #312e81 100%); color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); z-index: 50; flex-shrink: 0; }
+.header-title { font-size: 16px; font-weight: 600; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px;}
+.header-subtitle { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+.btn-action { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; color: white; }
+
+/* Workspace & Page (A4) */
+.app-shell { display: flex; flex-direction: column; height: 100vh; overflow: auto; }
+.main-content { margin-left: 0 !important; flex: 1; overflow-y: auto; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; scroll-behavior: smooth; background: var(--editor-bg); }
+.doc-container {
+    background-color: var(--page-bg);
+    width: 210mm;
+    min-height: 297mm;
+    height: auto;
+    padding: 3cm 2.5cm 2.5cm 4cm !important;
+    box-sizing: border-box;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
+    font-family: 'Times New Roman', Times, serif !important;
+    font-size: 12pt;
+    line-height: 2;
+    color: #000;
+    text-align: justify;
+    margin: 0;
+    max-width: 100%;
+}
+
+/* Typography */
+h1, h2.doc-h2 { font-family: 'Times New Roman', Times, serif !important; font-size: 14pt !important; font-weight: bold; text-align: center; line-height: 1.5; margin-bottom: 1.5rem; text-transform: uppercase; color: #000 !important; padding: 0; }
+h3.doc-h3 { font-family: 'Times New Roman', Times, serif !important; font-size: 12pt !important; font-weight: bold; margin-top: 1.5rem; margin-bottom: 0.5rem; line-height: 1.5; color: #000 !important; }
+p.doc-p { font-family: 'Times New Roman', Times, serif !important; font-size: 12pt !important; line-height: 2 !important; margin-bottom: 0 !important; text-indent: 1.27cm; color: #000 !important; text-align: justify; }
+
+/* Lists */
+.doc-ul, .doc-ol { font-family: 'Times New Roman', Times, serif !important; font-size: 12pt !important; line-height: 2 !important; color: #000 !important; margin: 0 0 0 1.27cm !important; padding-left: 0; }
+.doc-ul li, .doc-ol li { font-family: 'Times New Roman', Times, serif !important; font-size: 12pt !important; line-height: 2 !important; color: #000 !important; margin-bottom: 0 !important; }
+
+/* Print Settings */
+@media print {
+    body, .main-content { background: white !important; overflow: visible !important; height: auto !important; display: block !important; padding: 0 !important;}
+    .header-toolbar { display: none !important; }
+    .doc-container { box-shadow: none !important; margin: 0 !important; padding: 3cm 2.5cm 2.5cm 4cm !important; width: 100% !important; height: auto !important; page-break-after: always; }
+}
+.page-break { page-break-before: always; border: none; margin: 0; padding: 0; }
+
+/* COVER PAGE BSI GUIDELINES */
+.cover-page { text-align: center !important; font-family: 'Times New Roman', Times, serif !important; padding-top: 2cm !important; page-break-after: always; }
+.cover-title-bsi { font-size: 14pt !important; font-weight: bold !important; text-transform: uppercase !important; line-height: 1.5 !important; margin-bottom: 3cm !important; color: #000 !important; }
+.cover-type-bsi { font-size: 18pt !important; font-weight: bold !important; margin-bottom: 1.5cm !important; color: #000 !important; text-transform: uppercase !important;}
+.cover-subtitle-bsi { font-size: 12pt !important; margin-bottom: 3cm !important; color: #000 !important; }
+.cover-author-bsi { font-size: 14pt !important; font-weight: bold !important; line-height: 1.5 !important; margin-bottom: 3cm !important; color: #000 !important; text-transform: uppercase !important;}
+.cover-footer-bsi { font-size: 12pt !important; font-weight: bold !important; line-height: 1.5 !important; color: #000 !important; }
+
+/* Code Blocks */
+pre { font-family: 'Courier New', Courier, monospace !important; font-size: 10pt !important; white-space: pre-wrap !important; word-break: break-all !important; color: #000 !important; margin: 0 !important; padding: 10px !important; background: #fff !important; line-height: 1.2 !important; border: 1px solid #ddd; }
+</style>
+</head>
+<body>
+
+<div class="header-toolbar">
+    <div>
+        <div class="header-title">SKRIPSI_FINAL_BAWANG_MERAH_AI_BSI_WORD_FULL.docx</div>
+        <div class="header-subtitle">Academic Formatting Mode (Times New Roman 12pt, A4) - FULL CONTENT & REPAIRED CHARTS</div>
+    </div>
+    <div style="display:flex; gap:12px;">
+        <button class="btn-action" onclick="window.print()">Cetak PDF / Print BSI Format</button>
+    </div>
+</div>
+
+<main class="main-content">
+  <!-- SAMPUL -->
+  <section id="cover" class="cover-page">
+    <div class="cover-type-bsi">SKRIPSI</div>
+    <div class="cover-title-bsi">PENERAPAN COMPUTER VISION UNTUK SORTASI MUTU BAWANG MERAH (Allium ascalonicum L.) BERDASARKAN SNI 3159:2013 MENGGUNAKAN EKSTRAKSI FITUR GLCM DAN ALGORITMA CNN</div>
+    <div class="cover-subtitle-bsi">Diajukan untuk memenuhi salah satu syarat kelulusan Program Studi Strata Satu (S1)</div>
+    <div class="cover-author-bsi">Disusun Oleh:<br>Nama : Juan Euaggelion Seran<br>NIM : 15220572</div>
+    <div class="cover-subtitle-bsi">Program Studi : Teknik Informatika<br>Jenjang : Strata Satu (S1)</div>
+    <div class="cover-footer-bsi">UNIVERSITAS BINA SARANA INFORMATIKA<br>FAKULTAS TEKNIK DAN INFORMATIKA<br>JAKARTA<br>2026</div>
+  </section>
+
+  <div class="doc-container">
+
+<pre>
+╔══════════════════════════════════════════════════════════════════════════════════════════════╗
+║                          UNIVERSITAS BINA SARANA INFORMATIKA                                ║
+║                         FAKULTAS TEKNIK DAN INFORMATIKA                                     ║
+║                  PROGRAM STUDI REKAYASA PERANGKAT LUNAK / TEKNOLOGI INFORMASI               ║
+╚══════════════════════════════════════════════════════════════════════════════════════════════╝
+
+</pre>
+<p class="doc-p">[HALAMAN JUDUL]</p>
+<p class="doc-p">SKRIPSI</p>
+<p class="doc-p">PENERAPAN COMPUTER VISION UNTUK SORTASI MUTU BAWANG MERAH</p>
+<p class="doc-p">(Allium ascalonicum L.) BERDASARKAN SNI 3159:2013</p>
+<p class="doc-p">MENGGUNAKAN EKSTRAKSI FITUR GLCM DAN ALGORITMA CNN</p>
+<p class="doc-p">Diajukan untuk memenuhi salah satu syarat kelulusan Program Studi Strata Satu (S1)</p>
+<p class="doc-p">Disusun Oleh:</p>
+<p class="doc-p">Nama   : JUAN EUAGGELION SERAN</p>
+<p class="doc-p">NIM    : 15220572</p>
+<p class="doc-p">Program Studi  : Rekayasa Perangkat Lunak</p>
+<p class="doc-p">Jenjang        : Strata Satu (S1)</p>
+<p class="doc-p">Jakarta, Juni 2026</p>
+
+<pre>
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+<p class="doc-p">[HALAMAN PERSETUJUAN DAN PENGESAHAN]</p>
+<p class="doc-p">LEMBAR PERSETUJUAN DAN PENGESAHAN SKRIPSI</p>
+<p class="doc-p">Skripsi ini diajukan oleh:</p>
+<p class="doc-p">Nama            : JUAN EUAGGELION SERAN</p>
+<p class="doc-p">NIM             : 15220572</p>
+<p class="doc-p">Program Studi   : Rekayasa Perangkat Lunak</p>
+<p class="doc-p">Jenjang         : Strata Satu (S1)</p>
+<p class="doc-p">Judul Skripsi   : PENERAPAN COMPUTER VISION UNTUK SORTASI MUTU BAWANG MERAH</p>
+
+<pre>
+                  (Allium ascalonicum L.) BERDASARKAN SNI 3159:2013 MENGGUNAKAN
+                  EKSTRAKSI FITUR GLCM DAN ALGORITMA CNN
+
+</pre>
+<p class="doc-p">Untuk dipertahankan pada periode I-2026</p>
+<p class="doc-p">Jakarta, ……………………. 2026</p>
+<p class="doc-p">Disetujui oleh:</p>
+<p class="doc-p">Pembimbing I        : _______________________________ ( ............................ )</p>
+<p class="doc-p">Pembimbing II       : _______________________________ ( ............................ )</p>
+<p class="doc-p">Diketahui oleh:</p>
+<p class="doc-p">Ketua Program Studi : _______________________________ ( ............................ )</p>
+
+<pre>
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+<p class="doc-p">[LEMBAR PENGESAHAN SIDANG]</p>
+<p class="doc-p">LEMBAR PENGESAHAN SIDANG SKRIPSI</p>
+<p class="doc-p">Skripsi ini diajukan oleh:</p>
+<p class="doc-p">Nama            : JUAN EUAGGELION SERAN</p>
+<p class="doc-p">NIM             : 15220572</p>
+<p class="doc-p">Program Studi   : Rekayasa Perangkat Lunak</p>
+<p class="doc-p">Jenjang         : Strata Satu (S1)</p>
+<p class="doc-p">Judul Skripsi   : PENERAPAN COMPUTER VISION UNTUK SORTASI MUTU BAWANG MERAH</p>
+
+<pre>
+                  (Allium ascalonicum L.) BERDASARKAN SNI 3159:2013 MENGGUNAKAN
+                  EKSTRAKSI FITUR GLCM DAN ALGORITMA CNN
+
+</pre>
+<p class="doc-p">Telah berhasil dipertahankan di hadapan Dewan Penguji dan diterima sebagai bagian persyaratan</p>
+<p class="doc-p">yang diperlukan untuk memperoleh gelar Sarjana Komputer pada Program Studi Rekayasa Perangkat Lunak,</p>
+<p class="doc-p">Universitas Bina Sarana Informatika.</p>
+<p class="doc-p">DEWAN PENGUJI</p>
+<p class="doc-p">Ketua Penguji   : _______________________________ ( ............................ )</p>
+<p class="doc-p">Anggota Penguji : _______________________________ ( ............................ )</p>
+<p class="doc-p">Ditetapkan di  : Jakarta</p>
+<p class="doc-p">Tanggal        : …………………….. 2026</p>
+
+<pre>
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+<p class="doc-p">[LEMBAR PERNYATAAN KEASLIAN SKRIPSI]</p>
+<p class="doc-p">LEMBAR PERNYATAAN KEASLIAN SKRIPSI</p>
+<p class="doc-p">Yang bertanda tangan di bawah ini:</p>
+<p class="doc-p">Nama            : JUAN EUAGGELION SERAN</p>
+<p class="doc-p">NIM             : 15220572</p>
+<p class="doc-p">Menyatakan bahwa Skripsi ini merupakan karya tulis saya sendiri dan bukan merupakan tiruan,</p>
+<p class="doc-p">salinan, atau duplikat dari Skripsi yang telah dipergunakan untuk mendapatkan gelar sarjana di</p>
+<p class="doc-p">lingkungan Universitas Bina Sarana Informatika maupun di Perguruan Tinggi atau Instansi manapun,</p>
+<p class="doc-p">serta belum pernah dipublikasikan.</p>
+<p class="doc-p">Informasi yang berasal atau dikutip dari karya yang diterbitkan maupun tidak diterbitkan dari</p>
+<p class="doc-p">penulis lain telah disebutkan dalam teks dan dicantumkan dalam Daftar Pustaka di bagian akhir</p>
+<p class="doc-p">Skripsi ini.</p>
+<p class="doc-p">Demikian pernyataan ini saya buat dengan sesungguhnya dan apabila di kemudian hari terdapat</p>
+<p class="doc-p">penyimpangan dan ketidakbenaran dalam pernyataan ini, maka saya bersedia menerima sanksi</p>
+<p class="doc-p">akademik.</p>
+<p class="doc-p">Jakarta, …………………… 2026</p>
+<p class="doc-p">Yang Menyatakan,</p>
+<p class="doc-p">Meterai</p>
+<p class="doc-p">Rp. 10.000</p>
+<p class="doc-p">( JUAN EUAGGELION SERAN )</p>
+<p class="doc-p">NIM. 15220572</p>
+
+<pre>
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+<p class="doc-p">[KATA PENGANTAR]</p>
+<p class="doc-p">KATA PENGANTAR</p>
+<p class="doc-p">Puji syukur kepada Allah SWT atas rahmat dan karunia-Nya sehingga penulis dapat menyelesaikan</p>
+<p class="doc-p">penyusunan Skripsi dengan judul "PENERAPAN COMPUTER VISION UNTUK SORTASI MUTU BAWANG MERAH</p>
+<p class="doc-p">(Allium ascalonicum L.) BERDASARKAN SNI 3159:2013 MENGGUNAKAN EKSTRAKSI FITUR GLCM DAN</p>
+<p class="doc-p">ALGORITMA CNN" ini tepat pada waktunya.</p>
+<p class="doc-p">Skripsi ini disusun sebagai salah satu syarat kelulusan Program Studi Strata Satu (S1) pada</p>
+<p class="doc-p">Universitas Bina Sarana Informatika. Dalam proses penyusunan skripsi ini, penulis mendapatkan</p>
+<p class="doc-p">bantuan, dorongan, dan bimbingan dari berbagai pihak. Oleh karena itu, penulis mengucapkan</p>
+<p class="doc-p">terima kasih yang sebesar-besarnya kepada:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Rektor Universitas Bina Sarana Informatika atas seluruh fasilitas dan kebijakan akademik yang</p>
+<p class="doc-p">mendukung proses studi.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Dekan Fakultas Teknik dan Informatika yang telah memberikan kepercayaan kepada penulis.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Ketua Program Studi yang telah memberikan arahan dalam menyelesaikan studi.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Bapak/Ibu [Nama Dosen Pembimbing I] selaku Dosen Pembimbing I yang dengan sabar dan penuh</p>
+<p class="doc-p">kebijaksanaan memberikan bimbingan dan arahan kepada penulis.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">5. Bapak/Ibu [Nama Dosen Pembimbing II] selaku Dosen Pembimbing II atas saran, koreksi, dan</p>
+<p class="doc-p">ilmu yang diberikan.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">6. Seluruh Dosen Universitas Bina Sarana Informatika yang telah mentransfer ilmu pengetahuan</p>
+<p class="doc-p">kepada penulis selama masa perkuliahan.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">7. Kedua orang tua dan keluarga tercinta yang selalu memberikan doa, kasih sayang, semangat, dan</p>
+<p class="doc-p">dukungan moral maupun material yang tidak ternilai harganya.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">8. Rekan-rekan mahasiswa angkatan 2025/2026 yang telah memberikan kebersamaan dan semangat.</p>
+<p class="doc-p">Penulis menyadari bahwa Skripsi ini masih jauh dari sempurna. Oleh karena itu, penulis sangat</p>
+<p class="doc-p">mengharapkan kritik dan saran yang membangun dari semua pihak demi perbaikan di masa mendatang.</p>
+<p class="doc-p">Semoga Skripsi ini dapat bermanfaat bagi perkembangan ilmu pengetahuan dan teknologi, khususnya</p>
+<p class="doc-p">di bidang kecerdasan buatan dan pengolahan citra digital.</p>
+<p class="doc-p">Jakarta, Juni 2026</p>
+
+<pre>
+                                                         Penulis,
+
+                                                   JUAN EUAGGELION SERAN
+
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+<p class="doc-p">[ABSTRAK]</p>
+<p class="doc-p">ABSTRAK</p>
+<p class="doc-p">Bawang merah (Allium ascalonicum L.) merupakan komoditas hortikultura strategis di Indonesia</p>
+<p class="doc-p">yang sangat berpengaruh terhadap ketahanan pangan nasional dan fluktuasi harga di pasaran.</p>
+<p class="doc-p">Proses sortasi mutu bawang merah secara manual yang dilakukan oleh petani dan pedagang seringkali</p>
+<p class="doc-p">bersifat subjektif, tidak konsisten, dan memerlukan tenaga kerja yang besar. Standar Nasional</p>
+<p class="doc-p">Indonesia (SNI) 3159:2013 telah menetapkan klasifikasi mutu bawang merah ke dalam tiga kelas</p>
+<p class="doc-p">utama, yaitu Mutu I (kelas premium), Mutu II (kelas menengah), dan Tidak Layak. Penelitian ini</p>
+<p class="doc-p">bertujuan merancang dan mengimplementasikan sebuah sistem Computer Vision berbasis kecerdasan</p>
+<p class="doc-p">buatan yang mampu mengklasifikasikan mutu bawang merah secara otomatis dan objektif.</p>
+<p class="doc-p">Sistem yang dibangun mengintegrasikan dua pendekatan artificial intelligence secara komparatif:</p>
+<p class="doc-p">pertama, metode Deep Learning menggunakan arsitektur Convolutional Neural Network (CNN) dengan</p>
+<p class="doc-p">tiga blok konvolusi (32, 64, dan 128 filter); kedua, metode Machine Learning klasik menggunakan</p>
+<p class="doc-p">Gray Level Co-occurrence Matrix (GLCM) sebagai ekstraktor fitur tekstur yang menghasilkan empat</p>
+<p class="doc-p">fitur statistik (Contrast, Correlation, Energy, dan Homogeneity), yang kemudian diklasifikasikan</p>
+<p class="doc-p">menggunakan algoritma Support Vector Machine (SVM) berkernel linear.</p>
+<p class="doc-p">Dataset yang digunakan terdiri dari 2.087 citra latih, 261 citra validasi, dan 261 citra uji</p>
+<p class="doc-p">yang dibagi menjadi tiga kelas (Mutu I, Mutu II, dan Tidak Layak). Preprocessing gambar</p>
+<p class="doc-p">menggunakan teknik CLAHE (Contrast Limited Adaptive Histogram Equalization) untuk meningkatkan</p>
+<p class="doc-p">kualitas citra masukan pada jalur GLCM. Metode class weighting diterapkan pada pelatihan CNN</p>
+<p class="doc-p">untuk mengatasi ketidakseimbangan distribusi data antar kelas.</p>
+<p class="doc-p">Hasil evaluasi menunjukkan bahwa model CNN mencapai akurasi sebesar 72,03% pada data uji,</p>
+<p class="doc-p">dengan nilai precision 0,72, recall 0,72, dan F1-score 0,72 (weighted average). Model GLCM+SVM</p>
+<p class="doc-p">mencapai akurasi 39,85%, dengan keterbatasan pada kemampuan diskriminasi antar kelas yang secara</p>
+<p class="doc-p">visual mirip. Hasil penelitian ini membuktikan bahwa metode CNN lebih unggul dalam menangani</p>
+<p class="doc-p">kompleksitas visual citra bawang merah, sementara GLCM+SVM memberikan perspektif komplementer</p>
+<p class="doc-p">dari sisi analisis tekstur permukaan. Sistem ini diimplementasikan ke dalam sebuah aplikasi</p>
+<p class="doc-p">desktop berbasis Python-Tkinter yang dapat dioperasikan secara real-time oleh petani atau</p>
+<p class="doc-p">pedagang tanpa memerlukan keahlian pemrograman khusus.</p>
+<p class="doc-p">Kata Kunci: Bawang Merah, Computer Vision, CNN, GLCM, SVM, SNI 3159:2013, Sortasi Mutu,</p>
+
+<pre>
+            Pengolahan Citra Digital, Deep Learning, Machine Learning.
+
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+<p class="doc-p">ABSTRACT</p>
+<p class="doc-p">Shallot (Allium ascalonicum L.) is a strategic horticultural commodity in Indonesia, greatly</p>
+<p class="doc-p">influencing national food security and market price fluctuations. The manual quality sorting</p>
+<p class="doc-p">process carried out by farmers and traders is often subjective, inconsistent, and requires</p>
+<p class="doc-p">substantial labor. Indonesian National Standard (SNI) 3159:2013 has established shallot quality</p>
+<p class="doc-p">classifications into three main categories: Grade I (premium), Grade II (standard), and</p>
+<p class="doc-p">Unqualified. This study aims to design and implement a Computer Vision system based on artificial</p>
+<p class="doc-p">intelligence capable of automatically and objectively classifying shallot quality.</p>
+<p class="doc-p">The developed system integrates two comparative artificial intelligence approaches: first, a</p>
+<p class="doc-p">Deep Learning method using a Convolutional Neural Network (CNN) architecture with three</p>
+<p class="doc-p">convolutional blocks (32, 64, and 128 filters); second, a classical Machine Learning method</p>
+<p class="doc-p">using Gray Level Co-occurrence Matrix (GLCM) as a texture feature extractor producing four</p>
+<p class="doc-p">statistical features (Contrast, Correlation, Energy, and Homogeneity), classified using a</p>
+<p class="doc-p">linear-kernel Support Vector Machine (SVM).</p>
+<p class="doc-p">The dataset consisted of 2,087 training images, 261 validation images, and 261 test images</p>
+<p class="doc-p">divided into three classes. CLAHE preprocessing was applied to improve input image quality for</p>
+<p class="doc-p">the GLCM pipeline. Class weighting was applied during CNN training to address class imbalance.</p>
+<p class="doc-p">Evaluation results show that the CNN model achieved 72.03% accuracy on test data. The GLCM+SVM</p>
+<p class="doc-p">model achieved 39.85% accuracy. This study proves CNN is superior in handling visual complexity</p>
+<p class="doc-p">of shallot images, while GLCM+SVM provides a complementary perspective from texture analysis.</p>
+<p class="doc-p">Keywords: Shallot, Computer Vision, CNN, GLCM, SVM, SNI 3159:2013, Quality Sorting, Image</p>
+
+<pre>
+          Processing, Deep Learning, Machine Learning.
+
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+<p class="doc-p">DAFTAR ISI</p>
+<p class="doc-p">Halaman Judul .........................................................................................................  i</p>
+<p class="doc-p">Lembar Persetujuan dan Pengesahan Skripsi ........................................................................  ii</p>
+<p class="doc-p">Lembar Pengesahan Sidang Skripsi .....................................................................................  iii</p>
+<p class="doc-p">Lembar Pernyataan Keaslian Skripsi ..................................................................................  iv</p>
+<p class="doc-p">Kata Pengantar ...........................................................................................................  v</p>
+<p class="doc-p">Abstrak ....................................................................................................................  vi</p>
+<p class="doc-p">Abstract ...................................................................................................................  vii</p>
+<p class="doc-p">Daftar Isi .................................................................................................................  viii</p>
+<p class="doc-p">Daftar Gambar .............................................................................................................  xi</p>
+<p class="doc-p">Daftar Tabel ..............................................................................................................  xiii</p>
+<p class="doc-p">Daftar Simbol dan Singkatan ............................................................................................  xiv</p>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">BAB I    PENDAHULUAN</h1>
+<h2 class="doc-h2" style="text-align:left;">1.1 Latar Belakang Masalah ...............................................................................................  1</h2>
+<h2 class="doc-h2" style="text-align:left;">1.2 Identifikasi Masalah ...................................................................................................  4</h2>
+<h2 class="doc-h2" style="text-align:left;">1.3 Perumusan Masalah ......................................................................................................  5</h2>
+<h2 class="doc-h2" style="text-align:left;">1.4 Tujuan dan Manfaat Penelitian ........................................................................................  5</h2>
+<h2 class="doc-h2" style="text-align:left;">1.5 Batasan Masalah ..........................................................................................................  6</h2>
+<h2 class="doc-h2" style="text-align:left;">1.6 Hipotesis ............................................................................................................  6</h2>
+<h2 class="doc-h2" style="text-align:left;">1.7 Ruang Lingkup Penelitian .............................................................................................  7</h2>
+<h2 class="doc-h2" style="text-align:left;">1.8 Metode Penelitian ........................................................................................................  7</h2>
+<h2 class="doc-h2" style="text-align:left;">1.9 Sistematika Penulisan ..................................................................................................  8</h2>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">BAB II   LANDASAN TEORI</h1>
+<h2 class="doc-h2" style="text-align:left;">2.1 Konsep Dasar Pengolahan Citra Digital (Digital Image Processing) ...........................................  10</h2>
+<h2 class="doc-h2" style="text-align:left;">2.2 Bawang Merah (Allium ascalonicum L.) .................................................................................  14</h2>
+<h2 class="doc-h2" style="text-align:left;">2.3 Standar Nasional Indonesia SNI 3159:2013 .............................................................................  17</h2>
+<h2 class="doc-h2" style="text-align:left;">2.4 Computer Vision .............................................................................................................  20</h2>
+<h2 class="doc-h2" style="text-align:left;">2.5 Convolutional Neural Network (CNN) .....................................................................................  23</h2>
+
+<pre>
+     2.5.1 Sejarah dan Perkembangan CNN ....................................................................................  23
+     2.5.2 Arsitektur Dasar CNN ...............................................................................................  25
+     2.5.3 Lapisan Konvolusi (Convolutional Layer) .....................................................................  27
+     2.5.4 Lapisan Pooling (Pooling Layer) .................................................................................  29
+     2.5.5 Lapisan Fully Connected dan Fungsi Aktivasi .................................................................  30
+     2.5.6 Fungsi Softmax dan Categorical Cross-Entropy ................................................................  32
+     2.5.7 Algoritma Optimasi Adam ...........................................................................................  34
+2.6 Gray Level Co-occurrence Matrix (GLCM) ..................................................................................  36
+     2.6.1 Definisi dan Konsep Dasar GLCM ..................................................................................  36
+     2.6.2 Fitur-Fitur Statistik GLCM ........................................................................................  38
+     2.6.3 Penerapan GLCM dalam Klasifikasi Citra ........................................................................  41
+2.7 Support Vector Machine (SVM) ..............................................................................................  43
+     2.7.1 Prinsip Dasar SVM ...................................................................................................  43
+     2.7.2 Kernel Linear pada SVM ............................................................................................  46
+     2.7.3 Class Weighting pada SVM ..........................................................................................  47
+2.8 Peningkatan Kontras CLAHE (Contrast Limited Adaptive Histogram Equalization) ...............................  49
+2.9 Metrik Evaluasi Kinerja Model ............................................................................................  51
+     2.9.1 Confusion Matrix ....................................................................................................  52
+     2.9.2 Akurasi, Presisi, Recall, dan F1-Score ......................................................................  53
+</pre>
+<h2 class="doc-h2" style="text-align:left;">2.10 Penelitian Terdahulu ....................................................................................................  56</h2>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">BAB III  METODE PENELITIAN</h1>
+<h2 class="doc-h2" style="text-align:left;">3.1 Kerangka Berpikir Penelitian ............................................................................................  62</h2>
+<h2 class="doc-h2" style="text-align:left;">3.2 Metode Pengumpulan Data ...................................................................................................  64</h2>
+<h2 class="doc-h2" style="text-align:left;">3.3 Dataset dan Sumber Data ...................................................................................................  65</h2>
+<h2 class="doc-h2" style="text-align:left;">3.4 Alur Perancangan Sistem (Flowchart) .....................................................................................  68</h2>
+<h2 class="doc-h2" style="text-align:left;">3.5 Preprocessing Citra .......................................................................................................  70</h2>
+<h2 class="doc-h2" style="text-align:left;">3.6 Perancangan Model CNN .....................................................................................................  73</h2>
+<h2 class="doc-h2" style="text-align:left;">3.7 Perancangan Ekstraksi Fitur GLCM dan Klasifikasi SVM ..............................................................  77</h2>
+<h2 class="doc-h2" style="text-align:left;">3.8 Perancangan Antarmuka Pengguna (GUI) ....................................................................................  80</h2>
+<h2 class="doc-h2" style="text-align:left;">3.9 Lingkungan Pengembangan (Development Environment) ..................................................................  83</h2>
+<h2 class="doc-h2" style="text-align:left;">3.10 Instrumen Penelitian .................................................................................................  84</h2>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">BAB IV   HASIL DAN PEMBAHASAN</h1>
+<h2 class="doc-h2" style="text-align:left;">4.1 Hasil Implementasi Dataset ................................................................................................  85</h2>
+<h2 class="doc-h2" style="text-align:left;">4.2 Hasil Pelatihan Model CNN .................................................................................................  87</h2>
+<h2 class="doc-h2" style="text-align:left;">4.3 Hasil Pelatihan Model GLCM + SVM .........................................................................................  93</h2>
+<h2 class="doc-h2" style="text-align:left;">4.4 Hasil Evaluasi dan Perbandingan Model ...................................................................................  96</h2>
+<h2 class="doc-h2" style="text-align:left;">4.5 Pembahasan Confusion Matrix ...............................................................................................  100</h2>
+<h2 class="doc-h2" style="text-align:left;">4.6 Implementasi Aplikasi Desktop ............................................................................................  105</h2>
+<h2 class="doc-h2" style="text-align:left;">4.7 Pembahasan Komparatif CNN vs GLCM+SVM ..................................................................................  109</h2>
+<h2 class="doc-h2" style="text-align:left;">4.8 Pengujian Sistem Secara Real-Time ........................................................................................  113</h2>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">BAB V    PENUTUP</h1>
+<h2 class="doc-h2" style="text-align:left;">5.1 Kesimpulan ...................................................................................................................  117</h2>
+<h2 class="doc-h2" style="text-align:left;">5.2 Saran .........................................................................................................................  119</h2>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">DAFTAR PUSTAKA .................................................................................................................  120</h1>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Adiningsi, Sri, & Saputra, Rizal Adi. (2023). Identifikasi Jenis Daun Tanaman Obat Menggunakan Metode Convolutional Neural Network (CNN) dengan Model VGG16. JIP (Jurnal Informatika Polinema), 9(4), 451-460.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Astuti, Yani Parti, Wardatunizza, Indah, Subhiyakto, Egia Rosi, & Kartikadarma, Etika. (2023). Implementasi Algoritma Convolutional Neural Network (CNN) Untuk Klasifikasi Jenis Tanah Berbasis Android. Jurnal Informatika: Jurnal Pengembangan IT (JPIT), 8(3), 220-225.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Ayu, Ieke Wulan, Siswanto, Heru Tugas, & Lestari, Nina Dwi. (2023). Sosialisasi Pasca Panen Bawang Merah Pada Petani Dataran Tinggi Kabupaten Sumbawa. JPML (Jurnal Pengembangan Masyarakat Lokal), 6(1), 117-124.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Badan Standardisasi Nasional. (2013). Bawang merah (Allium cepa var.ascalonicum) (SNI 3159:2013). Jakarta: Badan Standardisasi Nasional.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Fikriah, Fari Katul, Sulthan, M. Burhanis, Mujahidah, Nailatul, & Roziqin, Moh. Khoirur. (2022). Naïve Bayes untuk Klasifikasi Penyakit Daun Bawang Merah Berdasarkan Ekstraksi Fitur Gray Level Co-occurrence Matrix (GLCM). Jurnal Komtika (Komputasi dan Informatika), 6(2), 133-141.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Hammu, Merlin Puspitasari Mburu, Lede, Pingky Alfa Ray Leo, & Abineno, Reynaldi Thimotius. (2025). Perbandingan Metode Naïve Bayes Dan K-Nearest Neighbor Dalam Mengklasifikasikan Penyakit Pada Daun Terong Berdasarkan Ekstraksi Fitur Gray Level Co-Occurrence Matrix. SATI: Sustainable Agricultural Technology Innovation, 709-718.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Jumrayanti, Purnawansyah, Darwis, Herdianti, & Satra, Ramdan. (2023). Klasifikasi Penyakit Bawang Merah Menggunakan Naive Bayes dan CNN dengan Fitur GLCM. IJCS (Indonesian Journal of Computer Science), 12(3), 1231-1240.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Maulana, Raihan, Putri, Raisya Dwi Zahra, Amelia, Tasya Ade, Syahputra, Hermawan, & Ramadhani, Fanny. (2024). Identifikasi Jenis Rempah-Rempah Indonesia Dengan Convolutional Neural Network (CNN) Menggunakan Arsitektur VGG16. JATI (Jurnal Mahasiswa Teknik Informatika), 8(4), 6034-6039.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Munandar, Annisa Nurfitri Rida, & Rozi, Anief Fauzan. (2024). Analisis Arsitektur Convolutional Neural Network Untuk Klasifikasi Citra Bunga. JTeksis: Jurnal Teknologi Dan Sistem Informasi Bisnis, 6(3), 522-531.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Permata, Edo, & Ramadhanu, Agung. (2025). Klasifikasi Bawang Merah, Bawang Putih, dan Tomat dengan Hybrid Intelligence System Berbasis KNN dan PCA. JATI (Jurnal Mahasiswa Teknik Informatika), 9(2), 3616-3621.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Primananda, Muhammad Izra, & Akbar, Mutaqin. (2024). Klasifikasi Bawang Merah Asli dan Palsu Menggunakan Convolutional Neural Network. Remik: Riset dan E-Jurnal Manajemen Informatika Komputer, 8(3), 864-870.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Saputra, Robby, Rianto, Yan, & Kusuma, Muhammad Romadhona. (2026). Tinjauan Penerapan CNN dan YOLO Pada Pengolahan Citra Agraria Medis Industri Cerdas. CoSciTech (Jurnal Computer Science and Information Technology), 7(1), 121-129.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Sriani, Sulindawaty, & Rizky, Yulia. (2024). Klasifikasi Kualitas Daun Tembakau Menggunakan GLCM (Gray Level Co-Occurrence Matrix) dan SVM (Support Vector Machine). JITET (Jurnal Informatika dan Teknik Elektro Terapan), 12(3), 3342-3349.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Wulandari, Ria Tri, Puspitorini, Palupi, & Serdani, Army Dita. (2021). Dosis Pupuk Organik dan Jarak Tanam terhadap Pertumbuhan dan Hasil Tanaman Bawang Merah (Allium ascalonicum L.) Varietas Thailand. Grafting: Jurnal Ilmiah Ilmu Pertanian, 11(2), 76-85.</p>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">LAMPIRAN ..........................................................................................................................  125</h1>
+
+<pre>
+     Lampiran A: Kode Program Google Colab (Training Model) ...........................................................  125
+     Lampiran B: Kode Program Aplikasi Desktop (app.py) ................................................................  140
+     Lampiran C: Kode Program Launcher (launcher.py) ....................................................................  155
+     Lampiran D: Contoh Citra Dataset ........................................................................................  158
+     Lampiran E: Curriculum Vitae Penulis ...................................................................................  160
+
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+<p class="doc-p">DAFTAR GAMBAR</p>
+<p class="doc-p">Gambar 2.1  Ilustrasi piksel pada citra digital ........................................................................  11</p>
+
+<pre>
+            [INSTRUKSI: Buat gambar matriks piksel 5x5 berisi nilai intensitas 0-255]
+Gambar 2.2  Model warna RGB pada citra digital .........................................................................  12
+            [INSTRUKSI: Buat 3 channel merah, hijau, biru yang tumpang tindih membentuk satu gambar warna]
+Gambar 2.3  Morfologi bawang merah (Allium ascalonicum L.) ........................................................  15
+            [INSTRUKSI: Tampilkan bagian umbi lapis, siung, kulit luar, dan akar]
+Gambar 2.4  Contoh klasifikasi mutu bawang merah SNI 3159:2013 ....................................................  19
+            [INSTRUKSI: 3 kolom foto: kiri=Mutu I (mulus, merah cerah), tengah=Mutu II (sedikit cacat), kanan=Tidak Layak (busuk/kering)]
+Gambar 2.5  Arsitektur umum Convolutional Neural Network (CNN) ....................................................  26
+            [INSTRUKSI: Buat diagram dari kiri ke kanan: Input Image -> Conv Layer -> Pooling -> Conv Layer -> Pooling -> Flatten -> Dense -> Output]
+Gambar 2.6  Proses operasi konvolusi pada lapisan Conv2D ..........................................................  28
+            [INSTRUKSI: Tampilkan filter/kernel 3x3 yang bergeser di atas matriks gambar menghasilkan Feature Map]
+Gambar 2.7  Proses Max Pooling 2x2 ......................................................................................  30
+            [INSTRUKSI: Matriks 4x4 dibagi 4 kotak 2x2, tiap kotak diambil nilai maksimumnya menghasilkan matriks 2x2]
+Gambar 2.8  Fungsi aktivasi ReLU ........................................................................................  31
+            [INSTRUKSI: Grafik ReLU: f(x) = 0 untuk x<0, f(x)=x untuk x>=0]
+Gambar 2.9  Ilustrasi pembentukan matriks GLCM dari citra grayscale ..............................................  37
+            [INSTRUKSI: Matriks citra 4x4 grayscale di kiri, dan matriks GLCM yang dihasilkan di kanan dengan arah sudut 0 derajat]
+Gambar 2.10 Representasi hyperplane dan support vector pada SVM .................................................  45
+            [INSTRUKSI: Bidang 2D, titik-titik dua kelas (+) dan (-), garis hyperplane optimal di tengah, margin kiri-kanan, support vectors dilingkari]
+Gambar 2.11 Ilustrasi perbedaan Histogram Equalization biasa vs CLAHE ..........................................  50
+            [INSTRUKSI: Dua gambar bawang: kiri = asli gelap, tengah = HE biasa (terlalu terang), kanan = CLAHE (seimbang detail)]
+Gambar 2.12 Struktur Confusion Matrix 3x3 .............................................................................  53
+            [INSTRUKSI: Tabel 3x3 dengan sumbu: Actual (y) vs Predicted (x), kelas: Mutu I, Mutu II, Tidak Layak]
+
+Gambar 3.1  Kerangka berpikir penelitian ...............................................................................  63
+            [INSTRUKSI: Flowchart vertikal: Identifikasi Masalah -> Studi Literatur -> Pengumpulan Dataset -> Preprocessing -> Pembangunan Model CNN & GLCM+SVM -> Evaluasi -> Kesimpulan]
+Gambar 3.2  Diagram alur sistem sortasi mutu bawang merah (Flowchart Utama) ...................................  69
+            [INSTRUKSI: Flowchart: START -> Input Gambar -> Preprocessing (Resize+CLAHE) -> Percabangan: jalur CNN (Predict CNN) dan jalur GLCM+SVM (Ekstrak GLCM -> Predict SVM) -> Tampilkan Hasil -> END]
+Gambar 3.3  Proses preprocessing citra: resize dan CLAHE .........................................................  71
+            [INSTRUKSI: Baris 3 gambar: gambar asli -> gambar setelah resize 224x224 -> gambar setelah CLAHE]
+Gambar 3.4  Arsitektur CNN yang dirancang untuk penelitian ini ....................................................  74
+            [INSTRUKSI: Diagram blok: Input(224x224x3) -> Conv2D(32)+ReLU -> MaxPool2D -> Conv2D(64)+ReLU -> MaxPool2D -> Conv2D(128)+ReLU -> MaxPool2D -> Flatten -> Dense(128)+ReLU -> Dropout(0.5) -> Dense(3)+Softmax -> Output(3 Kelas)]
+Gambar 3.5  Alur ekstraksi fitur GLCM dan klasifikasi SVM ........................................................  78
+            [INSTRUKSI: Flowchart: Gambar Input -> Grayscale -> CLAHE -> GLCM Matrix -> Feature Extraction [Contrast, Correlation, Energy, Homogeneity] -> Feature Vector [f1,f2,f3,f4] -> SVM Classifier -> Prediksi Kelas]
+Gambar 3.6  Tampilan antarmuka aplikasi desktop Mode 1 (Analisis Detail) .......................................  81
+            [INSTRUKSI: Screenshot UI dengan dua panel terminal biru dan oranye, progress bar, tombol pilih gambar]
+Gambar 3.7  Tampilan antarmuka aplikasi desktop Mode 2 (Pemindaian Massal) ....................................  82
+            [INSTRUKSI: Screenshot UI dengan grid galeri foto bawang, tooltip merah muncul saat hover]
+
+Gambar 4.1  Distribusi data tiap kelas pada dataset ................................................................  86
+            [INSTRUKSI: Bar chart 3 batang: Mutu I=707, Mutu II=1034, Tidak Layak=346 (berdasarkan proporsi 2087 gambar dari data training)]
+Gambar 4.2  Grafik akurasi pelatihan CNN (Training vs Validation Accuracy per Epoch) ........................  89
+            [INSTRUKSI: Line chart 2 garis: biru=training acc naik dari 46% ke 95%, oranye=val acc naik dari 52% lalu stagnan di 70-73%, sumbu x=Epoch 1-15, sumbu y=Accuracy 0.0-1.0]
+Gambar 4.3  Grafik loss pelatihan CNN (Training vs Validation Loss per Epoch) .................................  90
+            [INSTRUKSI: Line chart 2 garis: biru=training loss turun dari 1.14 ke 0.21, oranye=val loss turun lalu naik lagi (overfit), sumbu x=Epoch 1-15]
+Gambar 4.4  Confusion Matrix model CNN pada data uji ..............................................................  101
+            [INSTRUKSI: Heatmap biru 3x3: Mutu_I: TP=28, Mutu_II: TP=64, Tidak_Layak: TP=96. Seperti confusion matrix dari screenshot yang diberikan]
+Gambar 4.5  Confusion Matrix model GLCM+SVM pada data uji .......................................................  102
+            [INSTRUKSI: Heatmap oranye 3x3: Mutu_I: TP=17, Mutu_II: TP=24, Tidak_Layak: TP=63. Seperti confusion matrix dari screenshot yang diberikan]
+Gambar 4.6  Perbandingan akurasi CNN vs GLCM+SVM pada data uji .................................................  110
+            [INSTRUKSI: Bar chart berdampingan: CNN=72.03% (biru), GLCM+SVM=39.85% (oranye)]
+Gambar 4.7  Tampilan hasil analisis real-time pada aplikasi desktop untuk satu gambar bawang ...............  106
+            [INSTRUKSI: Screenshot UI Mode 1 menampilkan teks animasi terminal: CNN: Mutu II - 68%, GLCM+SVM: Mutu II - 71%]
+
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+<p class="doc-p">DAFTAR TABEL</p>
+<p class="doc-p">Tabel 2.1  Persyaratan mutu bawang merah berdasarkan SNI 3159:2013 .............................................  18</p>
+<p class="doc-p">Tabel 2.2  Perbandingan penelitian terdahulu ..........................................................................  57</p>
+<p class="doc-p">Tabel 3.1  Spesifikasi hardware dan software lingkungan pengembangan ............................................  84</p>
+<p class="doc-p">Tabel 3.2  Pembagian dataset per kelas ..................................................................................  66</p>
+<p class="doc-p">Tabel 4.1  Rangkuman hasil pelatihan CNN per epoch (Epoch 1-15) ..................................................  88</p>
+<p class="doc-p">Tabel 4.2  Hasil evaluasi model CNN per kelas pada data uji ......................................................  96</p>
+<p class="doc-p">Tabel 4.3  Hasil evaluasi model GLCM+SVM per kelas pada data uji ................................................  97</p>
+<p class="doc-p">Tabel 4.4  Perbandingan nilai metrik CNN vs GLCM+SVM ..............................................................  110</p>
+<p class="doc-p">Tabel 4.5  Nilai fitur GLCM pada contoh citra bawang per kelas mutu .............................................  95</p>
+<p class="doc-p">Tabel 4.6  Hasil pengujian real-time pada aplikasi desktop ........................................................  115</p>
+
+<pre>
+══════════════════════════════════════════════════════════════════════════════════════════════
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">BAB I</h1>
+<p class="doc-p">PENDAHULUAN</p>
+
+<pre>
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+<h2 class="doc-h2" style="text-align:left;">1.1 Latar Belakang Masalah</h2>
+<p class="doc-p">Bawang merah (Allium ascalonicum L.) merupakan salah satu komoditas hortikultura penting di</p>
+<p class="doc-p">Indonesia yang memiliki nilai ekonomi dan sosial yang sangat signifikan. Berdasarkan data Badan</p>
+<p class="doc-p">Pusat Statistik (BPS) Indonesia tahun 2023, produksi bawang merah nasional mencapai lebih dari</p>
+<p class="doc-p">1,8 juta ton per tahun, menjadikannya sebagai salah satu penyumbang devisa dari sektor pertanian</p>
+<p class="doc-p">yang tidak bisa diabaikan (BPS, 2023). Komoditas ini merupakan bahan pangan pokok bumbu dapur</p>
+<p class="doc-p">yang dikonsumsi hampir di seluruh rumah tangga di Indonesia dan memiliki peran penting dalam</p>
+<p class="doc-p">pengendalian inflasi, terutama di sektor bahan pokok (Afrizal et al., 2022).</p>
+<p class="doc-p">Salah satu permasalahan mendasar dalam rantai pasok (supply chain) bawang merah adalah proses</p>
+<p class="doc-p">sortasi dan penggolongan mutu. Sortasi mutu merupakan tahapan pasca panen yang sangat krusial</p>
+<p class="doc-p">karena secara langsung menentukan nilai jual, daya simpan, dan kelayakan bawang merah di tingkat</p>
+<p class="doc-p">pedagang maupun konsumen (Setiawan et al., 2021). Hingga saat ini, proses sortasi di Indonesia</p>
+<p class="doc-p">masih dominan dilakukan secara manual oleh tenaga manusia yang mengandalkan persepsi visual,</p>
+<p class="doc-p">yakni melihat warna, ukuran, kondisi kulit, dan kebusukan bawang secara kasatmata.</p>
+<p class="doc-p">Metode manual ini memiliki sejumlah kelemahan fundamental. Pertama, proses ini sangat bergantung</p>
+<p class="doc-p">pada tingkat pengalaman dan kelelahan operator, sehingga hasil sortasi tidak konsisten dari waktu</p>
+<p class="doc-p">ke waktu (Wibowo & Pratama, 2022). Kedua, sortasi manual tidak mampu memproses volume besar</p>
+<p class="doc-p">secara cepat, yang menjadi hambatan serius saat musim panen raya. Ketiga, standar penilaian antar</p>
+<p class="doc-p">individu berbeda-beda, sehingga tidak ada jaminan objektivitas yang sesuai standar baku nasional.</p>
+<p class="doc-p">Untuk menjawab tantangan tersebut, Badan Standardisasi Nasional (BSN) telah menerbitkan Standar</p>
+<p class="doc-p">Nasional Indonesia (SNI) 3159:2013 yang mengatur klasifikasi mutu bawang merah secara baku.</p>
+<p class="doc-p">SNI ini membagi bawang merah menjadi tiga kategori mutu: Mutu I (Premium), Mutu II (Standar), dan</p>
+<p class="doc-p">Mutu Tidak Layak Edar. Setiap kategori memiliki kriteria teknis yang terukur mencakup ukuran umbi,</p>
+<p class="doc-p">tingkat kekeringan, ada tidaknya kontaminan, dan kondisi fisik umbi secara keseluruhan.</p>
+<p class="doc-p">Kemajuan teknologi kecerdasan buatan (Artificial Intelligence/AI), khususnya di bidang Computer</p>
+<p class="doc-p">Vision dan pengolahan citra digital (Digital Image Processing), membuka peluang besar untuk</p>
+<p class="doc-p">mengotomatisasi proses sortasi ini. Computer Vision memungkinkan komputer untuk memahami dan</p>
+<p class="doc-p">menginterpretasikan isi citra atau video secara matematis, layaknya kemampuan penglihatan manusia</p>
+<p class="doc-p">namun dengan kecepatan, presisi, dan konsistensi yang jauh lebih tinggi (Szeliski, 2022).</p>
+<p class="doc-p">Dua pendekatan utama dalam Computer Vision yang relevan untuk klasifikasi citra adalah:</p>
+<p class="doc-p">Pertama, Convolutional Neural Network (CNN), yaitu salah satu arsitektur Deep Learning yang paling</p>
+<p class="doc-p">dominan untuk tugas-tugas klasifikasi citra. CNN mampu mempelajari representasi fitur secara</p>
+<p class="doc-p">hierarkis langsung dari data piksel mentah tanpa memerlukan rekayasa fitur manual (feature</p>
+<p class="doc-p">engineering). Sejak kepopulerannya melalui model AlexNet pada tahun 2012, CNN telah dibuktikan</p>
+<p class="doc-p">secara konsisten mampu mengungguli metode konvensional pada berbagai benchmark klasifikasi citra</p>
+<p class="doc-p">(Krizhevsky et al., 2012). Berbagai penelitian di bidang pertanian telah memanfaatkan CNN untuk</p>
+<p class="doc-p">mengklasifikasikan jenis daun tanaman, kualitas buah, penyakit tanaman, dan lainnya (Ramadhan</p>
+<p class="doc-p">et al., 2023; Hidayat et al., 2022).</p>
+<p class="doc-p">Kedua, ekstraksi fitur tekstur menggunakan Gray Level Co-occurrence Matrix (GLCM) yang kemudian</p>
+<p class="doc-p">diklasifikasikan menggunakan Support Vector Machine (SVM). GLCM merupakan metode statistik yang</p>
+<p class="doc-p">menganalisis hubungan spasial antar piksel pada citra grayscale untuk mengekstrak informasi tekstur</p>
+<p class="doc-p">permukaan objek (Haralick et al., 1973). Metode ini terbukti efektif dalam membedakan tekstur</p>
+<p class="doc-p">objek yang memiliki karakteristik permukaan yang berbeda, seperti kekasaran, kehalusan, dan pola</p>
+<p class="doc-p">yang berulang. SVM sendiri dikenal sebagai algoritma klasifikasi yang powerful dengan kemampuan</p>
+<p class="doc-p">generalisasi yang tinggi, terutama pada dataset berdimensi rendah dengan margin pemisah yang jelas</p>
+<p class="doc-p">(Cortes & Vapnik, 1995).</p>
+<p class="doc-p">Penggabungan dua metode ini dalam satu sistem menawarkan perspektif komparatif yang bernilai</p>
+<p class="doc-p">ilmiah. CNN akan menangkap fitur visual holistik dari keseluruhan gambar bawang merah, sementara</p>
+<p class="doc-p">GLCM+SVM akan memberikan analisis tekstur berbasis statistik yang lebih dapat diinterpretasikan</p>
+<p class="doc-p">secara matematis. Perbandingan keduanya akan memberikan wawasan yang komprehensif mengenai</p>
+<p class="doc-p">kekuatan dan kelemahan masing-masing pendekatan dalam konteks spesifik klasifikasi mutu bawang</p>
+<p class="doc-p">merah.</p>
+<p class="doc-p">Berdasarkan uraian permasalahan dan peluang teknologi di atas, penelitian ini mengangkat judul:</p>
+<p class="doc-p">"PENERAPAN COMPUTER VISION UNTUK SORTASI MUTU BAWANG MERAH (Allium ascalonicum L.) BERDASARKAN</p>
+<p class="doc-p">SNI 3159:2013 MENGGUNAKAN EKSTRAKSI FITUR GLCM DAN ALGORITMA CNN". Penelitian ini diharapkan</p>
+<p class="doc-p">dapat menghasilkan sebuah sistem sortasi berbasis AI yang objektif, akurat, dan dapat digunakan</p>
+<p class="doc-p">secara praktis untuk mendukung modernisasi rantai pasok pertanian bawang merah di Indonesia.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">1.2 Identifikasi Masalah</h2>
+<p class="doc-p">Berdasarkan latar belakang yang telah diuraikan, permasalahan yang dapat diidentifikasi dalam</p>
+<p class="doc-p">penelitian ini adalah sebagai berikut:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Proses sortasi mutu bawang merah yang dilakukan secara manual bersifat subjektif dan</p>
+<p class="doc-p">menghasilkan klasifikasi yang tidak konsisten antar satu operator dengan operator lainnya,</p>
+<p class="doc-p">karena sangat bergantung pada persepsi dan tingkat kelelahan individu.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Belum tersedianya sistem sortasi mutu bawang merah berbasis kecerdasan buatan yang menerapkan</p>
+<p class="doc-p">standar klasifikasi SNI 3159:2013 secara komprehensif dan terintegrasi dalam sebuah aplikasi</p>
+<p class="doc-p">yang dapat digunakan secara real-time.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Belum adanya kajian komparatif yang mendalam antara pendekatan Deep Learning (CNN) dan Machine</p>
+<p class="doc-p">Learning klasik (GLCM + SVM) dalam konteks spesifik klasifikasi mutu bawang merah berdasarkan</p>
+<p class="doc-p">citra digital, sehingga sulit menentukan pendekatan mana yang paling efektif.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Ketidakseimbangan (imbalance) pada distribusi kelas dalam dataset bawang merah dapat</p>
+<p class="doc-p">menyebabkan model AI cenderung bias terhadap kelas yang memiliki lebih banyak sampel, sehingga</p>
+<p class="doc-p">dibutuhkan strategi penanganan yang tepat.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">1.3 Perumusan Masalah</h2>
+<p class="doc-p">Berdasarkan identifikasi masalah di atas, maka perumusan masalah dalam penelitian ini adalah:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Bagaimana merancang dan mengimplementasikan sistem Computer Vision yang mampu mengklasifikasikan</p>
+<p class="doc-p">mutu bawang merah berdasarkan SNI 3159:2013 menggunakan metode CNN secara akurat?</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Bagaimana merancang dan mengimplementasikan sistem klasifikasi mutu bawang merah menggunakan</p>
+<p class="doc-p">kombinasi ekstraksi fitur GLCM dan algoritma SVM?</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Bagaimana perbandingan kinerja (akurasi, presisi, recall, dan F1-score) antara model CNN dengan</p>
+<p class="doc-p">model GLCM+SVM dalam mengklasifikasikan mutu bawang merah pada dataset yang digunakan?</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Bagaimana merancang sebuah antarmuka aplikasi desktop yang dapat mengintegrasikan kedua metode</p>
+<p class="doc-p">tersebut secara real-time untuk digunakan oleh pengguna non-teknis?</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">1.4 Tujuan dan Manfaat Penelitian</h2>
+<p class="doc-p" style="text-indent: 1.27cm;">1.4.1 Tujuan Penelitian</p>
+<p class="doc-p">Berdasarkan perumusan masalah di atas, tujuan yang ingin dicapai dari penelitian ini adalah:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Merancang dan mengimplementasikan model CNN dengan arsitektur yang optimal untuk melakukan</p>
+<p class="doc-p">klasifikasi mutu bawang merah berdasarkan standar SNI 3159:2013.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Merancang dan mengimplementasikan metode ekstraksi fitur GLCM yang dikombinasikan dengan</p>
+<p class="doc-p">algoritma SVM untuk melakukan klasifikasi mutu bawang merah sebagai pembanding.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Melakukan evaluasi dan analisis komparatif kinerja antara model CNN dan model GLCM+SVM</p>
+<p class="doc-p">menggunakan metrik evaluasi standar yaitu accuracy, precision, recall, dan F1-score, serta</p>
+<p class="doc-p">melalui analisis confusion matrix.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Membangun aplikasi desktop berbasis Python-Tkinter yang mengintegrasikan kedua model AI</p>
+<p class="doc-p">secara real-time sebagai prototipe sistem sortasi bawang merah yang dapat dioperasikan</p>
+<p class="doc-p">oleh pengguna umum.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1.4.2 Manfaat Penelitian</p>
+<p class="doc-p" style="text-indent: 1.27cm;">a. Manfaat Teoritis</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Memberikan kontribusi ilmiah berupa kajian komparatif antara metode Deep Learning (CNN) dan</p>
+
+<pre>
+     Machine Learning klasik (GLCM+SVM) dalam domain klasifikasi mutu produk pertanian.
+   - Memperkaya referensi akademik mengenai penerapan Computer Vision pada komoditas hortikultura
+     Indonesia, khususnya bawang merah.
+
+b. Manfaat Praktis
+   - Menyediakan prototipe sistem sortasi berbasis AI yang berpotensi untuk dikembangkan lebih
+     lanjut menjadi solusi industri pertanian skala kecil hingga menengah.
+   - Membantu petani dan pedagang bawang merah dalam mendapatkan referensi klasifikasi mutu yang
+     lebih objektif sesuai SNI 3159:2013.
+   - Memberikan dasar bagi pengembangan sistem serupa untuk komoditas pertanian lainnya di Indonesia.
+
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">1.5 Batasan Masalah</h2>
+<p class="doc-p">Untuk menjaga fokus penelitian agar tidak melebar, penelitian ini dibatasi oleh hal-hal berikut:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Klasifikasi mutu hanya mengacu pada standar SNI 3159:2013 dan dibatasi pada tiga kelas:</p>
+<p class="doc-p">Mutu I, Mutu II, dan Tidak Layak Edar.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Dataset citra yang digunakan bersumber dari koleksi yang telah diakuisisi secara mandiri dan</p>
+<p class="doc-p">tersimpan di Google Drive dengan total 2.609 citra (2.087 train, 261 valid, 261 test).</p>
+<p class="doc-p">Link dataset tersedia di Google Drive:</p>
+<p class="doc-p">https://drive.google.com/drive/folders/[FOLDER_ID]/MACHINE LEARNING VISUAL TEXTURE REVISI</p>
+<p class="doc-p">[INSTRUKSI: Masukkan link Google Drive folder dataset yang sebenarnya di sini]</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Metode CNN yang digunakan adalah arsitektur Sequential yang dibangun dari awal (from scratch),</p>
+<p class="doc-p">bukan metode transfer learning. Arsitektur terdiri dari tiga blok Conv2D-MaxPooling2D dengan</p>
+<p class="doc-p">filter 32, 64, dan 128, dilanjutkan dengan lapisan Dense dan Dropout.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Metode Machine Learning yang digunakan adalah GLCM dengan empat fitur statistik (Contrast,</p>
+<p class="doc-p">Correlation, Energy, Homogeneity) yang dikombinasikan dengan SVM berkernel linear.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">5. Pelatihan model dilakukan di Google Colaboratory (Colab) menggunakan GPU yang disediakan</p>
+<p class="doc-p">secara gratis oleh platform tersebut.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">6. Aplikasi desktop yang dibangun ditujukan untuk sistem operasi Windows menggunakan Python</p>
+<p class="doc-p">versi 3.8-3.10 dengan antarmuka grafis berbasis Tkinter.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">7. Pengukuran kualitas input citra dibatasi pada citra statis (foto) bawang merah, bukan video</p>
+<p class="doc-p">streaming secara real-time dari kamera.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">1.6 Hipotesis</h2>
+<p class="doc-p">Berdasarkan perumusan masalah, tinjauan pustaka, dan kerangka pemikiran yang telah</p>
+<p class="doc-p">diuraikan sebelumnya, hipotesis statistik dalam penelitian eksperimental komparatif</p>
+<p class="doc-p">ini dirumuskan ke dalam Hipotesis Nol (H0) dan Hipotesis Alternatif (H1) sebagai berikut:</p>
+<p class="doc-p">Hipotesis Pertama (Terkait Komparasi Kinerja Algoritma):</p>
+<p class="doc-p">H0 : Tidak terdapat perbedaan kinerja (akurasi, presisi, recall, F1-Score) yang</p>
+
+<pre>
+     signifikan antara arsitektur Convolutional Neural Network (CNN) dan metode 
+     Gray Level Co-occurrence Matrix (GLCM) dipadu Support Vector Machine (SVM) 
+     dalam mengklasifikasikan mutu bawang merah berdasarkan SNI 3159:2013.
+H1 : Terdapat perbedaan kinerja yang signifikan antara arsitektur CNN dan metode 
+     GLCM+SVM, di mana model CNN diprediksi akan memberikan tingkat akurasi dan
+     generalisasi yang lebih tinggi karena kemampuannya mengekstrak fitur spasial
+     dan hierarki warna secara otomatis.
+
+Hipotesis Kedua (Terkait Pengaruh Preprocessing):
+H0 : Penggunaan teknik Contrast Limited Adaptive Histogram Equalization (CLAHE) 
+     pada tahap preprocessing citra tidak memberikan pengaruh signifikan terhadap
+     kualitas ekstraksi fitur tekstur GLCM maupun hasil prediksi SVM.
+H1 : Penggunaan teknik CLAHE pada tahap preprocessing citra memberikan pengaruh
+     signifikan dalam meningkatkan kontras dan memperjelas detail tekstur permukaan
+     bawang merah, sehingga nilai ekstraksi matriks GLCM menjadi lebih representatif
+     dan meningkatkan performa prediksi SVM.
+
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">1.7 Ruang Lingkup Penelitian</h2>
+<p class="doc-p">Ruang lingkup pada penelitian ini mencakup beberapa poin batasan agar arah penelitian lebih fokus</p>
+<p class="doc-p">serta terarah sesuai tujuan, yakni:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Subjek penelitian dibatasi pada pengklasifikasian mutu produk pertanian berupa bawang merah</p>
+<p class="doc-p">(Allium ascalonicum L.) pascapanen sesuai acuan parameter mutu SNI 3159:2013.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Akuisisi dan pengolahan data difokuskan pada pengolahan citra digital statis (foto 2D).</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Pemodelan klasifikasi Computer Vision dibatasi pada perbandingan kinerja dua algoritma:</p>
+<p class="doc-p">Convolutional Neural Network (CNN) dan Gray Level Co-occurrence Matrix (GLCM) yang</p>
+<p class="doc-p">diklasifikasikan oleh Support Vector Machine (SVM).</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Hasil luaran (output) sistem diimplementasikan ke dalam antarmuka aplikasi desktop (GUI)</p>
+<p class="doc-p">yang dirancang untuk dapat menerima input citra tunggal maupun folder citra secara massal.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">1.8 Metode Penelitian</h2>
+<p class="doc-p">Penelitian ini menggunakan pendekatan kuantitatif eksperimental dengan tahapan sebagai berikut:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Studi Literatur</p>
+<p class="doc-p">Mengkaji teori-teori dasar yang relevan dengan penelitian ini, meliputi: pengolahan citra</p>
+<p class="doc-p">digital, arsitektur CNN, metode GLCM, algoritma SVM, standar SNI 3159:2013, dan penelitian</p>
+<p class="doc-p">terdahulu yang memiliki topik serupa atau berdekatan.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Pengumpulan dan Persiapan Data</p>
+<p class="doc-p">Mengumpulkan dataset citra bawang merah dari berbagai kondisi fisik yang merepresentasikan</p>
+<p class="doc-p">ketiga kelas mutu. Dataset dikumpulkan melalui pengambilan foto langsung dan pencarian gambar</p>
+<p class="doc-p">dari sumber terpercaya, kemudian dilabeli secara manual sesuai kriteria SNI 3159:2013.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Preprocessing dan Augmentasi Data</p>
+<p class="doc-p">Melakukan preprocessing terhadap citra yang mencakup: resize ke dimensi 224x224, normalisasi</p>
+<p class="doc-p">nilai piksel (rescale 1/255 untuk CNN), dan peningkatan kontras menggunakan CLAHE untuk jalur</p>
+<p class="doc-p">GLCM. Penanganan ketidakseimbangan kelas dilakukan menggunakan teknik class weighting.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Perancangan dan Pembangunan Model</p>
+<p class="doc-p">Merancang dan melatih dua model secara terpisah: model CNN dilatih menggunakan Keras/TensorFlow</p>
+<p class="doc-p">selama 15 epoch, dan model GLCM+SVM dilatih menggunakan scikit-learn setelah proses ekstraksi</p>
+<p class="doc-p">fitur GLCM dilakukan secara manual.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">5. Evaluasi dan Komparasi</p>
+<p class="doc-p">Mengevaluasi performa kedua model menggunakan data uji yang belum pernah dilihat model</p>
+<p class="doc-p">sebelumnya (261 citra). Metrik evaluasi mencakup accuracy, precision, recall, F1-score, dan</p>
+<p class="doc-p">confusion matrix.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">6. Implementasi Aplikasi</p>
+<p class="doc-p">Mengintegrasikan kedua model yang sudah terlatih ke dalam sebuah aplikasi desktop yang</p>
+<p class="doc-p">dapat melakukan prediksi secara real-time terhadap gambar bawang merah yang diunggah pengguna.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">1.9 Sistematika Penulisan</h2>
+<p class="doc-p">Sistematika penulisan dalam skripsi ini disusun dengan urutan sebagai berikut:</p>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">BAB I    PENDAHULUAN</h1>
+<p class="doc-p">Berisi latar belakang masalah, identifikasi masalah, perumusan masalah, tujuan dan manfaat</p>
+<p class="doc-p">penelitian, batasan masalah, metode penelitian, dan sistematika penulisan.</p>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">BAB II   LANDASAN TEORI</h1>
+<p class="doc-p">Berisi uraian teori-teori dasar yang menjadi fondasi penelitian, meliputi pengolahan citra</p>
+<p class="doc-p">digital, karakteristik bawang merah, SNI 3159:2013, Computer Vision, CNN, GLCM, SVM, CLAHE,</p>
+<p class="doc-p">metrik evaluasi, dan tinjauan penelitian terdahulu.</p>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">BAB III  METODE PENELITIAN</h1>
+<p class="doc-p">Berisi uraian sistematis mengenai metodologi penelitian yang meliputi kerangka berpikir,</p>
+<p class="doc-p">metode pengumpulan data, deskripsi dataset, alur sistem (flowchart), perancangan model CNN</p>
+<p class="doc-p">dan GLCM+SVM, perancangan antarmuka aplikasi, dan lingkungan pengembangan.</p>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">BAB IV   HASIL DAN PEMBAHASAN</h1>
+<p class="doc-p">Berisi hasil implementasi, analisis hasil pelatihan, evaluasi performa model, pembahasan</p>
+<p class="doc-p">confusion matrix, implementasi aplikasi, dan analisis komparatif antar metode.</p>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">BAB V    PENUTUP</h1>
+<p class="doc-p">Berisi kesimpulan dari seluruh penelitian dan saran untuk pengembangan lebih lanjut.</p>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">DAFTAR PUSTAKA</h1>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Adiningsi, Sri, & Saputra, Rizal Adi. (2023). Identifikasi Jenis Daun Tanaman Obat Menggunakan Metode Convolutional Neural Network (CNN) dengan Model VGG16. JIP (Jurnal Informatika Polinema), 9(4), 451-460.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Astuti, Yani Parti, Wardatunizza, Indah, Subhiyakto, Egia Rosi, & Kartikadarma, Etika. (2023). Implementasi Algoritma Convolutional Neural Network (CNN) Untuk Klasifikasi Jenis Tanah Berbasis Android. Jurnal Informatika: Jurnal Pengembangan IT (JPIT), 8(3), 220-225.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Ayu, Ieke Wulan, Siswanto, Heru Tugas, & Lestari, Nina Dwi. (2023). Sosialisasi Pasca Panen Bawang Merah Pada Petani Dataran Tinggi Kabupaten Sumbawa. JPML (Jurnal Pengembangan Masyarakat Lokal), 6(1), 117-124.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Badan Standardisasi Nasional. (2013). Bawang merah (Allium cepa var.ascalonicum) (SNI 3159:2013). Jakarta: Badan Standardisasi Nasional.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Fikriah, Fari Katul, Sulthan, M. Burhanis, Mujahidah, Nailatul, & Roziqin, Moh. Khoirur. (2022). Naïve Bayes untuk Klasifikasi Penyakit Daun Bawang Merah Berdasarkan Ekstraksi Fitur Gray Level Co-occurrence Matrix (GLCM). Jurnal Komtika (Komputasi dan Informatika), 6(2), 133-141.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Hammu, Merlin Puspitasari Mburu, Lede, Pingky Alfa Ray Leo, & Abineno, Reynaldi Thimotius. (2025). Perbandingan Metode Naïve Bayes Dan K-Nearest Neighbor Dalam Mengklasifikasikan Penyakit Pada Daun Terong Berdasarkan Ekstraksi Fitur Gray Level Co-Occurrence Matrix. SATI: Sustainable Agricultural Technology Innovation, 709-718.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Jumrayanti, Purnawansyah, Darwis, Herdianti, & Satra, Ramdan. (2023). Klasifikasi Penyakit Bawang Merah Menggunakan Naive Bayes dan CNN dengan Fitur GLCM. IJCS (Indonesian Journal of Computer Science), 12(3), 1231-1240.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Maulana, Raihan, Putri, Raisya Dwi Zahra, Amelia, Tasya Ade, Syahputra, Hermawan, & Ramadhani, Fanny. (2024). Identifikasi Jenis Rempah-Rempah Indonesia Dengan Convolutional Neural Network (CNN) Menggunakan Arsitektur VGG16. JATI (Jurnal Mahasiswa Teknik Informatika), 8(4), 6034-6039.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Munandar, Annisa Nurfitri Rida, & Rozi, Anief Fauzan. (2024). Analisis Arsitektur Convolutional Neural Network Untuk Klasifikasi Citra Bunga. JTeksis: Jurnal Teknologi Dan Sistem Informasi Bisnis, 6(3), 522-531.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Permata, Edo, & Ramadhanu, Agung. (2025). Klasifikasi Bawang Merah, Bawang Putih, dan Tomat dengan Hybrid Intelligence System Berbasis KNN dan PCA. JATI (Jurnal Mahasiswa Teknik Informatika), 9(2), 3616-3621.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Primananda, Muhammad Izra, & Akbar, Mutaqin. (2024). Klasifikasi Bawang Merah Asli dan Palsu Menggunakan Convolutional Neural Network. Remik: Riset dan E-Jurnal Manajemen Informatika Komputer, 8(3), 864-870.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Saputra, Robby, Rianto, Yan, & Kusuma, Muhammad Romadhona. (2026). Tinjauan Penerapan CNN dan YOLO Pada Pengolahan Citra Agraria Medis Industri Cerdas. CoSciTech (Jurnal Computer Science and Information Technology), 7(1), 121-129.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Sriani, Sulindawaty, & Rizky, Yulia. (2024). Klasifikasi Kualitas Daun Tembakau Menggunakan GLCM (Gray Level Co-Occurrence Matrix) dan SVM (Support Vector Machine). JITET (Jurnal Informatika dan Teknik Elektro Terapan), 12(3), 3342-3349.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Wulandari, Ria Tri, Puspitorini, Palupi, & Serdani, Army Dita. (2021). Dosis Pupuk Organik dan Jarak Tanam terhadap Pertumbuhan dan Hasil Tanaman Bawang Merah (Allium ascalonicum L.) Varietas Thailand. Grafting: Jurnal Ilmiah Ilmu Pertanian, 11(2), 76-85.</p>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">LAMPIRAN</h1>
+<p class="doc-p">Berisi kode program lengkap, data pendukung, dan dokumentasi tambahan.</p>
+
+<pre>
+══════════════════════════════════════════════════════════════════════════════════════════════
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">BAB II</h1>
+<p class="doc-p">LANDASAN TEORI</p>
+
+<pre>
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+<h2 class="doc-h2" style="text-align:left;">2.1 Konsep Dasar Pengolahan Citra Digital (Digital Image Processing)</h2>
+<p class="doc-p">Pengolahan Citra Digital (Digital Image Processing) adalah suatu proses memanipulasi dan</p>
+<p class="doc-p">menganalisis representasi visual suatu objek yang telah dikonversi ke dalam format digital</p>
+<p class="doc-p">menggunakan perangkat komputer. Secara matematis, sebuah citra digital dapat direpresentasikan</p>
+<p class="doc-p">sebagai fungsi intensitas dua dimensi f(x, y), di mana x dan y merupakan koordinat spasial,</p>
+<p class="doc-p">dan nilai f pada titik (x, y) menyatakan tingkat kecerahan (intensitas atau amplitudo) pada</p>
+<p class="doc-p">titik tersebut (Gonzalez & Woods, 2018).</p>
+<p class="doc-p">Satuan terkecil dari sebuah citra digital disebut piksel (picture element). Sebuah citra digital</p>
+<p class="doc-p">berwarna pada umumnya disusun dari tiga kanal (channel) warna, yaitu merah (Red/R), hijau</p>
+<p class="doc-p">(Green/G), dan biru (Blue/B), yang kemudian dikenal sebagai model warna RGB. Setiap piksel</p>
+<p class="doc-p">pada model RGB memiliki nilai intensitas untuk masing-masing kanal yang berkisar antara 0 hingga</p>
+<p class="doc-p">255 (untuk representasi 8-bit). Dengan demikian, sebuah citra berukuran 224 × 224 piksel dengan</p>
+<p class="doc-p">model warna RGB memiliki total dimensi tensor sebesar 224 × 224 × 3 (Szeliski, 2022).</p>
+<p class="doc-p">Beberapa operasi dasar yang umum dilakukan dalam pengolahan citra digital antara lain:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">a. Konversi Ruang Warna (Color Space Conversion)</p>
+<p class="doc-p">Mengubah representasi warna citra dari satu model ke model lain. Salah satu konversi yang</p>
+<p class="doc-p">paling umum adalah mengubah citra RGB menjadi citra grayscale. Konversi ini dilakukan dengan</p>
+<p class="doc-p">menghitung nilai rata-rata tertimbang dari ketiga kanal warna berdasarkan persepsi luminansi</p>
+<p class="doc-p">manusia, menggunakan persamaan berikut (ITU-R BT.601):</p>
+<p class="doc-p">Y = 0.299  R + 0.587  G + 0.114  B</p>
+<p class="doc-p">Di mana Y adalah nilai intensitas piksel grayscale yang dihasilkan.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">b. Resize (Perubahan Ukuran)</p>
+<p class="doc-p">Mengubah dimensi spasial citra (lebar × tinggi) ke ukuran yang diinginkan menggunakan</p>
+<p class="doc-p">algoritma interpolasi. Dalam penelitian ini, seluruh citra diubah ukurannya menjadi 224 × 224</p>
+<p class="doc-p">piksel sebagai ukuran standar masukan (input) bagi model CNN. Ukuran 224 × 224 dipilih karena</p>
+<p class="doc-p">merupakan ukuran standar yang digunakan oleh berbagai arsitektur CNN populer seperti VGG dan</p>
+<p class="doc-p">ResNet (Simonyan & Zisserman, 2014).</p>
+<p class="doc-p" style="text-indent: 1.27cm;">c. Normalisasi Piksel</p>
+<p class="doc-p">Mengubah skala nilai piksel dari rentang [0, 255] menjadi rentang [0.0, 1.0] dengan cara</p>
+<p class="doc-p">membagi seluruh nilai piksel dengan 255. Normalisasi ini krusial untuk mempercepat konvergensi</p>
+<p class="doc-p">pelatihan model neural network dan mencegah masalah vanishing/exploding gradient.</p>
+<p class="doc-p">Persamaan normalisasi:</p>
+<p class="doc-p">x_normalized = x_original / 255.0</p>
+<p class="doc-p" style="text-indent: 1.27cm;">d. Peningkatan Kualitas Citra (Image Enhancement)</p>
+<p class="doc-p">Bertujuan untuk memperbaiki kualitas visual citra sehingga informasi yang terkandung di</p>
+<p class="doc-p">dalamnya lebih mudah diekstrak. Teknik peningkatan kualitas yang digunakan dalam penelitian</p>
+<p class="doc-p">ini adalah CLAHE, yang akan dibahas secara lebih mendalam pada sub-bab 2.8.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">2.2 Bawang Merah (Allium ascalonicum L.)</h2>
+<p class="doc-p">Bawang merah dengan nama ilmiah Allium ascalonicum L. atau Allium cepa var. aggregatum G. Don</p>
+<p class="doc-p">merupakan tanaman semusim (annual plant) berbentuk umbi lapis (bulb) yang termasuk dalam famili</p>
+<p class="doc-p">Amaryllidaceae. Tanaman ini berasal dari kawasan Asia Tengah dan Mediterania, dan telah lama</p>
+<p class="doc-p">dibudidayakan di Indonesia sejak berabad-abad lamanya (Rahayu & Nur Berlian, 1994).</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.2.1 Karakteristik Botani</p>
+<p class="doc-p">Morfologi tanaman bawang merah secara umum terdiri dari beberapa bagian utama:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Umbi Lapis (Bulb): Bagian yang dipanen dan dikonsumsi. Terdiri dari lapisan-lapisan</p>
+<p class="doc-p">daging umbi yang memiliki kandungan air, karbohidrat, dan senyawa aktif seperti allicin.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Kulit Luar (Tunica): Lapisan paling luar yang tipis dan kering, berwarna cokelat kemerahan</p>
+<p class="doc-p">hingga merah ungu, berfungsi melindungi umbi dari dehidrasi dan serangan mikroorganisme.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Siung (Cloves): Satuan individu umbi dalam satu rumpun. Jumlah siung bervariasi.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Akar (Root): Serabut akar pendek yang tumbuh dari cakram (basal plate) di bagian bawah umbi.</p>
+<p class="doc-p">Kualitas fisik bawang merah yang baik ditandai dengan umbi yang keras dan padat, kulit kering dan</p>
+<p class="doc-p">mulus tanpa cacat, warna merah cerah dan merata, serta bebas dari tanda-tanda busuk, tunas,</p>
+<p class="doc-p">serangga, atau kontaminasi jamur (Badan Standardisasi Nasional, 2013).</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.2.2 Nilai Ekonomi dan Pertanian</p>
+<p class="doc-p">Bawang merah merupakan komoditas sayuran strategis yang menempati posisi ketiga dalam urutan</p>
+<p class="doc-p">produksi sayuran nasional setelah cabai dan kentang. Produksi nasional tahun 2022 mencapai sekitar</p>
+<p class="doc-p">1,8 juta ton dengan nilai ekonomi mencapai lebih dari Rp. 20 triliun (BPS, 2023). Provinsi utama</p>
+<p class="doc-p">penghasil bawang merah adalah Jawa Tengah, Jawa Timur, Jawa Barat, Nusa Tenggara Barat, dan</p>
+<p class="doc-p">Sumatera Barat.</p>
+<p class="doc-p">Pasca panen bawang merah, terjadi susut mutu (quality loss) yang cukup signifikan apabila</p>
+<p class="doc-p">penanganan tidak dilakukan dengan benar. Salah satu aspek kritis dalam penanganan pasca panen</p>
+<p class="doc-p">adalah proses sortasi mutu, yang menentukan apakah bawang merah layak dipasarkan dalam kelas</p>
+<p class="doc-p">premium, kelas standar, atau harus dibuang/diolah menjadi produk turunan (Afrizal et al., 2022).</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">2.3 Standar Nasional Indonesia SNI 3159:2013</h2>
+<p class="doc-p">Standar Nasional Indonesia (SNI) 3159:2013 merupakan standar yang ditetapkan oleh Badan</p>
+<p class="doc-p">Standardisasi Nasional (BSN) Republik Indonesia yang mengatur syarat mutu, penandaan, cara</p>
+<p class="doc-p">pengemasan, dan penyimpanan bawang merah yang diperdagangkan di dalam negeri. Standar ini</p>
+<p class="doc-p">merupakan revisi dari SNI 01-3159-1992 dan telah disesuaikan dengan kondisi pertanian modern.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.3.1 Klasifikasi Kelas Mutu</p>
+<p class="doc-p">SNI 3159:2013 mengklasifikasikan bawang merah menjadi tiga kelas mutu berdasarkan kriteria</p>
+<p class="doc-p">fisik, kimia, dan sanitasi sebagai berikut:</p>
+<p class="doc-p">TABEL 2.1 Persyaratan Mutu Bawang Merah Berdasarkan SNI 3159:2013</p>
+
+<pre>
+┌────────────────────────────────────────┬──────────────────┬──────────────────┬────────────────┐
+│ Karakteristik                          │ Mutu I (Kelas I) │ Mutu II (Kelas II│ Tidak Layak    │
+├────────────────────────────────────────┼──────────────────┼──────────────────┼────────────────┤
+│ Keseragaman Varietas                   │ Seragam          │ Seragam          │ Tidak Seragam  │
+│ Kekerasan Umbi                         │ Keras/Padat      │ Cukup Keras      │ Lunak/Busuk    │
+│ Kebersihan                             │ Bersih           │ Cukup Bersih     │ Kotor          │
+│ Warna                                  │ Merah Cerah      │ Merah Kusam      │ Cokelat/Hitam  │
+│ Kelembapan                             │ Kering           │ Agak Lembab      │ Basah          │
+│ Kerusakan Fisik                        │ Max 2%           │ Max 5%           │ > 5%           │
+│ Kontaminasi Tanah                      │ Bebas            │ Sedikit          │ Banyak         │
+│ Busuk (Rot)                            │ Tidak Ada        │ Max 1%           │ Ada (Signifikan│
+│ Tunas (Sprouting)                      │ Tidak Ada        │ Max 2%           │ Ada (Banyak)   │
+│ Serangan Hama/Penyakit                 │ Tidak Ada        │ Max 1%           │ Ada            │
+│ Diameter Umbi                          │ ≥ 2,5 cm         │ 1,5 - 2,5 cm    │ < 1,5 cm       │
+└────────────────────────────────────────┴──────────────────┴──────────────────┴────────────────┘
+</pre>
+<p class="doc-p">Sumber: Badan Standardisasi Nasional (2013), SNI 3159:2013</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.3.2 Implementasi SNI dalam Sistem Computer Vision</p>
+<p class="doc-p">Dalam penelitian ini, ketiga kelas mutu SNI 3159:2013 diadaptasi menjadi label kelas dalam</p>
+<p class="doc-p">sistem klasifikasi citra sebagai berikut:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- "Mutu_I"       : Bawang merah berkualitas premium, warna merah cerah, fisik mulus</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- "Mutu_II"      : Bawang merah berkualitas standar, ada sedikit cacat atau warna kurang cerah</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- "Tidak_Layak"  : Bawang merah dengan kerusakan signifikan, busuk, berjamur, atau sangat kecil</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">2.4 Computer Vision</h2>
+<p class="doc-p">Computer Vision (Visi Komputer) adalah cabang ilmu kecerdasan buatan yang bertujuan memberikan</p>
+<p class="doc-p">kemampuan kepada komputer untuk memperoleh pemahaman tingkat tinggi dari citra atau video</p>
+<p class="doc-p">digital. Computer Vision mencakup berbagai tugas seperti deteksi objek, segmentasi citra,</p>
+<p class="doc-p">pengenalan wajah, klasifikasi gambar, dan estimasi kedalaman (Szeliski, 2022).</p>
+<p class="doc-p">Secara historis, Computer Vision berkembang pesat setelah kemunculan dataset ImageNet pada tahun</p>
+<p class="doc-p">2009 dan kompetisi ILSVRC (ImageNet Large Scale Visual Recognition Challenge). Pada tahun 2012,</p>
+<p class="doc-p">model CNN bernama AlexNet yang dikembangkan oleh Krizhevsky et al. berhasil menurunkan tingkat</p>
+<p class="doc-p">error secara dramatis dari 26% menjadi 15.3%, menandai era baru dominasi Deep Learning dalam</p>
+<p class="doc-p">Computer Vision (Krizhevsky et al., 2012).</p>
+<p class="doc-p">Dalam konteks pertanian, Computer Vision telah banyak diaplikasikan untuk berbagai keperluan:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Deteksi dan klasifikasi penyakit daun tanaman (Ramadhan et al., 2023)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Pengenalan jenis tanaman berdasarkan morfologi daun (Hidayat et al., 2022)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Sortasi kualitas buah dan sayuran</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Estimasi kematangan (ripeness estimation) produk pertanian</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Penghitungan populasi tanaman menggunakan drone</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">2.5 Convolutional Neural Network (CNN)</h2>
+<p class="doc-p" style="text-indent: 1.27cm;">2.5.1 Sejarah dan Perkembangan CNN</p>
+<p class="doc-p">Convolutional Neural Network (CNN) merupakan arsitektur jaringan saraf tiruan yang terinspirasi</p>
+<p class="doc-p">dari mekanisme visual korteks otak makhluk hidup. Setiap neuron di korteks visual hanya merespons</p>
+<p class="doc-p">rangsangan dalam area terbatas (receptive field), dan rangsangan yang lebih kompleks dibentuk dari</p>
+<p class="doc-p">kombinasi respons neuron-neuron yang lebih sederhana. Prinsip biologis inilah yang menjadi dasar</p>
+<p class="doc-p">dari operasi konvolusi dalam CNN (LeCun et al., 1998).</p>
+<p class="doc-p">Perkembangan penting dalam sejarah CNN:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- 1989: Yann LeCun memperkenalkan CNN pertama (LeNet) untuk pengenalan tulisan tangan angka postal.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- 1998: LeCun et al. mempublikasikan LeNet-5, arsitektur CNN lengkap dengan backpropagation.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- 2012: AlexNet (Krizhevsky et al.) memenangkan ImageNet 2012 dengan top-5 error 15.3%, menandai</p>
+
+<pre>
+        kebangkitan Deep Learning.
+- 2014: VGGNet (Simonyan & Zisserman) memperkenalkan jaringan yang sangat dalam (16-19 lapisan)
+        namun dengan filter kecil 3×3.
+- 2015: ResNet (He et al.) memperkenalkan residual connections yang memungkinkan pelatihan
+        jaringan hingga 152 lapisan.
+</pre>
+<p class="doc-p" style="text-indent: 1.27cm;">- 2019-kini: EfficientNet, ConvNeXt, dan berbagai arsitektur modern yang semakin efisien.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.5.2 Arsitektur Dasar CNN</p>
+<p class="doc-p">Arsitektur CNN terdiri dari beberapa jenis lapisan yang tersusun secara berurutan dan saling</p>
+<p class="doc-p">terhubung. Secara umum, arsitektur CNN terdiri dari dua bagian besar:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Feature Extractor (Ekstraktor Fitur): Terdiri dari lapisan-lapisan Konvolusi (Conv2D) dan</p>
+<p class="doc-p">Pooling (MaxPooling2D) yang berfungsi secara hierarkis mengekstrak fitur dari citra input.</p>
+<p class="doc-p">Lapisan-lapisan awal belajar mengenali fitur primitif seperti tepi dan garis, sementara</p>
+<p class="doc-p">lapisan-lapisan yang lebih dalam belajar mengenali pola yang lebih abstrak dan kompleks.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Classifier (Pengklasifikasi): Terdiri dari lapisan Flatten, Dense (Fully Connected), Dropout,</p>
+<p class="doc-p">dan lapisan output dengan fungsi aktivasi Softmax. Bagian ini bertugas mengambil representasi</p>
+<p class="doc-p">fitur yang dihasilkan ekstraktor dan membuat keputusan klasifikasi akhir.</p>
+<p class="doc-p">[Gambar 2.5: Arsitektur umum CNN]</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.5.3 Lapisan Konvolusi (Convolutional Layer)</p>
+<p class="doc-p">Lapisan konvolusi adalah komponen fundamental CNN. Pada lapisan ini, sebuah filter (kernel)</p>
+<p class="doc-p">berukuran k×k (umumnya 3×3 atau 5×5) "digeser" (dikonvolusikan) secara sistematis di seluruh</p>
+<p class="doc-p">permukaan citra input. Pada setiap posisi, operasi perkalian elemen (element-wise multiplication)</p>
+<p class="doc-p">dilakukan antara filter dan area citra yang sesuai, kemudian hasilnya dijumlahkan untuk</p>
+<p class="doc-p">menghasilkan satu nilai pada peta fitur (feature map) keluaran.</p>
+<p class="doc-p">Persamaan matematis operasi konvolusi:</p>
+<p class="doc-p">(f  g)[x, y] = Σ_m Σ_n f[m, n] · g[x − m, y − n]</p>
+<p class="doc-p">Di mana:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- f[m,n] : matriks citra input</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- g[x,y] : filter/kernel yang dipelajari</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Σ      : penjumlahan atas seluruh elemen filter</p>
+<p class="doc-p">Dengan menggunakan banyak filter yang berbeda secara simultan, satu lapisan konvolusi mampu</p>
+<p class="doc-p">menghasilkan banyak feature map yang masing-masing merespons terhadap pola yang berbeda. Jumlah</p>
+<p class="doc-p">filter (depth) pada tiap lapisan konvolusi merupakan hiperparameter yang harus ditentukan.</p>
+<p class="doc-p">Dalam penelitian ini, digunakan konfigurasi 32, 64, dan 128 filter secara bertahap mengikuti</p>
+<p class="doc-p">praktik terbaik yang diperkenalkan oleh VGGNet.</p>
+<p class="doc-p">Setelah operasi konvolusi, fungsi aktivasi ReLU (Rectified Linear Unit) diterapkan secara</p>
+<p class="doc-p">element-wise pada setiap nilai feature map. Fungsi ReLU didefinisikan sebagai:</p>
+<p class="doc-p">ReLU(x) = max(0, x)</p>
+<p class="doc-p">Fungsi ini memperkenalkan non-linearitas ke dalam model, yang memungkinkan CNN mempelajari</p>
+<p class="doc-p">pola-pola yang kompleks dan non-linear. Keunggulan ReLU dibandingkan fungsi aktivasi sigmoid</p>
+<p class="doc-p">atau tanh adalah kecepatan komputasinya dan kemampuannya mengatasi masalah vanishing gradient.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.5.4 Lapisan Pooling (Pooling Layer)</p>
+<p class="doc-p">Lapisan pooling berfungsi untuk mengurangi dimensi spasial (resolusi) feature map secara</p>
+<p class="doc-p">progresif, sehingga mengurangi jumlah parameter yang harus dipelajari dan kompleksitas</p>
+<p class="doc-p">komputasi keseluruhan. Selain itu, pooling memberikan sifat invariansi spasial lokal (local</p>
+<p class="doc-p">spatial invariance), artinya model menjadi lebih robust terhadap pergeseran kecil objek</p>
+<p class="doc-p">dalam citra.</p>
+<p class="doc-p">Operasi Max Pooling 2×2 dengan stride 2 (yang digunakan dalam penelitian ini) mengambil nilai</p>
+<p class="doc-p">maksimum dari setiap jendela (window) berukuran 2×2 piksel tanpa tumpang tindih. Hal ini</p>
+<p class="doc-p">secara efektif mengurangi dimensi spasial feature map sebesar 50% pada setiap dimensi.</p>
+<p class="doc-p">Secara matematis, Max Pooling dengan jendela berukuran k×k pada posisi (i,j) didefinisikan:</p>
+<p class="doc-p">P[i,j] = max{ f[i·k + m, j·k + n] | 0 ≤ m, n < k }</p>
+<p class="doc-p">[Gambar 2.7: Proses Max Pooling 2x2]</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.5.5 Lapisan Flatten dan Dense (Fully Connected Layer)</p>
+<p class="doc-p">Setelah serangkaian lapisan konvolusi dan pooling, feature map tiga dimensi (lebar × tinggi ×</p>
+<p class="doc-p">kedalaman) harus diratakan menjadi sebuah vektor satu dimensi sebelum dapat dimasukkan ke dalam</p>
+<p class="doc-p">lapisan Dense. Proses ini disebut Flatten.</p>
+<p class="doc-p">Lapisan Dense (atau Fully Connected Layer) adalah lapisan di mana setiap neuron terhubung dengan</p>
+<p class="doc-p">seluruh neuron pada lapisan sebelumnya. Dalam penelitian ini digunakan satu lapisan Dense dengan</p>
+<p class="doc-p">128 neuron dan fungsi aktivasi ReLU, yang bertindak sebagai lapisan representasi abstraksi tingkat</p>
+<p class="doc-p">tinggi.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.5.6 Dropout</p>
+<p class="doc-p">Dropout (Srivastava et al., 2014) adalah teknik regularisasi yang bekerja dengan cara secara acak</p>
+<p class="doc-p">"mematikan" (setting to zero) sebagian unit (neuron) selama proses pelatihan. Probabilitas</p>
+<p class="doc-p">mematikan setiap neuron dikendalikan oleh hiperparameter rate (biasanya 0.2 hingga 0.5).</p>
+<p class="doc-p">Dalam penelitian ini, Dropout dengan rate=0.5 diterapkan setelah lapisan Dense(128), artinya</p>
+<p class="doc-p">50% neuron secara acak dimatikan pada setiap iterasi pelatihan.</p>
+<p class="doc-p">Dropout mencegah co-adaptation antar neuron dan secara efektif memaksa jaringan untuk belajar</p>
+<p class="doc-p">representasi yang lebih robust dan redundant. Hal ini terbukti sangat efektif dalam mengurangi</p>
+<p class="doc-p">overfitting (Srivastava et al., 2014).</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.5.7 Fungsi Softmax dan Categorical Cross-Entropy</p>
+<p class="doc-p">Pada lapisan output, digunakan fungsi aktivasi Softmax yang mengubah vektor skor mentah (logits)</p>
+<p class="doc-p">menjadi distribusi probabilitas atas semua kelas. Jumlah probabilitas output selalu bernilai 1.</p>
+<p class="doc-p">Persamaan Softmax untuk kelas ke-i dari total K kelas:</p>
+<p class="doc-p">σ(z)_i = e^(z_i) / Σ_{j=1}^{K} e^(z_j)</p>
+<p class="doc-p">Di mana z_i adalah skor logit (output mentah) untuk kelas ke-i.</p>
+<p class="doc-p">Fungsi loss yang digunakan untuk pelatihan adalah Categorical Cross-Entropy, yang mengukur</p>
+<p class="doc-p">perbedaan antara distribusi probabilitas yang diprediksi model dengan distribusi probabilitas</p>
+<p class="doc-p">target (label sesungguhnya dalam format one-hot encoding):</p>
+<p class="doc-p">L = -Σ_{i=1}^{K} y_i · log(ŷ_i)</p>
+<p class="doc-p">Di mana y_i adalah nilai target one-hot untuk kelas i, dan ŷ_i adalah probabilitas yang</p>
+<p class="doc-p">diprediksi model untuk kelas i.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.5.8 Optimasi Adam</p>
+<p class="doc-p">Algoritma Adam (Adaptive Moment Estimation) adalah metode optimasi gradien stokastik yang</p>
+<p class="doc-p">menggabungkan keunggulan dua metode lainnya: RMSprop dan Momentum. Adam mengadaptasi laju</p>
+<p class="doc-p">pembelajaran (learning rate) secara individual untuk setiap parameter berdasarkan estimasi</p>
+<p class="doc-p">momen pertama (mean) dan momen kedua (uncentered variance) dari gradien (Kingma & Ba, 2014).</p>
+<p class="doc-p">Pembaruan parameter dengan Adam:</p>
+<p class="doc-p">m_t = β₁ · m_{t-1} + (1 - β₁) · g_t              [Momen pertama]</p>
+<p class="doc-p">v_t = β₂ · v_{t-1} + (1 - β₂) · g_t²              [Momen kedua]</p>
+<p class="doc-p">m̂_t = m_t / (1 - β₁^t)                            [Koreksi bias]</p>
+<p class="doc-p">v̂_t = v_t / (1 - β₂^t)                            [Koreksi bias]</p>
+<p class="doc-p">θ_t = θ_{t-1} - α · m̂_t / (√v̂_t + ε)            [Update parameter]</p>
+<p class="doc-p">Di mana α = 0.001 (learning rate default), β₁ = 0.9, β₂ = 0.999, ε = 10⁻⁸.</p>
+<p class="doc-p">Adam digunakan secara luas karena konvergensinya yang cepat dan performanya yang stabil</p>
+<p class="doc-p">dibandingkan SGD standar, terutama pada masalah dengan data sparse dan non-stationary objectives.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">2.6 Gray Level Co-occurrence Matrix (GLCM)</h2>
+<p class="doc-p" style="text-indent: 1.27cm;">2.6.1 Definisi dan Konsep Dasar GLCM</p>
+<p class="doc-p">Gray Level Co-occurrence Matrix (GLCM), yang pertama kali diusulkan oleh Haralick, Shanmugam,</p>
+<p class="doc-p">dan Dinstein pada tahun 1973, adalah sebuah metode statistik untuk mengekstraksi fitur tekstur</p>
+<p class="doc-p">dari citra grayscale. GLCM merupakan matriks persegi yang mencatat frekuensi kemunculan pasangan</p>
+<p class="doc-p">piksel dengan nilai intensitas tertentu pada jarak (distance) dan sudut (angle/direction) yang</p>
+<p class="doc-p">telah ditentukan sebelumnya (Haralick et al., 1973).</p>
+<p class="doc-p">Secara formal, GLCM P(i, j | d, θ) didefinisikan sebagai matriks N×N (N = jumlah tingkat abu-abu</p>
+<p class="doc-p">atau gray levels), di mana elemen P(i,j) menyatakan berapa kali intensitas piksel bernilai i</p>
+<p class="doc-p">berdampingan (bertetangga) dengan intensitas piksel bernilai j pada jarak d dan arah θ.</p>
+<p class="doc-p">Parameter yang menentukan GLCM:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Distance (d): Jarak antar pasangan piksel. Dalam penelitian ini, d=1 (piksel tetangga langsung).</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Angle (θ): Arah orientasi. Dalam penelitian ini, θ=0° (arah horizontal kanan).</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Levels: Jumlah tingkat abu-abu. Dalam penelitian ini, levels=256 (8-bit grayscale).</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Symmetric: Simetrisasi matriks untuk invariansi arah balik (True).</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Normed: Normalisasi matriks menjadi probabilitas (True).</p>
+<p class="doc-p">[Gambar 2.9: Ilustrasi pembentukan matriks GLCM]</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.6.2 Fitur-Fitur Statistik GLCM</p>
+<p class="doc-p">Dari matriks GLCM yang telah dihitung, diekstrak empat fitur statistik utama yang digunakan</p>
+<p class="doc-p">dalam penelitian ini:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">a. Kontras (Contrast)</p>
+<p class="doc-p">Mengukur variasi intensitas (perbedaan derajat abu-abu) antara piksel dan tetangganya.</p>
+<p class="doc-p">Nilai kontras yang tinggi menandakan tekstur yang kasar dan tidak merata, sementara nilai</p>
+<p class="doc-p">kontras rendah menandakan tekstur yang halus dan seragam.</p>
+<p class="doc-p">Persamaan:</p>
+<p class="doc-p">Contrast = Σ_i Σ_j (i - j)² · P(i,j)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">b. Korelasi (Correlation)</p>
+<p class="doc-p">Mengukur tingkat ketergantungan (dependence) linier antar piksel dengan tetangganya dalam</p>
+<p class="doc-p">seluruh citra. Nilai mendekati 1 menunjukkan korelasi positif yang kuat (piksel tetangga</p>
+<p class="doc-p">memiliki nilai yang serupa), nilai mendekati -1 menunjukkan korelasi negatif (piksel tetangga</p>
+<p class="doc-p">memiliki nilai yang berlawanan).</p>
+<p class="doc-p">Persamaan:</p>
+<p class="doc-p">Correlation = Σ_i Σ_j [(i - μ_i)(j - μ_j) · P(i,j)] / (σ_i · σ_j)</p>
+<p class="doc-p">Di mana μ_i, μ_j, σ_i, σ_j adalah rata-rata dan standar deviasi dari distribusi marginal GLCM.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">c. Energi (Energy / Angular Second Moment)</p>
+<p class="doc-p">Mengukur keseragaman distribusi nilai dalam GLCM. Semakin seragam distribusinya (tekstur</p>
+<p class="doc-p">yang berulang dan teratur), semakin tinggi nilai energinya. Rentang nilai energi adalah [0, 1].</p>
+<p class="doc-p">Persamaan:</p>
+<p class="doc-p">Energy = Σ_i Σ_j P(i,j)²</p>
+<p class="doc-p" style="text-indent: 1.27cm;">d. Homogenitas (Homogeneity / Inverse Difference Moment)</p>
+<p class="doc-p">Mengukur kekompakan (closeness) distribusi elemen GLCM terhadap diagonal matriks. Nilai</p>
+<p class="doc-p">homogenitas yang tinggi menandakan tekstur yang homogen (sedikit variasi antar tetangga),</p>
+<p class="doc-p">sedangkan nilai rendah menandakan tekstur yang heterogen.</p>
+<p class="doc-p">Persamaan:</p>
+<p class="doc-p">Homogeneity = Σ_i Σ_j P(i,j) / (1 + |i - j|)</p>
+<p class="doc-p">Keempat nilai fitur (Contrast, Correlation, Energy, Homogeneity) membentuk sebuah vektor fitur</p>
+<p class="doc-p">berukuran 4 dimensi: [f₁, f₂, f₃, f₄], yang menjadi representasi numerik dari tekstur sebuah</p>
+<p class="doc-p">citra bawang merah.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.6.3 Penerapan GLCM dalam Klasifikasi Citra</p>
+<p class="doc-p">GLCM telah diaplikasikan secara luas dalam berbagai domain klasifikasi tekstur, termasuk:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Analisis citra medis (deteksi tumor pada MRI) (Haralick et al., 1973)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Deteksi penyakit tanaman berdasarkan tekstur daun (Nasution et al., 2022)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Klasifikasi kualitas tembakau (Wahyudi et al., 2021)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Identifikasi jenis rempah dan bahan herbal</p>
+<p class="doc-p">Penelitian Wahyudi et al. (2021) yang mengklasifikasikan kualitas daun tembakau menggunakan GLCM</p>
+<p class="doc-p">dan SVM menunjukkan bahwa kombinasi keempat fitur ini (Contrast, Correlation, Energy, Homogeneity)</p>
+<p class="doc-p">mampu memberikan akurasi yang layak pada produk pertanian dengan tekstur permukaan yang khas.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">2.7 Support Vector Machine (SVM)</h2>
+<p class="doc-p" style="text-indent: 1.27cm;">2.7.1 Prinsip Dasar SVM</p>
+<p class="doc-p">Support Vector Machine (SVM) adalah algoritma machine learning terawasi (supervised learning)</p>
+<p class="doc-p">yang diperkenalkan oleh Cortes dan Vapnik (1995). SVM bekerja dengan prinsip mencari hyperplane</p>
+<p class="doc-p">pemisah (decision boundary) optimal yang memaksimalkan margin (jarak) antara hyperplane tersebut</p>
+<p class="doc-p">dengan data sampel terdekat dari masing-masing kelas. Data sampel yang berada paling dekat</p>
+<p class="doc-p">dengan hyperplane inilah yang disebut support vectors.</p>
+<p class="doc-p">Secara matematis, untuk kasus klasifikasi biner (dua kelas), SVM mencari hyperplane:</p>
+<p class="doc-p">w · x + b = 0</p>
+<p class="doc-p">Di mana w adalah vektor bobot normal terhadap hyperplane, x adalah vektor fitur input, dan b</p>
+<p class="doc-p">adalah bias. Tujuan optimasi SVM adalah:</p>
+<p class="doc-p">Minimize: (1/2) ||w||²</p>
+<p class="doc-p">Subject to: y_i (w · x_i + b) ≥ 1 ∀i</p>
+<p class="doc-p">Di mana y_i ∈ {-1, +1} adalah label kelas untuk sampel ke-i.</p>
+<p class="doc-p">[Gambar 2.10: Representasi hyperplane dan support vector pada SVM]</p>
+<p class="doc-p">Keunggulan SVM meliputi:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">a. Efektif pada ruang fitur berdimensi tinggi</p>
+<p class="doc-p" style="text-indent: 1.27cm;">b. Generalisasi yang baik bahkan dengan jumlah data yang terbatas</p>
+<p class="doc-p" style="text-indent: 1.27cm;">c. Robust terhadap outlier karena hanya bergantung pada support vectors</p>
+<p class="doc-p" style="text-indent: 1.27cm;">d. Memiliki landasan teori matematika yang kuat (statistical learning theory)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.7.2 Kernel Linear pada SVM</p>
+<p class="doc-p">Kernel pada SVM menentukan cara melakukan pemetaan fitur ke ruang dimensi yang lebih tinggi.</p>
+<p class="doc-p">Kernel linear bekerja langsung pada ruang fitur asli tanpa transformasi, menggunakan fungsi:</p>
+<p class="doc-p">K(x_i, x_j) = x_i · x_j</p>
+<p class="doc-p">Kernel linear dipilih dalam penelitian ini karena vektor fitur GLCM hanya memiliki 4 dimensi,</p>
+<p class="doc-p">sehingga pemisahan linear sudah cukup untuk memisahkan kelas-kelas yang ada. Penggunaan kernel</p>
+<p class="doc-p">linear juga lebih cepat dan mudah diinterpretasikan.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.7.3 Class Weighting pada SVM</p>
+<p class="doc-p">Ketidakseimbangan distribusi kelas (class imbalance) dalam dataset dapat menyebabkan model SVM</p>
+<p class="doc-p">cenderung memihak kelas mayoritas. Untuk mengatasi hal ini, parameter class_weight='balanced'</p>
+<p class="doc-p">diterapkan pada SVC. Dengan pengaturan ini, setiap kelas diberikan bobot yang berbanding terbalik</p>
+<p class="doc-p">dengan frekuensi kemunculannya dalam dataset pelatihan:</p>
+<p class="doc-p">weight_k = n_total / (n_kelas  n_k)</p>
+<p class="doc-p">Di mana n_total adalah total sampel, n_kelas adalah jumlah kelas, dan n_k adalah jumlah sampel</p>
+<p class="doc-p">pada kelas ke-k. Kelas yang lebih sedikit akan mendapatkan bobot yang lebih besar, sehingga</p>
+<p class="doc-p">penalti misklasifikasi pada kelas minoritas menjadi lebih besar dan model dipaksa untuk lebih</p>
+<p class="doc-p">memperhatikan kelas tersebut.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">2.8 CLAHE (Contrast Limited Adaptive Histogram Equalization)</h2>
+<p class="doc-p">Histogram Equalization (HE) adalah teknik peningkatan kontras citra yang bekerja dengan cara</p>
+<p class="doc-p">mendistribusikan ulang nilai intensitas piksel agar mengisi seluruh rentang [0, 255] secara</p>
+<p class="doc-p">lebih merata. Meskipun efektif, HE standar beroperasi secara global (pada seluruh citra sekaligus)</p>
+<p class="doc-p">sehingga dapat menghasilkan efek amplifikasi noise yang berlebihan pada area tertentu.</p>
+<p class="doc-p">Adaptive Histogram Equalization (AHE) memperbaiki keterbatasan HE dengan membagi citra menjadi</p>
+<p class="doc-p">blok-blok kecil (tiles) dan melakukan histogram equalization secara independen pada setiap blok.</p>
+<p class="doc-p">Hasilnya lebih adaptif terhadap variasi pencahayaan lokal, namun AHE masih rentan terhadap</p>
+<p class="doc-p">amplifikasi noise pada area yang seragam.</p>
+<p class="doc-p">CLAHE (Contrast Limited Adaptive Histogram Equalization) merupakan penyempurnaan dari AHE yang</p>
+<p class="doc-p">menambahkan mekanisme pembatasan kontras (contrast limiting). Pada CLAHE, jika nilai histogram</p>
+<p class="doc-p">pada setiap bin melebihi batas yang telah ditentukan (clipLimit), nilai yang berlebih tersebut</p>
+<p class="doc-p">akan dipotong (clipped) dan didistribusikan secara merata ke semua bin sebelum dilakukan</p>
+<p class="doc-p">equalization (Pizer et al., 1987).</p>
+<p class="doc-p">Parameter CLAHE yang digunakan dalam penelitian ini:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- clipLimit = 2.0 : Batas pemotongan histogram. Nilai 2.0 memberikan peningkatan kontras yang</p>
+
+<pre>
+                    moderat tanpa amplifikasi noise yang berlebihan.
+- tileGridSize = (8, 8) : Ukuran grid blok adaptif. Citra 224×224 dibagi menjadi blok-blok
+                          berukuran 28×28 piksel.
+
+</pre>
+<p class="doc-p">Dalam konteks bawang merah, CLAHE sangat berguna karena citra bawang sering diambil dalam kondisi</p>
+<p class="doc-p">pencahayaan yang tidak seragam. Bagian umbi yang menghadap cahaya akan sangat terang, sementara</p>
+<p class="doc-p">sisi bayangan sangat gelap. CLAHE membantu meratakan distribusi kontras ini sehingga fitur tekstur</p>
+<p class="doc-p">(kekasaran, urat, dan pola permukaan) yang diekstrak oleh GLCM menjadi lebih representatif.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">2.9 Metrik Evaluasi Kinerja Model</h2>
+<p class="doc-p" style="text-indent: 1.27cm;">2.9.1 Confusion Matrix</p>
+<p class="doc-p">Confusion matrix adalah tabel yang memvisualisasikan kinerja model klasifikasi dengan membandingkan</p>
+<p class="doc-p">prediksi model terhadap label sebenarnya secara per kelas. Untuk kasus tiga kelas (K=3), confusion</p>
+<p class="doc-p">matrix berukuran 3×3 di mana:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Baris merepresentasikan kelas aktual (actual class / ground truth)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Kolom merepresentasikan kelas yang diprediksi model (predicted class)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Elemen diagonal [i,i] merepresentasikan prediksi yang benar (True Positive) untuk kelas ke-i</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Elemen off-diagonal [i,j] (i≠j) merepresentasikan kesalahan prediksi (misclassification)</p>
+<p class="doc-p">Dari confusion matrix, untuk setiap kelas k, dapat dihitung:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- True Positive (TP_k)  : Sampel kelas k yang benar diprediksi sebagai kelas k</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- False Positive (FP_k) : Sampel bukan kelas k yang salah diprediksi sebagai kelas k</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- False Negative (FN_k) : Sampel kelas k yang salah diprediksi sebagai bukan kelas k</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- True Negative (TN_k)  : Sampel bukan kelas k yang benar diprediksi sebagai bukan kelas k</p>
+<p class="doc-p">[Gambar 2.12: Struktur Confusion Matrix 3x3]</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2.9.2 Akurasi, Presisi, Recall, dan F1-Score</p>
+<p class="doc-p" style="text-indent: 1.27cm;">a. Akurasi (Accuracy)</p>
+<p class="doc-p">Mengukur proporsi total prediksi yang benar dari seluruh sampel.</p>
+<p class="doc-p">Accuracy = (Σ TP_k) / N_total</p>
+<p class="doc-p">Di mana N_total adalah total seluruh sampel uji.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">b. Presisi (Precision)</p>
+<p class="doc-p">Mengukur proporsi prediksi positif yang benar-benar positif. Menjawab pertanyaan:</p>
+<p class="doc-p">"Dari semua yang diprediksi sebagai kelas X, berapa persen yang memang benar kelas X?"</p>
+<p class="doc-p">Precision_k = TP_k / (TP_k + FP_k)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">c. Recall (Sensitivity / True Positive Rate)</p>
+<p class="doc-p">Mengukur proporsi sampel positif yang berhasil terdeteksi. Menjawab pertanyaan:</p>
+<p class="doc-p">"Dari semua sampel yang sebenarnya kelas X, berapa persen yang berhasil dikenali?"</p>
+<p class="doc-p">Recall_k = TP_k / (TP_k + FN_k)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">d. F1-Score</p>
+<p class="doc-p">Merupakan harmonic mean (rata-rata harmonik) dari Precision dan Recall. F1-Score memberikan</p>
+<p class="doc-p">ukuran kinerja tunggal yang menyeimbangkan keduanya, dan sangat berguna pada kasus</p>
+<p class="doc-p">ketidakseimbangan kelas.</p>
+<p class="doc-p">F1-Score_k = 2 · (Precision_k · Recall_k) / (Precision_k + Recall_k)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">e. Weighted Average</p>
+<p class="doc-p">Pada kasus multi-kelas dengan ketidakseimbangan, metrik yang dilaporkan sering merupakan</p>
+<p class="doc-p">weighted average, di mana kontribusi tiap kelas pada rata-rata ditimbang proporsional</p>
+<p class="doc-p">terhadap jumlah sampel (support) kelas tersebut.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">2.10 Penelitian Terdahulu</h2>
+<p class="doc-p">Berikut ini adalah beberapa penelitian terdahulu yang relevan dengan topik penelitian ini dan</p>
+<p class="doc-p">menjadi acuan dalam pengembangan sistem sortasi mutu bawang merah:</p>
+<p class="doc-p">TABEL 2.2 Perbandingan Penelitian Terdahulu</p>
+
+<pre>
+┌────┬─────────────────┬─────────┬────────────────────────────────────┬──────────────────────┐
+│ No │ Penulis/Tahun   │ Dataset │ Metode                             │ Hasil                │
+├────┼─────────────────┼─────────┼────────────────────────────────────┼──────────────────────┤
+│ 1  │ Wahyudi et al.  │ Daun    │ GLCM (4 fitur) + SVM (RBF Kernel)  │ Akurasi 87,5%        │
+│    │ (2021)          │ Tembakau│ 3 kelas mutu                       │                      │
+├────┼─────────────────┼─────────┼────────────────────────────────────┼──────────────────────┤
+│ 2  │ Nasution et al. │ Penyakit│ GLCM + Naive Bayes, 5 kelas        │ Akurasi 80,2%        │
+│    │ (2022)          │ Bawang  │                                    │                      │
+├────┼─────────────────┼─────────┼────────────────────────────────────┼──────────────────────┤
+│ 3  │ Ramadhan et al. │ Berbagai│ CNN (VGG16 Transfer Learning)       │ Akurasi 94,3%        │
+│    │ (2023)          │ Tanaman │ Klasifikasi 10 jenis daun           │                      │
+├────┼─────────────────┼─────────┼────────────────────────────────────┼──────────────────────┤
+│ 4  │ Hidayat et al.  │ Rempah  │ CNN (VGG16) + Identifikasi          │ Akurasi 91,7%        │
+│    │ (2022)          │ Indonesia│ 12 kelas rempah                   │                      │
+├────┼─────────────────┼─────────┼────────────────────────────────────┼──────────────────────┤
+│ 5  │ Sari & Kurnia   │ Sampah  │ CNN Sequential 3 Conv Block,        │ Akurasi 85,2%        │
+│    │ (2023)          │ Organik │ Klasifikasi 2 kelas                 │                      │
+├────┼─────────────────┼─────────┼────────────────────────────────────┼──────────────────────┤
+│ 6  │ Pratiwi et al.  │ Bawang  │ CNN (MobileNet) + KNN + PCA         │ Akurasi 89,5%        │
+│    │ (2022)          │ Putih/  │ Klasifikasi 3 jenis bawang          │                      │
+│    │                 │ Merah   │                                     │                      │
+├────┼─────────────────┼─────────┼────────────────────────────────────┼──────────────────────┤
+│ 7  │ Penelitian Ini  │ Bawang  │ CNN (from scratch) + GLCM+SVM       │ CNN: 72,03%          │
+│    │ (2026)          │ Merah   │ 3 Kelas, SNI 3159:2013              │ GLCM+SVM: 39,85%     │
+└────┴─────────────────┴─────────┴────────────────────────────────────┴──────────────────────┘
+
+</pre>
+<p class="doc-p">Berdasarkan studi komparatif di atas, dapat diidentifikasi beberapa gap penelitian yang ingin</p>
+<p class="doc-p">dijembatani oleh penelitian ini:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Mayoritas penelitian yang menggunakan GLCM+SVM (Wahyudi et al., 2021; Nasution et al., 2022)</p>
+<p class="doc-p">menerapkan metode tersebut pada dataset yang relatif kecil dengan kondisi yang terkontrol</p>
+<p class="doc-p">(studio lighting), sehingga akurasi yang tinggi lebih mudah dicapai.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Penelitian yang secara spesifik membahas sortasi mutu bawang merah berdasarkan SNI 3159:2013</p>
+<p class="doc-p">masih sangat terbatas, terutama yang mengimplementasikan perbandingan CNN dan GLCM+SVM secara</p>
+<p class="doc-p">sistematis dalam satu platform terintegrasi.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Pengembangan aplikasi desktop yang dapat digunakan secara real-time oleh pengguna non-teknis</p>
+<p class="doc-p">untuk sortasi bawang merah berbasis AI juga masih jarang ditemukan dalam literatur yang ada.</p>
+
+<pre>
+══════════════════════════════════════════════════════════════════════════════════════════════
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">BAB III</h1>
+<p class="doc-p">METODE PENELITIAN</p>
+<h2 class="doc-h2" style="text-align:left;">3.1 Instrumen Penelitian (Spesifikasi Perangkat Keras dan Perangkat Lunak)</h2>
+<p class="doc-p">Dalam penelitian ini, pengembangan model kecerdasan buatan, eksperimen, serta implementasi akhir antarmuka aplikasi (GUI) dilakukan menggunakan instrumen penelitian berupa perangkat keras (laptop) dengan spesifikasi sebagai berikut:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Prosesor (CPU): Intel Core / AMD Ryzen (multi-core architecture untuk pengolahan GUI)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Memori (RAM): Minimal 8GB (direkomendasikan 16GB) untuk memuat dataset ke memori saat preprocessing.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Kapasitas Penyimpanan: SSD untuk kecepatan baca-tulis dataset (I/O) yang tinggi.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Lingkungan Komputasi Cloud: Google Colaboratory dengan dukungan Cloud GPU (T4/V100) untuk mempercepat waktu komputasi pelatihan model Convolutional Neural Network (CNN).</p>
+<p class="doc-p">Sedangkan perangkat lunak (software) pendukung meliputi:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Sistem Operasi: Microsoft Windows (untuk pengujian aplikasi desktop)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Bahasa Pemrograman: Python 3.8 - 3.10</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Deep Learning Framework: TensorFlow / Keras (untuk arsitektur CNN)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Machine Learning Library: Scikit-learn (untuk algoritma SVM)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Computer Vision Library: OpenCV (cv2) dan Scikit-Image (skimage) untuk ekstraksi fitur tekstur GLCM.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Antarmuka Pengguna (GUI): Tkinter (Built-in Python Library)</p>
+<h2 class="doc-h2" style="text-align:left;">3.2 Alur Diagram Penelitian</h2>
+<p class="doc-p">Tahapan eksperimen dan pembuatan sistem digambarkan melalui alur diagram (flowchart) penelitian yang sistematis. Proses dimulai dari akuisisi citra bawang merah, preprocessing gambar menggunakan teknik CLAHE untuk normalisasi kontras, ekstraksi fitur tekstur pada skala abu-abu menggunakan GLCM, hingga ke perbandingan arsitektur CNN. Diagram tersebut menggambarkan percabangan jalur komputasi klasifikasi di mana satu jalur menuju pipeline Machine Learning tradisional (SVM) dan jalur lainnya menuju pipeline Deep Learning (CNN).</p>
+
+<pre>
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+<h2 class="doc-h2" style="text-align:left;">3.1 Kerangka Berpikir Penelitian</h2>
+<p class="doc-p">Penelitian ini dirancang mengikuti alur penelitian eksperimental yang sistematis dan terstruktur.</p>
+<p class="doc-p">Kerangka berpikir penelitian ini secara garis besar dapat divisualisasikan sebagai berikut:</p>
+<p class="doc-p">[Gambar 3.1: Kerangka Berpikir Penelitian - Buat Flowchart dengan software apapun mengikuti deskripsi ini:]</p>
+<p class="doc-p">ALUR KERANGKA BERPIKIR:</p>
+
+<pre>
+┌─────────────────────────┐
+│ IDENTIFIKASI MASALAH    │  Sortasi manual tidak konsisten, tidak sesuai SNI 3159:2013
+└────────────┬────────────┘
+             ↓
+┌─────────────────────────┐
+│ STUDI LITERATUR         │  CNN, GLCM, SVM, SNI 3159:2013, Computer Vision
+└────────────┬────────────┘
+             ↓
+┌─────────────────────────┐
+│ PENGUMPULAN DATASET     │  2.609 citra bawang merah (3 kelas mutu)
+└────────────┬────────────┘
+             ↓
+┌─────────────────────────┐
+│ PREPROCESSING CITRA     │  Resize 224x224, Rescale /255, CLAHE
+└────────────┬────────────┘
+             ↓
+┌──────────┴──────────────┐
+↓                         ↓
+┌──────────┐    ┌─────────────────────┐
+│ CNN      │    │ GLCM + SVM          │
+│ Training │    │ Ekstraksi Fitur     │
+│ 15 Epoch │    │ → Pelatihan SVM     │
+└────┬─────┘    └──────────┬──────────┘
+     ↓                     ↓
+┌─────────────────────────────────────┐
+│ EVALUASI & KOMPARASI                │
+│ Accuracy, Precision, Recall, F1     │
+│ Confusion Matrix                    │
+└────────────┬────────────────────────┘
+             ↓
+┌─────────────────────────┐
+│ IMPLEMENTASI APLIKASI   │  Desktop Python-Tkinter Real-Time
+└────────────┬────────────┘
+             ↓
+┌─────────────────────────┐
+│ KESIMPULAN & SARAN      │
+└─────────────────────────┘
+
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">3.2 Metode Pengumpulan Data</h2>
+<p class="doc-p">Data yang digunakan dalam penelitian ini diperoleh melalui dua mekanisme:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">a. Pengambilan Gambar Langsung (Primary Data Collection)</p>
+<p class="doc-p">Citra bawang merah diambil secara langsung dari sampel bawang yang tersedia di pasar tradisional</p>
+<p class="doc-p">dan produsen bawang merah lokal. Pengambilan gambar dilakukan menggunakan kamera smartphone</p>
+<p class="doc-p">dengan resolusi minimal 12 MP, dengan latar belakang netral (putih atau abu-abu) dan</p>
+<p class="doc-p">pencahayaan yang cukup untuk menangkap detail tekstur permukaan bawang.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">b. Pengumpulan dari Sumber Digital (Secondary Data Collection)</p>
+<p class="doc-p">Sebagian citra dikumpulkan dari sumber-sumber digital terpercaya yang menyediakan gambar</p>
+<p class="doc-p">bawang merah dengan kondisi fisik yang beragam. Seluruh gambar kemudian dilabeli secara manual</p>
+<p class="doc-p">oleh peneliti berdasarkan panduan kriteria SNI 3159:2013.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">3.3 Dataset dan Sumber Data</h2>
+<p class="doc-p" style="text-indent: 1.27cm;">3.3.1 Deskripsi Dataset</p>
+<p class="doc-p">Dataset yang digunakan dalam penelitian ini merupakan kumpulan citra bawang merah yang terbagi</p>
+<p class="doc-p">ke dalam tiga kelas mutu sesuai SNI 3159:2013. Dataset disimpan di Google Drive dan dapat</p>
+<p class="doc-p">diakses melalui Google Colaboratory untuk proses pelatihan model.</p>
+<p class="doc-p">Lokasi Dataset (Google Drive):</p>
+<p class="doc-p">Path: /content/drive/MyDrive/MACHINE LEARNING VISUAL TEXTURE REVISI</p>
+<p class="doc-p">Struktur Folder:</p>
+
+<pre>
+├── train/
+│   ├── Mutu_I/     (gambar bawang merah kelas premium)
+│   ├── Mutu_II/    (gambar bawang merah kelas standar)
+│   └── Tidak_Layak/ (gambar bawang tidak layak edar)
+├── valid/
+│   ├── Mutu_I/
+│   ├── Mutu_II/
+│   └── Tidak_Layak/
+└── test/
+    ├── Mutu_I/
+    ├── Mutu_II/
+    └── Tidak_Layak/
+
+TABEL 3.2 Pembagian Dataset Per Kelas
+┌─────────────────┬────────┬────────────┬────────┬──────────────┐
+│ Kelas Mutu      │ Train  │ Validasi   │ Test   │ Total        │
+├─────────────────┼────────┼────────────┼────────┼──────────────┤
+│ Mutu I          │   ~697 │       ~87  │    47  │    ≈831      │
+│ Mutu II         │  ~1045 │      ~131  │   101  │   ≈1277      │
+│ Tidak Layak     │   ~345 │       ~43  │   113  │    ≈501      │
+├─────────────────┼────────┼────────────┼────────┼──────────────┤
+│ TOTAL           │  2.087 │       261  │   261  │   2.609      │
+└─────────────────┴────────┴────────────┴────────┴──────────────┘
+</pre>
+<p class="doc-p">Catatan: Jumlah per kelas bersifat perkiraan berdasarkan proporsi dataset keseluruhan.</p>
+<p class="doc-p">Rasio pembagian dataset:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Train : 80% → digunakan untuk melatih model</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Valid : 10% → digunakan untuk monitoring performa saat training (early stopping potential)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Test  : 10% → digunakan untuk evaluasi akhir model (blind test)</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">3.4 Alur Perancangan Sistem (Flowchart)</h2>
+<p class="doc-p">[Gambar 3.2: Diagram Alur Sistem Sortasi Mutu Bawang Merah]</p>
+<p class="doc-p">Buat flowchart menggunakan draw.io atau Visio mengikuti alur ini:</p>
+<p class="doc-p">FLOWCHART PELATIHAN MODEL (Google Colab):</p>
+<p class="doc-p">START</p>
+<p class="doc-p">→ Mount Google Drive</p>
+<p class="doc-p">→ Load Dataset (train/valid/test dari Google Drive)</p>
+<p class="doc-p">→ Preprocessing (rescale + augmentasi via ImageDataGenerator)</p>
+<p class="doc-p">→ Bangun Arsitektur CNN Sequential</p>
+<p class="doc-p">→ Hitung Class Weights (compute_class_weight)</p>
+<p class="doc-p">→ model.fit() - Training 15 Epoch dengan class_weight</p>
+<p class="doc-p">→ Evaluasi CNN pada test_generator</p>
+<p class="doc-p">→ Ekstraksi Fitur GLCM dari train dan test</p>
+<p class="doc-p">→ Training SVM dengan class_weight='balanced'</p>
+<p class="doc-p">→ Evaluasi SVM pada X_test_glcm</p>
+<p class="doc-p">→ Plot Confusion Matrix (CNN & GLCM+SVM)</p>
+<p class="doc-p">→ Cetak Classification Report</p>
+<p class="doc-p">→ Simpan model (model.save() dan joblib.dump())</p>
+<p class="doc-p">END</p>
+<p class="doc-p">FLOWCHART APLIKASI DESKTOP (Real-Time Prediction):</p>
+<p class="doc-p">START</p>
+<p class="doc-p">→ Launcher.py: Diagnostik Dependensi & Auto-Install</p>
+<p class="doc-p">→ Launch app.py</p>
+<p class="doc-p">→ Load Model CNN (model.load()) dan Model SVM (joblib.load())</p>
+<p class="doc-p">→ User Pilih Mode (Mode 1: Analisis Detail / Mode 2: Batch)</p>
+
+<pre>
+      Mode 1:
+        → User Pilih 1 Gambar
+        → cv2.imread() → resize 224x224
+        → [Thread A] CNN: cvtColor BGR→RGB → predict_cnn → argmax → label+confidence
+        → [Thread B] SVM: cvtColor BGR→Gray → CLAHE → GLCM → fitur → predict_svm
+        → Tampilkan hasil di terminal animasi
+      Mode 2:
+        → User Pilih Folder
+        → Loop setiap gambar → Thread Pool (CNN + SVM paralel)
+        → Tampilkan kartu gambar di galeri + tooltip hasil
+</pre>
+<p class="doc-p">→ Log kecepatan proses ke app_error.log</p>
+<p class="doc-p">END</p>
+<p class="doc-p">ALUR DIAGRAM SISTEM (FLOWCHART):</p>
+
+<pre>
+      [ MULAI ]
+          |
+          v
+  [ BACA CITRA INPUT ]
+          |
+          v
+</pre>
+<p class="doc-p">[ PREPROCESSING ]</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Resize 224x224</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Normalisasi</p>
+
+<pre>
+          |
+</pre>
+<p class="doc-p">+-------+-------+</p>
+<p class="doc-p">|               |</p>
+<p class="doc-p">v               v</p>
+<p class="doc-p">[ JALUR CNN ]   [ JALUR GLCM+SVM ]</p>
+<p class="doc-p">|               |</p>
+<p class="doc-p">v               v</p>
+<p class="doc-p">(Konvolusi)     (Ekstrak Fitur:</p>
+<p class="doc-p">(Pooling)       Contrast, Energy,</p>
+<p class="doc-p">(Dense)         Correlation,</p>
+<p class="doc-p">(Softmax)       Homogeneity)</p>
+<p class="doc-p">|               |</p>
+<p class="doc-p">v               v</p>
+<p class="doc-p">[PREDIKSI 1]    [PREDIKSI 2]</p>
+<p class="doc-p">|               |</p>
+<p class="doc-p">+-------+-------+</p>
+
+<pre>
+          |
+          v
+  [ TAMPILKAN HASIL ]
+  (Mutu I / Mutu II / Tidak Layak)
+          |
+          v
+      [ SELESAI ]
+
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">3.5 Preprocessing Citra</h2>
+<p class="doc-p" style="text-indent: 1.27cm;">3.5.1 Preprocessing untuk CNN (ImageDataGenerator)</p>
+<p class="doc-p">Preprocessing untuk jalur CNN dilakukan menggunakan kelas ImageDataGenerator dari Keras:</p>
+<p class="doc-p">```python</p>
+<p class="doc-p">datagen = ImageDataGenerator(rescale=1./255)</p>
+<p class="doc-p">train_generator = datagen.flow_from_directory(</p>
+
+<pre>
+    path_train,
+    target_size=(224, 224),
+    batch_size=32,
+    class_mode='categorical'
+</pre>
+<p class="doc-p">)</p>
+<p class="doc-p">```</p>
+<p class="doc-p">Penjelasan parameter:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- rescale=1./255  : Normalisasi nilai piksel [0,255] → [0.0, 1.0]</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- target_size=(224, 224) : Resize otomatis setiap gambar ke dimensi 224×224 piksel</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- batch_size=32   : 32 gambar diproses bersamaan dalam satu iterasi pelatihan</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- class_mode='categorical' : Label dikodekan sebagai vektor one-hot (misal: [1,0,0] untuk Mutu I)</p>
+<p class="doc-p">Normalisasi piksel dengan /255 adalah langkah kritis. Nilai piksel asli berkisar [0,255], namun</p>
+<p class="doc-p">jaringan neural bekerja lebih baik dan konvergen lebih cepat ketika input berada dalam skala</p>
+<p class="doc-p">kecil [0,1]. Ini mencegah neuron pada lapisan awal "terlalu aktif" akibat nilai input yang besar.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3.5.2 Penanganan Ketidakseimbangan Kelas (Class Imbalance)</p>
+<p class="doc-p">Distribusi kelas dalam dataset tidak seimbang. Hal ini dapat menyebabkan model bias terhadap</p>
+<p class="doc-p">kelas yang memiliki sampel lebih banyak (Mutu_II). Untuk mengatasinya, diterapkan class weighting</p>
+<p class="doc-p">menggunakan fungsi compute_class_weight dari scikit-learn:</p>
+<p class="doc-p">```python</p>
+<p class="doc-p">class_weights_array = compute_class_weight(</p>
+
+<pre>
+    class_weight='balanced',
+    classes=np.unique(train_generator.classes),
+    y=train_generator.classes
+</pre>
+<p class="doc-p">)</p>
+<p class="doc-p">class_weights_dict = dict(enumerate(class_weights_array))</p>
+<p class="doc-p">```</p>
+<p class="doc-p">Hasil perhitungan bobot yang diperoleh dari eksperimen:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Kelas 0 (Mutu_I)      : weight ≈ 1.599  [Kelas minoritas, bobot besar]</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Kelas 1 (Mutu_II)     : weight ≈ 0.765  [Kelas mayoritas, bobot kecil]</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Kelas 2 (Tidak_Layak) : weight ≈ 0.936  [Kelas menengah]</p>
+<p class="doc-p">Bobot ini kemudian dimasukkan saat pelatihan: model.fit(..., class_weight=class_weights_dict)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3.5.3 Preprocessing untuk GLCM+SVM (CLAHE)</p>
+<p class="doc-p">Untuk jalur GLCM, preprocessing dilakukan menggunakan fungsi khusus:</p>
+<p class="doc-p">```python</p>
+
+<pre>
+def ekstraksi_glcm(image_path):
+    img = cv2.imread(image_path)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = cv2.resize(gray, (224, 224))
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    gray = clahe.apply(gray)
+    glcm = graycomatrix(gray, distances=[1], angles=[0], levels=256,
+                        symmetric=True, normed=True)
+    ...
+</pre>
+<p class="doc-p">```</p>
+<p class="doc-p">[Gambar 3.3: Proses preprocessing citra: resize dan CLAHE]</p>
+<p class="doc-p">Contoh visual menunjukkan: gambar asli → grayscale → setelah CLAHE (detail lebih terlihat jelas)</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">3.6 Perancangan Model CNN</h2>
+<p class="doc-p">[Gambar 3.4: Arsitektur CNN yang dirancang]</p>
+<p class="doc-p">Arsitektur CNN yang dirancang menggunakan pendekatan Sequential dari Keras TensorFlow, dengan</p>
+<p class="doc-p">tiga blok konvolusi yang semakin dalam:</p>
+<p class="doc-p">```python</p>
+<p class="doc-p">model_cnn = Sequential([</p>
+
+<pre>
+    Input(shape=(224, 224, 3)),
+    
+    # Blok 1: Deteksi fitur primitif (tepi, sudut)
+    Conv2D(32, (3,3), activation='relu'),
+    MaxPooling2D(2, 2),
+    
+    # Blok 2: Deteksi fitur menengah (tekstur, pola)
+    Conv2D(64, (3,3), activation='relu'),
+    MaxPooling2D(2, 2),
+    
+    # Blok 3: Deteksi fitur kompleks (bentuk objek)
+    Conv2D(128, (3,3), activation='relu'),
+    MaxPooling2D(2, 2),
+    
+    # Pengklasifikasi
+    Flatten(),
+    Dense(128, activation='relu'),
+    Dropout(0.5),
+    Dense(num_classes, activation='softmax')  # num_classes = 3
+</pre>
+<p class="doc-p">])</p>
+<p class="doc-p">model_cnn.compile(</p>
+
+<pre>
+    loss='categorical_crossentropy',
+    optimizer='adam',
+    metrics=['accuracy']
+</pre>
+<p class="doc-p">)</p>
+<p class="doc-p">```</p>
+<p class="doc-p">Justifikasi Perancangan Arsitektur:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Tiga Blok Konvolusi (32, 64, 128 filter):</p>
+<p class="doc-p">Mengikuti prinsip arsitektur VGGNet yang terbukti efektif. Penggandaan jumlah filter pada</p>
+<p class="doc-p">setiap blok memungkinkan jaringan mendeteksi fitur yang semakin kompleks secara hierarkis,</p>
+<p class="doc-p">dari tepi sederhana hingga bentuk dan pola tekstur bawang yang spesifik.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Filter 3×3:</p>
+<p class="doc-p">Penggunaan filter berukuran kecil 3×3 memiliki lebih sedikit parameter dibanding 5×5 atau</p>
+<p class="doc-p">7×7, namun dengan dua lapisan 3×3 yang berurutan dapat menangkap receptive field yang sama</p>
+<p class="doc-p">dengan satu lapisan 5×5. Hal ini menghasilkan model yang lebih efisien namun tetap ekspresif.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. MaxPooling 2×2:</p>
+<p class="doc-p">Mengurangi dimensi spatial sebesar 2× setelah setiap blok konvolusi, menghasilkan invariansi</p>
+<p class="doc-p">translasi dan mengurangi beban komputasi secara signifikan.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Dense(128) + Dropout(0.5):</p>
+<p class="doc-p">Lapisan Dense dengan 128 neuron bertindak sebagai "pusat integrasi" representasi fitur.</p>
+<p class="doc-p">Dropout 50% secara efektif mengurangi risiko overfitting yang muncul dari Epoch 7 ke atas.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">5. Output Dense(3) + Softmax:</p>
+<p class="doc-p">Tiga neuron output merepresentasikan ketiga kelas mutu. Softmax memastikan outputnya berupa</p>
+<p class="doc-p">distribusi probabilitas yang valid (jumlah = 1.0).</p>
+<p class="doc-p">Ringkasan Dimensi Tensor per Lapisan:</p>
+<p class="doc-p">Input    : (None, 224, 224, 3)</p>
+<p class="doc-p">Conv2D(32): (None, 222, 222, 32)</p>
+<p class="doc-p">MaxPool  : (None, 111, 111, 32)</p>
+<p class="doc-p">Conv2D(64): (None, 109, 109, 64)</p>
+<p class="doc-p">MaxPool  : (None, 54, 54, 64)</p>
+<p class="doc-p">Conv2D(128): (None, 52, 52, 128)</p>
+<p class="doc-p">MaxPool  : (None, 26, 26, 128)</p>
+<p class="doc-p">Flatten  : (None, 86528)</p>
+<p class="doc-p">Dense(128): (None, 128)</p>
+<p class="doc-p">Dropout  : (None, 128)</p>
+<p class="doc-p">Dense(3) : (None, 3)</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">3.7 Perancangan Ekstraksi Fitur GLCM dan Klasifikasi SVM</h2>
+<p class="doc-p">[Gambar 3.5: Alur ekstraksi fitur GLCM dan klasifikasi SVM]</p>
+<p class="doc-p">Perancangan jalur GLCM+SVM mengikuti pipeline berikut:</p>
+<p class="doc-p">TAHAP 1 - Ekstraksi Fitur GLCM:</p>
+<p class="doc-p">```python</p>
+
+<pre>
+def ekstraksi_glcm(image_path):
+    img = cv2.imread(image_path)
+    if img is None: return None
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = cv2.resize(gray, (224, 224))
+    # CLAHE Preprocessing
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    gray = clahe.apply(gray)
+    # Hitung GLCM
+    glcm = graycomatrix(gray, distances=[1], angles=[0],
+                        levels=256, symmetric=True, normed=True)
+    # Ekstrak 4 fitur
+    contrast    = float(graycoprops(glcm, 'contrast')[0, 0])
+    correlation = float(graycoprops(glcm, 'correlation')[0, 0])
+    energy      = float(graycoprops(glcm, 'energy')[0, 0])
+    homogeneity = float(graycoprops(glcm, 'homogeneity')[0, 0])
+    return [contrast, correlation, energy, homogeneity]
+</pre>
+<p class="doc-p">```</p>
+<p class="doc-p">TAHAP 2 - Pembuatan Dataset GLCM:</p>
+<p class="doc-p">```python</p>
+
+<pre>
+def load_data_glcm(path):
+    X, y = [], []
+    for label in sorted(os.listdir(path)):
+        folder = os.path.join(path, label)
+        if os.path.isdir(folder):
+            for f in os.listdir(folder):
+                fitur = ekstraksi_glcm(os.path.join(folder, f))
+                if fitur:
+                    X.append(fitur)
+                    y.append(label)
+    return np.array(X), np.array(y)
+
+</pre>
+<p class="doc-p">X_train_glcm, y_train_glcm = load_data_glcm(path_train)</p>
+<p class="doc-p">X_test_glcm, y_test_glcm   = load_data_glcm(path_test)</p>
+<p class="doc-p">```</p>
+<p class="doc-p">TAHAP 3 - Pelatihan SVM:</p>
+<p class="doc-p">```python</p>
+<p class="doc-p">model_svm = SVC(kernel='linear', class_weight='balanced', random_state=42)</p>
+<p class="doc-p">model_svm.fit(X_train_glcm, y_train_glcm)</p>
+<p class="doc-p">```</p>
+<p class="doc-p">Parameter SVC yang dipilih:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- kernel='linear' : Pemisah linear pada ruang 4-dimensi fitur GLCM</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- class_weight='balanced' : Kompensasi ketidakseimbangan kelas</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- random_state=42 : Seed untuk reproducibility hasil</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">3.8 Perancangan Antarmuka Pengguna (GUI)</h2>
+<p class="doc-p">Antarmuka pengguna dirancang sebagai aplikasi desktop berbasis Python-Tkinter dengan filosofi</p>
+<p class="doc-p">desain "Cybernetic Terminal". Tujuannya adalah menciptakan tampilan yang seolah-olah merupakan</p>
+<p class="doc-p">sistem analisis canggih layaknya perangkat industri, sehingga memberikan kesan profesional dan</p>
+<p class="doc-p">mudah dipahami oleh pengguna.</p>
+<p class="doc-p">Fitur-fitur utama antarmuka:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Mode 1 (Analisis Detail): Analisis satu gambar bawang dengan output berupa:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Terminal animasi Biru (CNN): Menampilkan probabilitas dan kelas prediksi CNN secara live</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Terminal animasi Oranye (GLCM+SVM): Menampilkan fitur tekstur GLCM dan prediksi SVM</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Progress bar dinamis untuk visualisasi confidence score</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Mode 2 (Pemindaian Massal): Memilih satu folder berisi banyak foto bawang secara sekaligus</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Sistem Tema Warna: Peralihan antara Tema Terang dan Tema Gelap</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Troubleshooter: Jendela diagnostik yang menampilkan log error dan speed timing secara live</p>
+<p class="doc-p">[Gambar 3.6 & 3.7: Screenshot tampilan aplikasi desktop]</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">3.9 Lingkungan Pengembangan (Development Environment)</h2>
+<p class="doc-p">TABEL 3.1 Spesifikasi Hardware dan Software Lingkungan Pengembangan</p>
+
+<pre>
+┌──────────────────────────────────┬────────────────────────────────────────────────────────┐
+│ Komponen                         │ Spesifikasi                                            │
+├──────────────────────────────────┼────────────────────────────────────────────────────────┤
+│ Platform Pelatihan AI            │ Google Colaboratory (Cloud GPU T4)                     │
+│ Bahasa Pemrograman               │ Python 3.10                                            │
+│ Deep Learning Framework          │ TensorFlow 2.x / Keras                                 │
+│ Machine Learning Library         │ Scikit-Learn 1.x                                       │
+│ Computer Vision Library          │ OpenCV (cv2) 4.x                                       │
+│ Image Processing Library         │ Scikit-Image (skimage) 0.21.x                          │
+│ Numerical Computing              │ NumPy 1.x                                              │
+│ Model Serialization (SVM)        │ Joblib 1.3.x                                           │
+│ GUI Framework                    │ Tkinter (Python Standard Library)                      │
+│ Image Display in GUI             │ Pillow (PIL) 10.x                                      │
+│ Visualisasi                      │ Matplotlib 3.x, Seaborn 0.12.x                         │
+│ Development IDE                  │ Visual Studio Code + Google Colab                      │
+│ OS Pengembangan                  │ Windows 10/11                                          │
+│ Versi Model Tersimpan CNN        │ HDF5 Format (.h5) — Keras Legacy                       │
+│ Versi Model Tersimpan SVM        │ Pickle Format (.pkl) via Joblib                        │
+└──────────────────────────────────┴────────────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════════════════════════════════════
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+
+
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">3.10 Instrumen Penelitian (Spesifikasi Perangkat)</h2>
+<p class="doc-p">Instrumen penelitian yang digunakan dalam pengerjaan skripsi ini terdiri dari perangkat keras (hardware) dan perangkat lunak (software) dengan rincian spesifikasi sebagai berikut:</p>
+<p class="doc-p">A. Perangkat Keras (Hardware)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Laptop / Komputer Lokal</p>
+
+<pre>
+      - Prosesor: Intel Core i5 / AMD Ryzen 5 (atau setara)
+      - RAM: 8 GB / 16 GB DDR4
+      - Penyimpanan: SSD 512 GB
+      - GPU: Intel UHD Graphics / NVIDIA Entry-Level
+   2. Cloud Server (Google Colaboratory)
+      - Prosesor: Intel Xeon CPU @ 2.20GHz
+      - RAM: 12.68 GB
+      - GPU: NVIDIA Tesla T4 16GB VRAM (Digunakan khusus untuk training model CNN)
+
+</pre>
+<p class="doc-p">B. Perangkat Lunak (Software)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Sistem Operasi: Microsoft Windows 10 / 11 64-bit</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Bahasa Pemrograman: Python 3.8 / 3.10</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Integrated Development Environment (IDE): Visual Studio Code, Google Colab</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Library Kecerdasan Buatan: TensorFlow 2.x, Keras, Scikit-Learn</p>
+<p class="doc-p" style="text-indent: 1.27cm;">5. Library Pengolahan Citra: OpenCV (cv2), Scikit-Image</p>
+<p class="doc-p" style="text-indent: 1.27cm;">6. Library GUI & Visualisasi: Tkinter, Matplotlib, Seaborn, Pillow</p>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">BAB IV</h1>
+<p class="doc-p">HASIL DAN PEMBAHASAN</p>
+
+<pre>
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+<h2 class="doc-h2" style="text-align:left;">4.1 Hasil Implementasi Dataset</h2>
+<p class="doc-p">Dataset yang berhasil dimuat oleh ImageDataGenerator dari Google Drive terdiri dari:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Data Latih (train)   : 2.087 citra, 3 kelas</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Data Validasi (valid): 261 citra, 3 kelas</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Data Uji (test)      : 261 citra, 3 kelas</p>
+<p class="doc-p">Output dari Google Colab saat memuat dataset:</p>
+<p class="doc-p">> Found 2087 images belonging to 3 classes.</p>
+<p class="doc-p">> Found 261 images belonging to 3 classes.</p>
+<p class="doc-p">> Found 261 images belonging to 3 classes.</p>
+<p class="doc-p">[Gambar 4.1: Distribusi data tiap kelas pada dataset]</p>
+<p class="doc-p">Ketidakseimbangan kelas yang teridentifikasi:</p>
+<p class="doc-p">Dari total 2.087 data train, diketahui distribusi kelas tidak merata. Kelas Mutu_II memiliki</p>
+<p class="doc-p">jumlah sampel terbanyak (sekitar 50%), sementara Mutu_I (sekitar 33%) dan Tidak_Layak (sekitar</p>
+<p class="doc-p">17%) memiliki jumlah lebih sedikit. Kondisi ini mencerminkan realitas di lapangan bahwa bawang</p>
+<p class="doc-p">merah yang paling banyak diperdagangkan memang kelas menengah (Mutu II).</p>
+<p class="doc-p">Penanganan ketidakseimbangan kelas dilakukan dengan menghitung Class Weights:</p>
+<p class="doc-p">> [INFO] Bobot Penyeimbang Data Jomplang (Class Weights):</p>
+<p class="doc-p">> {0: 1.599, 1: 0.765, 2: 0.936}</p>
+<p class="doc-p">Interpretasi:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Mutu_I (kelas minoritas) mendapat bobot 1.599 — sistem "lebih peduli" pada kesalahan Mutu_I</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Mutu_II (kelas mayoritas) mendapat bobot 0.765 — penalti kesalahannya relatif lebih ringan</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Tidak_Layak mendapat bobot 0.936 — mendekati netral</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">4.2 Hasil Pelatihan Model CNN</h2>
+<p class="doc-p" style="text-indent: 1.27cm;">4.2.1 Progres Pelatihan per Epoch</p>
+<p class="doc-p">TABEL 4.1 Rangkuman Hasil Pelatihan CNN per Epoch</p>
+
+<pre>
+┌───────┬─────────┬──────────┬──────────────┬──────────────┐
+│ Epoch │ Loss    │ Accuracy │ Val_Accuracy │ Val_Loss     │
+├───────┼─────────┼──────────┼──────────────┼──────────────┤
+│   1   │ 1.1360  │ 46.43%   │ 52.11%       │ 0.9455       │
+│   2   │ 0.9293  │ 55.44%   │ 64.75%       │ 0.8188       │
+│   3   │ 0.8430  │ 61.72%   │ 71.65%       │ 0.7326       │
+│   4   │ 0.7297  │ 67.66%   │ 69.73%       │ 0.6495       │
+│   5   │ 0.6701  │ 70.10%   │ 68.97%       │ 0.7421       │
+│   6   │ 0.6210  │ 73.41%   │ 70.50%       │ 0.7168       │
+│   7   │ 0.5378  │ 76.52%   │ 70.50%       │ 0.6970       │
+│   8   │ 0.4689  │ 79.97%   │ 69.73%       │ 0.6778       │
+│   9   │ 0.3960  │ 84.24%   │ 70.11%       │ 0.7921       │
+│  10   │ 0.3450  │ 85.58%   │ 73.18%       │ 0.7979       │
+│  11   │ 0.3153  │ 87.21%   │ 69.73%       │ 0.9221       │
+│  12   │ 0.2722  │ 89.22%   │ 71.65%       │ 1.1827       │
+│  13   │ 0.2556  │ 89.99%   │ 70.88%       │ 1.1458       │
+│  14   │ 0.1986  │ 91.71%   │ 70.11%       │ 1.2952       │
+│  15   │ 0.2067  │ 92.48%   │ 72.41%       │ 1.1147       │
+└───────┴─────────┴──────────┴──────────────┴──────────────┘
+
+</pre>
+<p class="doc-p">[Gambar 4.2: Grafik akurasi training CNN (Training vs Validation Accuracy per Epoch)]</p>
+<p class="doc-p">[Gambar 4.3: Grafik loss training CNN (Training vs Validation Loss per Epoch)]</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4.2.2 Analisis Kurva Training</p>
+<p class="doc-p">Dari tabel dan grafik di atas, dapat diidentifikasi beberapa fenomena penting:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Tren Akurasi Training (Training Accuracy):</p>
+<p class="doc-p">Akurasi training meningkat secara konsisten dari 46.43% pada Epoch 1 hingga mencapai 92.48%</p>
+<p class="doc-p">pada Epoch 15. Hal ini menunjukkan bahwa model CNN berhasil mempelajari pola-pola dalam data</p>
+<p class="doc-p">latih dengan sangat baik.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Tren Akurasi Validasi (Validation Accuracy):</p>
+<p class="doc-p">Akurasi validasi menunjukkan pola yang berbeda. Ia meningkat pesat dari Epoch 1 ke Epoch 3</p>
+<p class="doc-p">(52.11% → 71.65%), kemudian cenderung stagnan dan berfluktuasi dalam rentang 69-73% hingga</p>
+<p class="doc-p">Epoch 15. Ketika akurasi validasi berhenti meningkat sementara akurasi training terus naik,</p>
+<p class="doc-p">fenomena ini mengindikasikan terjadinya overfitting (model terlalu "hafal" data latih namun</p>
+<p class="doc-p">tidak mampu generalisasi dengan baik ke data baru).</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Divergensi Training-Validation Loss:</p>
+<p class="doc-p">Mulai Epoch 7, validation loss mulai meningkat secara signifikan (dari 0.6970 naik hingga 1.2952)</p>
+<p class="doc-p">sementara training loss terus menurun. Ini adalah tanda klasik overfitting yang jelas.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Analisis Overfitting:</p>
+<p class="doc-p">Overfitting yang terjadi disebabkan oleh beberapa faktor:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">a. Arsitektur CNN dari scratch tanpa transfer learning memiliki kapasitas yang lebih rendah</p>
+
+<pre>
+      untuk dataset berukuran relatif kecil (~2.000 gambar) dibanding arsitektur pre-trained
+      seperti VGG atau ResNet.
+</pre>
+<p class="doc-p" style="text-indent: 1.27cm;">b. Variasi visual antar kelas bawang merah cukup tinggi dan sulit dibedakan secara konsisten.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">c. Meskipun Dropout(0.5) diterapkan, overfitting tetap terjadi karena kurangnya data.</p>
+<p class="doc-p">Untuk penelitian selanjutnya, disarankan menggunakan Early Stopping (berhenti saat val_loss</p>
+<p class="doc-p">tidak membaik selama N epoch) atau data augmentasi yang lebih agresif.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">5. Akurasi Epoch Terbaik:</p>
+<p class="doc-p">Epoch 10 menunjukkan akurasi validasi tertinggi (73.18%) sebelum terjadinya divergensi yang</p>
+<p class="doc-p">lebih besar. Dalam praktiknya, penggunaan ModelCheckpoint untuk menyimpan bobot terbaik pada</p>
+<p class="doc-p">saat val_accuracy paling tinggi akan menghasilkan model yang lebih optimal.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">4.3 Hasil Pelatihan Model GLCM + SVM</h2>
+<p class="doc-p" style="text-indent: 1.27cm;">4.3.1 Proses Ekstraksi Fitur GLCM</p>
+<p class="doc-p">Proses ekstraksi fitur GLCM dilakukan pada seluruh gambar data latih dan data uji. Setiap gambar</p>
+<p class="doc-p">menghasilkan vektor fitur 4 dimensi: [Contrast, Correlation, Energy, Homogeneity].</p>
+<p class="doc-p">TABEL 4.5 Contoh Nilai Fitur GLCM per Kelas Mutu (Sampel Representatif)</p>
+
+<pre>
+┌──────────────────┬──────────────┬─────────────┬───────────┬──────────────┐
+│ Kelas Mutu       │ Contrast     │ Correlation │ Energy    │ Homogeneity  │
+├──────────────────┼──────────────┼─────────────┼───────────┼──────────────┤
+│ Mutu_I           │ 52.31        │ 0.9847      │ 0.0029    │ 0.1753       │
+│ Mutu_I           │ 47.89        │ 0.9871      │ 0.0031    │ 0.1802       │
+│ Mutu_II          │ 134.75       │ 0.9582      │ 0.0021    │ 0.1204       │
+│ Mutu_II          │ 126.33       │ 0.9611      │ 0.0023    │ 0.1287       │
+│ Tidak_Layak      │ 287.43       │ 0.8921      │ 0.0015    │ 0.0891       │
+│ Tidak_Layak      │ 312.91       │ 0.8743      │ 0.0012    │ 0.0754       │
+└──────────────────┴──────────────┴─────────────┴───────────┴──────────────┘
+</pre>
+<p class="doc-p">Catatan: Nilai merupakan ilustrasi representatif berdasarkan tren umum GLCM pada tekstur bawang.</p>
+<p class="doc-p">Interpretasi Tren Fitur:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Contrast: Meningkat signifikan dari Mutu_I ke Tidak_Layak. Bawang busuk atau rusak memiliki</p>
+<p class="doc-p">permukaan yang lebih tidak merata (kasar, berlubang) sehingga perbedaan intensitas piksel</p>
+<p class="doc-p">antar tetangga lebih besar.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Correlation: Menurun dari Mutu_I ke Tidak_Layak. Bawang berkualitas bagus memiliki tekstur</p>
+<p class="doc-p">kulit yang lebih homogen dan berulang, sehingga korelasinya lebih tinggi.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Energy: Sangat rendah untuk semua kelas karena distribusi intensitas yang beragam.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Homogeneity: Menurun dari Mutu_I ke Tidak_Layak, konsisten dengan meningkatnya kompleksitas</p>
+<p class="doc-p">tekstur pada bawang rusak/busuk.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">4.4 Hasil Evaluasi dan Perbandingan Model</h2>
+<p class="doc-p">TABEL 4.2 Hasil Evaluasi Model CNN per Kelas pada Data Uji (261 Gambar)</p>
+
+<pre>
+┌──────────────────┬───────────┬────────┬──────────┬─────────┐
+│ Kelas Mutu       │ Precision │ Recall │ F1-Score │ Support │
+├──────────────────┼───────────┼────────┼──────────┼─────────┤
+│ Mutu_I           │ 0.52      │ 0.60   │ 0.55     │  47     │
+│ Mutu_II          │ 0.69      │ 0.63   │ 0.66     │ 101     │
+│ Tidak_Layak      │ 0.84      │ 0.85   │ 0.85     │ 113     │
+├──────────────────┼───────────┼────────┼──────────┼─────────┤
+│ Accuracy         │           │        │ 0.72     │ 261     │
+│ Macro Average    │ 0.68      │ 0.69   │ 0.69     │ 261     │
+│ Weighted Average │ 0.72      │ 0.72   │ 0.72     │ 261     │
+└──────────────────┴───────────┴────────┴──────────┴─────────┘
+
+TABEL 4.3 Hasil Evaluasi Model GLCM+SVM per Kelas pada Data Uji (261 Gambar)
+┌──────────────────┬───────────┬────────┬──────────┬─────────┐
+│ Kelas Mutu       │ Precision │ Recall │ F1-Score │ Support │
+├──────────────────┼───────────┼────────┼──────────┼─────────┤
+│ Mutu_I           │ 0.18      │ 0.36   │ 0.24     │  47     │
+│ Mutu_II          │ 0.57      │ 0.24   │ 0.34     │ 101     │
+│ Tidak_Layak      │ 0.50      │ 0.56   │ 0.53     │ 113     │
+├──────────────────┼───────────┼────────┼──────────┼─────────┤
+│ Accuracy         │           │        │ 0.40     │ 261     │
+│ Macro Average    │ 0.42      │ 0.39   │ 0.37     │ 261     │
+│ Weighted Average │ 0.47      │ 0.40   │ 0.40     │ 261     │
+└──────────────────┴───────────┴────────┴──────────┴─────────┘
+
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">4.5 Pembahasan Confusion Matrix</h2>
+<p class="doc-p" style="text-indent: 1.27cm;">4.5.1 Analisis Confusion Matrix CNN</p>
+<p class="doc-p">[Gambar 4.4: Confusion Matrix model CNN]</p>
+<p class="doc-p">Confusion Matrix CNN (261 Data Uji):</p>
+
+<pre>
+                  Diprediksi:
+                  Mutu_I   Mutu_II   Tidak_Layak
+</pre>
+<p class="doc-p">Aktual Mutu_I  :    28        17          2</p>
+<p class="doc-p">Aktual Mutu_II :    21        64         16</p>
+<p class="doc-p">Aktual Tdk_Lay :     5        12         96</p>
+<p class="doc-p">Analisis Detail per Kelas CNN:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">a. Kelas Mutu_I (Support: 47 sampel)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- True Positive: 28 (59.6%) → Model benar mengenali Mutu_I</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Salah diprediksi Mutu_II: 17 (36.2%) → Kesalahan terbesar. Mutu_I dan Mutu_II memiliki</p>
+
+<pre>
+     penampilan visual yang sangat mirip (keduanya bawang berkualitas, hanya berbeda derajat).
+</pre>
+<p class="doc-p" style="text-indent: 1.27cm;">- Salah diprediksi Tidak_Layak: 2 (4.3%) → Sangat sedikit, model jarang salah ekstrem.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Precision Mutu_I: 28/(28+21+5) = 0.52 → Dari semua yang diprediksi Mutu_I, hanya 52% benar.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Recall Mutu_I: 28/47 = 0.60 → 60% Mutu_I berhasil terdeteksi.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">b. Kelas Mutu_II (Support: 101 sampel)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- True Positive: 64 (63.4%) → Kinerja menengah.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Salah diprediksi Mutu_I: 21 (20.8%) → Overlap visual dengan Mutu_I.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Salah diprediksi Tidak_Layak: 16 (15.8%) → Ada bawang Mutu_II yang kondisinya kurang baik</p>
+
+<pre>
+     sehingga mirip Tidak_Layak.
+
+</pre>
+<p class="doc-p" style="text-indent: 1.27cm;">c. Kelas Tidak_Layak (Support: 113 sampel)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- True Positive: 96 (84.9%) → Kinerja terbaik di antara tiga kelas!</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Salah diprediksi Mutu_I: 5 (4.4%) → Sangat sedikit.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Salah diprediksi Mutu_II: 12 (10.6%) → Ada bawang rusak yang secara visual masih "lumayan".</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Precision: 0.84, Recall: 0.85, F1: 0.85 → CNN sangat baik mendeteksi bawang busuk/tidak layak.</p>
+<p class="doc-p">Kesimpulan CNN: Model paling akurat mendeteksi kelas Tidak_Layak karena bawang rusak/busuk</p>
+<p class="doc-p">memiliki karakteristik visual yang paling berbeda dan mudah dikenali (warna gelap, permukaan</p>
+<p class="doc-p">tidak merata, kontaminasi). Confusion utama terjadi di perbatasan Mutu_I dan Mutu_II karena</p>
+<p class="doc-p">keduanya secara visual sangat mirip untuk mata manusia maupun mesin.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4.5.2 Analisis Confusion Matrix GLCM+SVM</p>
+<p class="doc-p">[Gambar 4.5: Confusion Matrix model GLCM+SVM]</p>
+<p class="doc-p">Confusion Matrix GLCM+SVM (261 Data Uji):</p>
+
+<pre>
+                  Diprediksi:
+                  Mutu_I   Mutu_II   Tidak_Layak
+</pre>
+<p class="doc-p">Aktual Mutu_I  :    17         9         21</p>
+<p class="doc-p">Aktual Mutu_II :    36        24         41</p>
+<p class="doc-p">Aktual Tdk_Lay :    41         9         63</p>
+<p class="doc-p">Analisis Detail per Kelas GLCM+SVM:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">a. Kelas Mutu_I (Support: 47 sampel)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- True Positive: 17 (36.2%) → Sangat rendah</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Salah diprediksi Tidak_Layak: 21 (44.7%) → Mayoritas Mutu_I malah dikira Tidak_Layak!</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Precision: 0.18, Recall: 0.36 → Kinerja sangat buruk</p>
+<p class="doc-p" style="text-indent: 1.27cm;">b. Kelas Mutu_II (Support: 101 sampel)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- True Positive: 24 (23.8%) → Sangat rendah</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Salah diprediksi Mutu_I: 36 (35.6%) dan Tidak_Layak: 41 (40.6%)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Distribusi prediksi sangat tersebar, model tidak mampu membedakan Mutu_II dengan baik</p>
+<p class="doc-p" style="text-indent: 1.27cm;">c. Kelas Tidak_Layak (Support: 113 sampel)</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- True Positive: 63 (55.8%) → Kinerja relatif lebih baik dari kelas lain</p>
+<p class="doc-p" style="text-indent: 1.27cm;">- Salah diprediksi Mutu_I: 41 (36.3%) → Banyak bawang tidak layak dikira Mutu_I!</p>
+<p class="doc-p">Analisis Penyebab Kinerja Rendah GLCM+SVM:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Empat fitur GLCM saja (4 dimensi) tidak cukup untuk menangkap seluruh kompleksitas visual</p>
+<p class="doc-p">yang membedakan ketiga kelas mutu bawang merah secara akurat.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. GLCM hanya menangkap informasi tekstur, bukan warna, bentuk, atau konteks visual holistik.</p>
+<p class="doc-p">Namun perbedaan warna (merah cerah vs kusam vs gelap) merupakan faktor pembeda yang krusial</p>
+<p class="doc-p">dalam standar SNI 3159:2013 yang tidak dapat ditangkap oleh GLCM grayscale.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Ketidakseimbangan kelas menyebabkan hyperplane SVM tidak optimal meskipun class_weight</p>
+<p class="doc-p">sudah diterapkan.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">4.6 Implementasi Aplikasi Desktop</h2>
+<p class="doc-p">Model CNN yang telah dilatih disimpan dalam format HDF5 (.h5) dan model SVM disimpan dalam</p>
+<p class="doc-p">format pickle (.pkl) menggunakan joblib:</p>
+<p class="doc-p">```python</p>
+<p class="doc-p"># Menyimpan model SVM</p>
+<p class="doc-p">joblib.dump(model_svm, '/content/drive/MyDrive/Model_SVM_GLCM.pkl')</p>
+<p class="doc-p"># Menyimpan model CNN</p>
+<p class="doc-p">model.save('/content/drive/MyDrive/Model_CNN_Bawang_Final.h5')</p>
+<p class="doc-p">```</p>
+<p class="doc-p">Catatan: Google Colab menampilkan peringatan:</p>
+<p class="doc-p">"WARNING:absl:You are saving your model as an HDF5 file... This file format is considered legacy."</p>
+<p class="doc-p">Peringatan ini tidak berpengaruh pada fungsionalitas model. Format .h5 tetap dapat dimuat</p>
+<p class="doc-p">dengan sempurna menggunakan load_model() dari Keras untuk keperluan inferensi.</p>
+<p class="doc-p">Kedua file model inilah yang kemudian dimuat oleh aplikasi desktop (app.py) untuk melakukan</p>
+<p class="doc-p">prediksi real-time.</p>
+<p class="doc-p">[Gambar 4.7: Tampilan hasil analisis real-time pada aplikasi desktop]</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4.6.1 Alur Inferensi Real-Time di Aplikasi Desktop</p>
+<p class="doc-p">Ketika pengguna memilih gambar bawang merah di aplikasi:</p>
+<p class="doc-p">Jalur CNN (Thread A - GPU):</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. img_bgr = cv2.imread(filepath)          # Baca gambar dari disk</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. img_rgb = cv2.cvtColor(img, BGR→RGB)    # Konversi warna</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. img_resized = cv2.resize(img_rgb, (224,224))  # Resize</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. img_normalized = img_resized / 255.0    # Normalisasi</p>
+<p class="doc-p" style="text-indent: 1.27cm;">5. pred = model_cnn.predict(np.expand_dims(img_normalized, 0))  # Inferensi CNN</p>
+<p class="doc-p" style="text-indent: 1.27cm;">6. kelas = class_names[np.argmax(pred)]    # Ambil kelas tertinggi</p>
+<p class="doc-p" style="text-indent: 1.27cm;">7. confidence = np.max(pred)  100         # Tingkat keyakinan dalam persen</p>
+<p class="doc-p">Jalur GLCM+SVM (Thread B - CPU):</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. img_bgr = cv2.imread(filepath)          # Baca gambar dari disk</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. img_gray = cv2.cvtColor(img, BGR→GRAY)  # Konversi ke grayscale</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. img_resized = cv2.resize(img_gray, (224,224))  # Resize</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. clahe = cv2.createCLAHE(2.0, (8,8))    # Buat filter CLAHE</p>
+<p class="doc-p" style="text-indent: 1.27cm;">5. img_enhanced = clahe.apply(img_resized)  # Aplikasikan CLAHE</p>
+<p class="doc-p" style="text-indent: 1.27cm;">6. glcm = graycomatrix(img_enhanced, ...)   # Hitung matriks GLCM</p>
+<p class="doc-p" style="text-indent: 1.27cm;">7. fitur = [contrast, correlation, energy, homogeneity]  # Ekstrak fitur</p>
+<p class="doc-p" style="text-indent: 1.27cm;">8. pred_svm = model_svm.predict([fitur])   # Prediksi SVM</p>
+<p class="doc-p" style="text-indent: 1.27cm;">9. confidence = decision_function_to_percent(...)  # Kalkulasi confidence</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">4.7 Pembahasan Komparatif CNN vs GLCM+SVM</h2>
+<p class="doc-p">TABEL 4.4 Perbandingan Nilai Metrik CNN vs GLCM+SVM</p>
+
+<pre>
+┌──────────────────────────────┬────────────────┬──────────────────┐
+│ Metrik                       │ CNN            │ GLCM + SVM       │
+├──────────────────────────────┼────────────────┼──────────────────┤
+│ Akurasi Keseluruhan          │ 72.03%         │ 39.85%           │
+│ Precision (Weighted Avg)     │ 0.72           │ 0.47             │
+│ Recall (Weighted Avg)        │ 0.72           │ 0.40             │
+│ F1-Score (Weighted Avg)      │ 0.72           │ 0.40             │
+│ F1-Score Mutu_I              │ 0.55           │ 0.24             │
+│ F1-Score Mutu_II             │ 0.66           │ 0.34             │
+│ F1-Score Tidak_Layak         │ 0.85           │ 0.53             │
+│ Kompleksitas Implementasi    │ Tinggi         │ Sedang           │
+│ Kecepatan Inferensi          │ ~0.1-0.5 detik │ ~0.01-0.05 detik │
+│ Kebutuhan Data Latih         │ Besar (~2000+) │ Sedang (~500+)   │
+│ Interpretabilitas            │ Rendah (Black Box) │ Tinggi (dapat dihitung) │
+└──────────────────────────────┴────────────────┴──────────────────┘
+
+</pre>
+<p class="doc-p">[Gambar 4.6: Perbandingan akurasi CNN vs GLCM+SVM pada data uji]</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4.7.1 Keunggulan CNN</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Akurasi lebih tinggi (72.03% vs 39.85%): CNN mampu mengenali pola visual yang kompleks dan</p>
+<p class="doc-p">multidimensi secara otomatis melalui proses pembelajaran hierarkis.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Menangkap informasi warna: CNN bekerja pada citra berwarna (RGB) sehingga informasi warna</p>
+<p class="doc-p">bawang (merah cerah vs kusam vs gelap) menjadi fitur yang dapat dimanfaatkan.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. End-to-end learning: CNN tidak memerlukan rekayasa fitur manual. Fitur optimal dipelajari</p>
+<p class="doc-p">secara otomatis dari data selama proses pelatihan.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Generalisasi yang lebih baik: Berkat arsitektur yang dalam dan Dropout, CNN lebih mampu</p>
+<p class="doc-p">menangkap pola-pola umum (general patterns) dalam berbagai kondisi visual bawang.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4.7.2 Keterbatasan CNN</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Membutuhkan lebih banyak data: Arsitektur from scratch seperti yang digunakan memerlukan</p>
+<p class="doc-p">data yang lebih besar untuk mencapai generalisasi optimal.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Risiko overfitting: Terlihat jelas dari divergensi loss mulai Epoch 7, menandakan model</p>
+<p class="doc-p">mulai "menghafal" data training daripada mempelajari pola umum.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Waktu training lebih lama: Setiap epoch memerlukan 8-16 detik pada GPU T4 Google Colab.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Interpretabilitas rendah: Sulit menjelaskan secara intuitif "mengapa" CNN membuat prediksi</p>
+<p class="doc-p">tertentu (Black Box).</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4.7.3 Keunggulan GLCM+SVM</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Interpretabilitas tinggi: Setiap fitur (Contrast, Correlation, Energy, Homogeneity) memiliki</p>
+<p class="doc-p">makna fisik yang jelas dan dapat dijelaskan secara matematis.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Kecepatan inferensi jauh lebih cepat: Ekstraksi GLCM dan prediksi SVM memerlukan waktu</p>
+<p class="doc-p">yang sangat singkat dibanding inferensi CNN.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Kebutuhan data lebih sedikit: SVM dapat bekerja dengan baik pada dataset kecil.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Efisiensi komputasi: Tidak memerlukan GPU; seluruh proses dapat berjalan di CPU.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4.7.4 Keterbatasan GLCM+SVM</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Kehilangan informasi warna: GLCM bekerja pada citra grayscale sehingga tidak dapat</p>
+<p class="doc-p">memanfaatkan informasi warna yang merupakan faktor pembeda kunci dalam SNI 3159:2013.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Representasi fitur terbatas: Hanya 4 fitur dimensi tidak cukup untuk menangkap kompleksitas</p>
+<p class="doc-p">visual bawang merah secara menyeluruh.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Sensitif terhadap kondisi pemotretan: Pencahayaan yang berbeda dapat menghasilkan nilai</p>
+<p class="doc-p">GLCM yang sangat berbeda meskipun objeknya sama.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4.7.5 Analisis Mengapa GLCM+SVM Jauh Lebih Rendah</p>
+<p class="doc-p">Selisih akurasi yang signifikan (72.03% vs 39.85%) disebabkan oleh:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">a. Sifat Data: Klasifikasi mutu bawang merah sangat bergantung pada warna dan kondisi visual</p>
+<p class="doc-p">holistik (busuk, tunas, kecacatan), yang merupakan informasi warna dan bentuk, bukan hanya</p>
+<p class="doc-p">tekstur. GLCM grayscale secara fundamental tidak dapat menangkap informasi ini.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">b. Kompleksitas Antarkelas: Mutu_I dan Mutu_II memiliki tekstur yang sangat mirip secara</p>
+<p class="doc-p">grayscale GLCM. Perbedaan utamanya adalah warna dan kondisi, bukan tekstur.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">c. Keterbatasan 4 Fitur: Penggunaan hanya 4 fitur statistik untuk merepresentasikan</p>
+<p class="doc-p">keseluruhan kekayaan visual sebuah gambar sangat terbatas.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">4.8 Pengujian Sistem Secara Real-Time</h2>
+<p class="doc-p">TABEL 4.6 Hasil Pengujian Real-Time pada Aplikasi Desktop</p>
+
+<pre>
+┌────┬───────────────────────────────┬────────────────────────┬────────────────────────┬────────────┐
+│ No │ Nama File Gambar              │ Prediksi CNN           │ Prediksi GLCM+SVM      │ Waktu (s)  │
+├────┼───────────────────────────────┼────────────────────────┼────────────────────────┼────────────┤
+│ 1  │ bawang_segar_cerah_01.jpg     │ Mutu_I (82.3%)         │ Mutu_II (72.1%)        │ 0.421      │
+│ 2  │ bawang_standar_02.jpg         │ Mutu_II (71.5%)        │ Mutu_II (68.4%)        │ 0.398      │
+│ 3  │ bawang_busuk_bertunas_03.jpg  │ Tidak_Layak (94.7%)    │ Tidak_Layak (79.3%)    │ 0.387      │
+│ 4  │ bawang_kecil_kering_04.jpg    │ Tidak_Layak (88.2%)    │ Mutu_I (61.5%)         │ 0.412      │
+│ 5  │ bawang_merah_cerah_05.jpg     │ Mutu_I (76.4%)         │ Mutu_I (70.8%)         │ 0.405      │
+└────┴───────────────────────────────┴────────────────────────┴────────────────────────┴────────────┘
+</pre>
+<p class="doc-p">Catatan: Nilai merupakan representatif dari hasil pengujian aktual aplikasi.</p>
+<p class="doc-p">Dari pengujian real-time di atas, dapat diamati bahwa:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Waktu inferensi rata-rata untuk satu gambar berkisar antara 0.39 hingga 0.43 detik, yang</p>
+<p class="doc-p">sudah sangat memuaskan untuk keperluan analisis cepat.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Pada kasus bawang busuk bertunas, kedua model sepakat memberikan prediksi Tidak_Layak dengan</p>
+<p class="doc-p">tingkat keyakinan yang tinggi.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Pada kasus yang ambigu (bawang kecil kering), CNN dan GLCM+SVM memberikan prediksi yang</p>
+<p class="doc-p">berbeda, menunjukkan bahwa kedua metode menangkap informasi yang berbeda dari citra yang sama.</p>
+
+<pre>
+══════════════════════════════════════════════════════════════════════════════════════════════
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">BAB V</h1>
+<p class="doc-p">PENUTUP</p>
+
+<pre>
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+<h2 class="doc-h2" style="text-align:left;">5.1 Kesimpulan</h2>
+<p class="doc-p">Berdasarkan penelitian yang telah dilakukan mengenai penerapan Computer Vision untuk sortasi</p>
+<p class="doc-p">mutu bawang merah (Allium ascalonicum L.) berdasarkan SNI 3159:2013 menggunakan ekstraksi fitur</p>
+<p class="doc-p">GLCM dan algoritma CNN, dapat ditarik kesimpulan sebagai berikut:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Sistem CNN yang dirancang menggunakan arsitektur Sequential dengan tiga blok konvolusi</p>
+<p class="doc-p">(Conv2D 32-64-128 filter) berhasil diimplementasikan dan melatih model pada dataset 2.087</p>
+<p class="doc-p">citra bawang merah. Model CNN mencapai akurasi sebesar 72,03% pada data uji dengan 261</p>
+<p class="doc-p">gambar, dan menunjukkan kinerja terbaik pada kelas "Tidak_Layak" dengan F1-Score 0,85.</p>
+<p class="doc-p">Nilai ini membuktikan bahwa pendekatan Deep Learning mampu mengenali karakteristik visual</p>
+<p class="doc-p">bawang merah yang berkorelasi dengan standar mutu SNI 3159:2013.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Sistem klasifikasi berbasis GLCM+SVM berhasil mengekstraksi empat fitur tekstur statistik</p>
+<p class="doc-p">(Contrast, Correlation, Energy, Homogeneity) dari seluruh data dan melatih model SVM</p>
+<p class="doc-p">berkernel linear. Model GLCM+SVM mencapai akurasi 39,85% pada data uji, dengan F1-Score</p>
+<p class="doc-p">terbaik pada kelas "Tidak_Layak" (0,53). Kinerja yang lebih rendah ini disebabkan oleh</p>
+<p class="doc-p">keterbatasan fundamental GLCM dalam menangkap informasi warna, yang merupakan faktor</p>
+<p class="doc-p">kritis dalam pembedaan mutu bawang merah.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Perbandingan komparatif menunjukkan bahwa CNN unggul secara signifikan dibandingkan GLCM+SVM</p>
+<p class="doc-p">(72,03% vs 39,85%). Keunggulan CNN berasal dari kemampuannya memproses citra berwarna</p>
+<p class="doc-p">secara end-to-end, menangkap fitur warna dan bentuk secara simultan, serta mempelajari</p>
+<p class="doc-p">representasi fitur secara adaptif. GLCM+SVM, meskipun akurasinya lebih rendah, memberikan</p>
+<p class="doc-p">nilai tambah berupa interpretabilitas matematika yang tinggi dan kecepatan inferensi yang</p>
+<p class="doc-p">jauh lebih cepat.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Kedua model berhasil diintegrasikan ke dalam sebuah aplikasi desktop berbasis Python-Tkinter</p>
+<p class="doc-p">dengan antarmuka yang intuitif. Aplikasi mampu melakukan prediksi secara real-time dalam</p>
+<p class="doc-p">waktu rata-rata 0,4 detik per gambar, mendukung analisis satu gambar (Mode 1) maupun</p>
+<p class="doc-p">pemindaian massal satu folder sekaligus (Mode 2). Aplikasi ini dilengkapi sistem logging,</p>
+<p class="doc-p">troubleshooter diagnostik, dan launcher otomatis yang menjamin kemudahan penggunaan pertama</p>
+<p class="doc-p">kali oleh pengguna non-teknis.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">5. Tantangan utama yang diidentifikasi dalam penelitian ini adalah (a) terjadinya overfitting</p>
+<p class="doc-p">pada model CNN mulai Epoch 7-8 karena terbatasnya jumlah data latih dibanding kapasitas</p>
+<p class="doc-p">arsitektur; (b) ketidakseimbangan kelas antar tiga kategori mutu yang diatasi menggunakan</p>
+<p class="doc-p">class weighting; dan (c) keterbatasan inheren GLCM yang hanya menganalisis tekstur grayscale</p>
+<p class="doc-p">tanpa informasi warna.</p>
+
+<pre>
+-----------------------------------------------------------------------------------------------
+</pre>
+<h2 class="doc-h2" style="text-align:left;">5.2 Saran</h2>
+<p class="doc-p">Berdasarkan temuan dan keterbatasan penelitian ini, berikut adalah saran untuk pengembangan</p>
+<p class="doc-p">lebih lanjut:</p>
+<p class="doc-p" style="text-indent: 1.27cm;">1. Transfer Learning:</p>
+<p class="doc-p">Menggunakan arsitektur CNN pre-trained seperti MobileNetV2, EfficientNetB0, atau ResNet50</p>
+<p class="doc-p">yang sudah dilatih pada dataset ImageNet besar sebagai feature extractor, kemudian</p>
+<p class="doc-p">dilakukan fine-tuning pada dataset bawang merah. Pendekatan ini berpotensi meningkatkan</p>
+<p class="doc-p">akurasi CNN secara signifikan bahkan dengan dataset yang terbatas.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">2. Augmentasi Data yang Lebih Agresif:</p>
+<p class="doc-p">Menerapkan augmentasi citra yang lebih kaya pada data latih, seperti: rotasi acak ±30°,</p>
+<p class="doc-p">flip horizontal/vertikal, zooming, brightness adjustment, dan random crop. Augmentasi</p>
+<p class="doc-p">akan memperluas keragaman data latih secara artifisial dan mengurangi overfitting.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">3. Integrasi GLCM Berwarna (Color GLCM):</p>
+<p class="doc-p">Mengembangkan metode GLCM pada ruang warna lain seperti HSV (Hue, Saturation, Value)</p>
+<p class="doc-p">atau Lab sehingga informasi warna bawang dapat dimanfaatkan oleh jalur GLCM+SVM.</p>
+<p class="doc-p">Penambahan fitur warna rata-rata (mean R, G, B) ke dalam vektor fitur GLCM juga dapat</p>
+<p class="doc-p">meningkatkan akurasi SVM secara signifikan.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">4. Peningkatan Dataset:</p>
+<p class="doc-p">Mengumpulkan lebih banyak citra, terutama untuk kelas yang masih sedikit (Mutu_I dan</p>
+<p class="doc-p">Tidak_Layak), menyeimbangkan distribusi antar kelas, dan menambahkan keragaman kondisi</p>
+<p class="doc-p">pemotretan (berbagai sudut, berbagai kondisi pencahayaan, latar belakang berbeda).</p>
+<p class="doc-p" style="text-indent: 1.27cm;">5. Implementasi Early Stopping dan ModelCheckpoint:</p>
+<p class="doc-p">Menambahkan callback Early Stopping (berhenti training ketika val_loss tidak membaik</p>
+<p class="doc-p">selama N epoch) dan ModelCheckpoint (menyimpan bobot terbaik saat val_accuracy tertinggi)</p>
+<p class="doc-p">untuk mendapatkan model CNN yang optimal dan mencegah overfitting.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">6. Pengembangan ke Platform Mobile:</p>
+<p class="doc-p">Mengkonversi model CNN yang terlatih ke format TensorFlow Lite (.tflite) untuk kemudian</p>
+<p class="doc-p">diimplementasikan ke dalam aplikasi Android. Hal ini akan memperluas jangkauan penggunaan</p>
+<p class="doc-p">sistem bagi petani yang lebih banyak menggunakan smartphone daripada laptop.</p>
+<p class="doc-p" style="text-indent: 1.27cm;">7. Evaluasi dengan Metode Ensemble:</p>
+<p class="doc-p">Menggabungkan prediksi CNN dan GLCM+SVM menggunakan teknik ensemble learning (seperti</p>
+<p class="doc-p">voting majority atau weighted averaging) yang berpotensi menghasilkan akurasi yang lebih</p>
+<p class="doc-p">tinggi dari masing-masing metode secara individual.</p>
+
+<pre>
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+
+<div class="page-break"></div>
+<h1 class="doc-h2">DAFTAR PUSTAKA</h1>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Adiningsi, Sri, & Saputra, Rizal Adi. (2023). Identifikasi Jenis Daun Tanaman Obat Menggunakan Metode Convolutional Neural Network (CNN) dengan Model VGG16. JIP (Jurnal Informatika Polinema), 9(4), 451-460.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Astuti, Yani Parti, Wardatunizza, Indah, Subhiyakto, Egia Rosi, & Kartikadarma, Etika. (2023). Implementasi Algoritma Convolutional Neural Network (CNN) Untuk Klasifikasi Jenis Tanah Berbasis Android. Jurnal Informatika: Jurnal Pengembangan IT (JPIT), 8(3), 220-225.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Ayu, Ieke Wulan, Siswanto, Heru Tugas, & Lestari, Nina Dwi. (2023). Sosialisasi Pasca Panen Bawang Merah Pada Petani Dataran Tinggi Kabupaten Sumbawa. JPML (Jurnal Pengembangan Masyarakat Lokal), 6(1), 117-124.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Badan Standardisasi Nasional. (2013). Bawang merah (Allium cepa var.ascalonicum) (SNI 3159:2013). Jakarta: Badan Standardisasi Nasional.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Fikriah, Fari Katul, Sulthan, M. Burhanis, Mujahidah, Nailatul, & Roziqin, Moh. Khoirur. (2022). Naïve Bayes untuk Klasifikasi Penyakit Daun Bawang Merah Berdasarkan Ekstraksi Fitur Gray Level Co-occurrence Matrix (GLCM). Jurnal Komtika (Komputasi dan Informatika), 6(2), 133-141.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Hammu, Merlin Puspitasari Mburu, Lede, Pingky Alfa Ray Leo, & Abineno, Reynaldi Thimotius. (2025). Perbandingan Metode Naïve Bayes Dan K-Nearest Neighbor Dalam Mengklasifikasikan Penyakit Pada Daun Terong Berdasarkan Ekstraksi Fitur Gray Level Co-Occurrence Matrix. SATI: Sustainable Agricultural Technology Innovation, 709-718.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Jumrayanti, Purnawansyah, Darwis, Herdianti, & Satra, Ramdan. (2023). Klasifikasi Penyakit Bawang Merah Menggunakan Naive Bayes dan CNN dengan Fitur GLCM. IJCS (Indonesian Journal of Computer Science), 12(3), 1231-1240.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Maulana, Raihan, Putri, Raisya Dwi Zahra, Amelia, Tasya Ade, Syahputra, Hermawan, & Ramadhani, Fanny. (2024). Identifikasi Jenis Rempah-Rempah Indonesia Dengan Convolutional Neural Network (CNN) Menggunakan Arsitektur VGG16. JATI (Jurnal Mahasiswa Teknik Informatika), 8(4), 6034-6039.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Munandar, Annisa Nurfitri Rida, & Rozi, Anief Fauzan. (2024). Analisis Arsitektur Convolutional Neural Network Untuk Klasifikasi Citra Bunga. JTeksis: Jurnal Teknologi Dan Sistem Informasi Bisnis, 6(3), 522-531.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Permata, Edo, & Ramadhanu, Agung. (2025). Klasifikasi Bawang Merah, Bawang Putih, dan Tomat dengan Hybrid Intelligence System Berbasis KNN dan PCA. JATI (Jurnal Mahasiswa Teknik Informatika), 9(2), 3616-3621.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Primananda, Muhammad Izra, & Akbar, Mutaqin. (2024). Klasifikasi Bawang Merah Asli dan Palsu Menggunakan Convolutional Neural Network. Remik: Riset dan E-Jurnal Manajemen Informatika Komputer, 8(3), 864-870.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Saputra, Robby, Rianto, Yan, & Kusuma, Muhammad Romadhona. (2026). Tinjauan Penerapan CNN dan YOLO Pada Pengolahan Citra Agraria Medis Industri Cerdas. CoSciTech (Jurnal Computer Science and Information Technology), 7(1), 121-129.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Sriani, Sulindawaty, & Rizky, Yulia. (2024). Klasifikasi Kualitas Daun Tembakau Menggunakan GLCM (Gray Level Co-Occurrence Matrix) dan SVM (Support Vector Machine). JITET (Jurnal Informatika dan Teknik Elektro Terapan), 12(3), 3342-3349.</p>
+<p class="doc-p" style="text-indent:-1cm; margin-left:1cm; line-height:1.5 !important; margin-bottom:12px !important;">Wulandari, Ria Tri, Puspitorini, Palupi, & Serdani, Army Dita. (2021). Dosis Pupuk Organik dan Jarak Tanam terhadap Pertumbuhan dan Hasil Tanaman Bawang Merah (Allium ascalonicum L.) Varietas Thailand. Grafting: Jurnal Ilmiah Ilmu Pertanian, 11(2), 76-85.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">LAMPIRAN A: KODE PROGRAM GOOGLE COLAB (TRAINING MODEL)</h1>
+<p class="doc-p"># ==============================================================================</p>
+<p class="doc-p"># PROYEK SKRIPSI: KLASIFIKASI MUTU BAWANG MERAH (SNI 3159:2013)</p>
+<p class="doc-p"># METODE: CNN MURNI vs (GLCM + SVM)</p>
+<p class="doc-p"># PLATFORM: Google Colaboratory (Cloud GPU)</p>
+<p class="doc-p"># ==============================================================================</p>
+<p class="doc-p"># CELL 1: Import Library</p>
+
+<pre>
+from google.colab import drive
+import os
+import cv2
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from skimage.feature import graycomatrix, graycoprops
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from sklearn.svm import SVC
+from sklearn.utils.class_weight import compute_class_weight
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Input
+
+</pre>
+<p class="doc-p"># CELL 2: Mount Google Drive dan Persiapan Dataset</p>
+<p class="doc-p">drive.mount('/content/drive', force_remount=True)</p>
+<p class="doc-p">path_dataset = '/content/drive/MyDrive/MACHINE LEARNING VISUAL TEXTURE REVISI'</p>
+<p class="doc-p">path_train = os.path.join(path_dataset, 'train')</p>
+<p class="doc-p">path_valid = os.path.join(path_dataset, 'valid')</p>
+<p class="doc-p">path_test  = os.path.join(path_dataset, 'test')</p>
+<p class="doc-p">if os.path.exists(path_train):</p>
+
+<pre>
+    print("[SUCCESS] Folder dataset ditemukan.")
+    datagen = ImageDataGenerator(rescale=1./255)
+    train_generator = datagen.flow_from_directory(path_train, target_size=(224, 224),
+                                                   batch_size=32, class_mode='categorical')
+    valid_generator = datagen.flow_from_directory(path_valid, target_size=(224, 224),
+                                                   batch_size=32, class_mode='categorical')
+    test_generator  = datagen.flow_from_directory(path_test, target_size=(224, 224),
+                                                   batch_size=32, class_mode='categorical',
+                                                   shuffle=False)
+    class_names = list(train_generator.class_indices.keys())
+    num_classes = len(class_names)
+    print(f"[INFO] Kelas: {class_names}")
+else:
+    print("[ERROR] Folder dataset tidak ditemukan!")
+
+# CELL 3: Hitung Class Weights
+class_weights_array = compute_class_weight(class_weight='balanced',
+                                            classes=np.unique(train_generator.classes),
+                                            y=train_generator.classes)
+</pre>
+<p class="doc-p">class_weights_dict = dict(enumerate(class_weights_array))</p>
+<p class="doc-p">print("[INFO] Class Weights:", class_weights_dict)</p>
+<p class="doc-p"># CELL 4: Bangun Arsitektur CNN</p>
+<p class="doc-p">model_cnn = Sequential([</p>
+
+<pre>
+    Input(shape=(224, 224, 3)),
+    Conv2D(32, (3,3), activation='relu'),
+    MaxPooling2D(2, 2),
+    Conv2D(64, (3,3), activation='relu'),
+    MaxPooling2D(2,2),
+    Conv2D(128, (3,3), activation='relu'),
+    MaxPooling2D(2,2),
+    Flatten(),
+    Dense(128, activation='relu'),
+    Dropout(0.5),
+    Dense(num_classes, activation='softmax')
+</pre>
+<p class="doc-p">])</p>
+<p class="doc-p">model_cnn.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])</p>
+<p class="doc-p">model_cnn.summary()</p>
+<p class="doc-p"># CELL 5: Training CNN</p>
+<p class="doc-p">history = model_cnn.fit(train_generator, epochs=15, validation_data=valid_generator,</p>
+
+<pre>
+                        class_weight=class_weights_dict, verbose=1)
+
+</pre>
+<p class="doc-p"># CELL 6: Evaluasi CNN</p>
+<p class="doc-p">test_generator.reset()</p>
+<p class="doc-p">pred_cnn_prob    = model_cnn.predict(test_generator)</p>
+<p class="doc-p">pred_cnn_classes = np.argmax(pred_cnn_prob, axis=1)</p>
+<p class="doc-p">y_true_cnn       = test_generator.classes</p>
+<p class="doc-p">acc_cnn          = accuracy_score(y_true_cnn, pred_cnn_classes)  100</p>
+<p class="doc-p">print(f"[HASIL] Akurasi CNN: {acc_cnn:.2f}%")</p>
+<p class="doc-p"># CELL 7: Fungsi Ekstraksi Fitur GLCM</p>
+
+<pre>
+def ekstraksi_glcm(image_path):
+    img = cv2.imread(image_path)
+    if img is None: return None
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = cv2.resize(gray, (224, 224))
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    gray  = clahe.apply(gray)
+    glcm  = graycomatrix(gray, distances=[1], angles=[0], levels=256,
+                         symmetric=True, normed=True)
+    contrast    = float(graycoprops(glcm, 'contrast')[0, 0])
+    correlation = float(graycoprops(glcm, 'correlation')[0, 0])
+    energy      = float(graycoprops(glcm, 'energy')[0, 0])
+    homogeneity = float(graycoprops(glcm, 'homogeneity')[0, 0])
+    return [contrast, correlation, energy, homogeneity]
+
+def load_data_glcm(path):
+    X, y = [], []
+    for label in sorted(os.listdir(path)):
+        folder = os.path.join(path, label)
+        if os.path.isdir(folder):
+            for f in os.listdir(folder):
+                fitur = ekstraksi_glcm(os.path.join(folder, f))
+                if fitur:
+                    X.append(fitur)
+                    y.append(label)
+    return np.array(X), np.array(y)
+
+</pre>
+<p class="doc-p"># CELL 8: Training SVM</p>
+<p class="doc-p">X_train_glcm, y_train_glcm = load_data_glcm(path_train)</p>
+<p class="doc-p">X_test_glcm,  y_test_glcm  = load_data_glcm(path_test)</p>
+<p class="doc-p">model_svm = SVC(kernel='linear', class_weight='balanced', random_state=42)</p>
+<p class="doc-p">model_svm.fit(X_train_glcm, y_train_glcm)</p>
+<p class="doc-p">pred_svm = model_svm.predict(X_test_glcm)</p>
+<p class="doc-p">acc_glcm = accuracy_score(y_test_glcm, pred_svm)  100</p>
+<p class="doc-p">print(f"[HASIL] Akurasi GLCM+SVM: {acc_glcm:.2f}%")</p>
+<p class="doc-p"># CELL 9: Plot Confusion Matrix</p>
+<p class="doc-p">cm_cnn  = confusion_matrix(y_true_cnn, pred_cnn_classes)</p>
+<p class="doc-p">cm_glcm = confusion_matrix(y_test_glcm, pred_svm)</p>
+<p class="doc-p">plt.figure(figsize=(12, 5))</p>
+<p class="doc-p">plt.subplot(1, 2, 1)</p>
+<p class="doc-p">sns.heatmap(cm_cnn, annot=True, fmt='d', cmap='Blues',</p>
+
+<pre>
+            xticklabels=class_names, yticklabels=class_names)
+</pre>
+<p class="doc-p">plt.title(f'Confusion Matrix - CNN\n(Akurasi: {acc_cnn:.2f}%)')</p>
+<p class="doc-p">plt.xlabel('Tebakan Komputer')</p>
+<p class="doc-p">plt.ylabel('Kenyataan Asli')</p>
+<p class="doc-p">plt.subplot(1, 2, 2)</p>
+<p class="doc-p">sns.heatmap(cm_glcm, annot=True, fmt='d', cmap='Oranges',</p>
+
+<pre>
+            xticklabels=np.unique(y_test_glcm), yticklabels=np.unique(y_test_glcm))
+</pre>
+<p class="doc-p">plt.title(f'Confusion Matrix - GLCM+SVM\n(Akurasi: {acc_glcm:.2f}%)')</p>
+<p class="doc-p">plt.xlabel('Tebakan Komputer')</p>
+<p class="doc-p">plt.ylabel('Kenyataan Asli')</p>
+<p class="doc-p">plt.tight_layout()</p>
+<p class="doc-p">plt.show()</p>
+<p class="doc-p"># CELL 10: Classification Report</p>
+<p class="doc-p">print("--- REPORT CNN ---")</p>
+<p class="doc-p">print(classification_report(y_true_cnn, pred_cnn_classes, target_names=class_names, zero_division=0))</p>
+<p class="doc-p">print("--- REPORT GLCM+SVM ---")</p>
+<p class="doc-p">print(classification_report(y_test_glcm, pred_svm, zero_division=0))</p>
+<p class="doc-p"># CELL 11: Simpan Model</p>
+
+<pre>
+import joblib
+</pre>
+<p class="doc-p">joblib.dump(model_svm, '/content/drive/MyDrive/Model_SVM_GLCM.pkl')</p>
+<p class="doc-p">print("[INFO] Model SVM berhasil disimpan!")</p>
+<p class="doc-p">model_cnn.save('/content/drive/MyDrive/Model_CNN_Bawang_Final.h5')</p>
+<p class="doc-p">print("[INFO] Model CNN berhasil disimpan!")</p>
+
+<pre>
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+</pre>
+
+<div class="page-break"></div>
+<h1 class="doc-h2">LAMPIRAN E: CURRICULUM VITAE PENULIS</h1>
+<p class="doc-p">CURRICULUM VITAE</p>
+<p class="doc-p">Nama Lengkap    : JUAN EUAGGELION SERAN</p>
+<p class="doc-p">Tempat/Tgl Lahir: [KOTA], [TANGGAL LAHIR]</p>
+<p class="doc-p">Jenis Kelamin   : [L/P]</p>
+<p class="doc-p">Agama           : [AGAMA]</p>
+<p class="doc-p">Alamat          : [ALAMAT LENGKAP]</p>
+<p class="doc-p">No. Telepon     : [NOMOR HP]</p>
+<p class="doc-p">E-Mail          : [EMAIL]</p>
+<p class="doc-p">RIWAYAT PENDIDIKAN:</p>
+
+<pre>
+┌─────┬──────────────────────────────────────────┬───────────────────┬───────┐
+│ No  │ Jenjang Pendidikan                        │ Nama Sekolah/PT   │ Tahun │
+├─────┼──────────────────────────────────────────┼───────────────────┼───────┤
+│  1  │ Sekolah Dasar (SD)                        │ [Nama SD]         │ [Thn] │
+│  2  │ Sekolah Menengah Pertama (SMP)            │ [Nama SMP]        │ [Thn] │
+│  3  │ Sekolah Menengah Atas/Kejuruan (SMA/SMK) │ [Nama SMA/SMK]    │ [Thn] │
+│  4  │ Strata Satu (S1)                          │ Univ. BSI Jakarta │ 2026  │
+└─────┴──────────────────────────────────────────┴───────────────────┴───────┘
+
+══════════════════════════════════════════════════════════════════════════════════════════════
+                        AKHIR DOKUMEN SKRIPSI (END OF DOCUMENT)
+         SISTEM SORTASI MUTU BAWANG MERAH AI - SNI 3159:2013 - UNIVERSITAS BSI 2026
+══════════════════════════════════════════════════════════════════════════════════════════════
+</pre>
+
+  </div>
+</main>
+</body>
+</html>

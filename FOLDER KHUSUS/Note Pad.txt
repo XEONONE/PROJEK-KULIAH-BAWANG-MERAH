@@ -1,0 +1,252 @@
+“kamu buat file baru yang pantas buat nama depan tersebut menurut recomendasi kamu ini harapan ku yang terahkir”
+
+[Pedoman%20Laporan%20Skripsi%20TA%20Universitas%20BSI%20Periode%202025.pdf](file;file:///f:/BINA%20SARANA%20INFORMATIKA%20%27BSI%27%20DEWI%20SARTIKA%20%28TUGGAS%20SKRIPSI%20AJARAN%202025-2026%20SEMSTER%208%20DARI%201-7%20SEMSTER%29/Program/PROJEK%20KULIAH%20BAWANG%20MERAH/Pedoman%20Laporan%20Skripsi%20TA%20Universitas%20BSI%20Periode%202025.pdf) dan [Pedoman%20Penyusunan%20TA%20Universitas%20BSI%20Tahun%202026.pdf](file;file:///f:/BINA%20SARANA%20INFORMATIKA%20%27BSI%27%20DEWI%20SARTIKA%20%28TUGGAS%20SKRIPSI%20AJARAN%202025-2026%20SEMSTER%208%20DARI%201-7%20SEMSTER%29/Program/PROJEK%20KULIAH%20BAWANG%20MERAH/Pedoman%20Penyusunan%20TA%20Universitas%20BSI%20Tahun%202026.pdf) merupakan full struktur2x skripsi nya lalu untuk jurnal nya yang saya kumpulkan [JURNAL%20YANG%20SAYA%20PAKAI](file;file:///f:/BINA%20SARANA%20INFORMATIKA%20%27BSI%27%20DEWI%20SARTIKA%20%28TUGGAS%20SKRIPSI%20AJARAN%202025-2026%20SEMSTER%208%20DARI%201-7%20SEMSTER%29/Program/PROJEK%20KULIAH%20BAWANG%20MERAH/JURNAL%20YANG%20SAYA%20PAKAI) 
+
+berikut ini program yang di google colab 
+from google.colab import drive import os import cv2 import numpy as np import seaborn as sns import matplotlib.pyplot as plt from skimage.feature import graycomatrix, graycoprops from sklearn.metrics import accuracy_score, confusion_matrix from sklearn.svm import SVC from sklearn.neighbors import KNeighborsClassifier from sklearn.ensemble import RandomForestClassifier from sklearn.naive_bayes import GaussianNB from sklearn.tree import DecisionTreeClassifier from sklearn.model_selection import learning_curve, ShuffleSplit from tensorflow.keras.preprocessing.image import ImageDataGenerator from tensorflow.keras.models import Sequential from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Input # 1. Koneksi Google Drive dengan Force Remount drive.mount('/content/drive', force_remount=True) path_dataset = '/content/drive/MyDrive/MACHINE LEARNING VISUAL TEXTURE REVISI' path_train = os.path.join(path_dataset, 'train') path_valid = os.path.join(path_dataset, 'valid') path_test = os.path.join(path_dataset, 'test') # Verifikasi folder sebelum lanjut if os.path.exists(path_train): print("[SUCCESS] Folder ditemukan. Menyiapkan generator...") datagen = ImageDataGenerator(rescale=1./255) train_generator = datagen.flow_from_directory(path_train, target_size=(224, 224), batch_size=32, class_mode='categorical') valid_generator = datagen.flow_from_directory(path_valid, target_size=(224, 224), batch_size=32, class_mode='categorical') test_generator = datagen.flow_from_directory(path_test, target_size=(224, 224), batch_size=32, class_mode='categorical', shuffle=False) num_classes = len(train_generator.class_indices) class_names = list(train_generator.class_indices.keys()) else: print("[ERROR] Path masih tidak terbaca. Seringkali ini karena perbedaan nama folder (spasi/kapital).") if os.path.exists('/content/drive/MyDrive'): print("Isi MyDrive:", os.listdir('/content/drive/MyDrive'))
+
+
+Hasil nya sebagai berikut : 
+Mounted at /content/drive [SUCCESS] Folder ditemukan. Menyiapkan generator... Found 1440 images belonging to 3 classes. Found 330 images belonging to 3 classes. Found 480 images belonging to 3 classes. 
+
+# ==============================================================================
+# PROYEK SKRIPSI: KLASIFIKASI MUTU BAWANG MERAH (SNI 3159:2013)
+# METODE: CNN MURNI vs (GLCM + SVM)
+# ==============================================================================
+
+import os
+import cv2
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from google.colab import drive
+
+from skimage.feature import graycomatrix, graycoprops
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from sklearn.svm import SVC
+from sklearn.utils.class_weight import compute_class_weight
+
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Input
+
+# 1. MOUNT GOOGLE DRIVE
+drive.mount('/content/drive')
+
+# SESUAIKAN JALUR FOLDER DRIVE LO DI SINI
+path_dataset = '/content/drive/MyDrive/MACHINE LEARNING VISUAL TEXTURE'
+path_train = os.path.join(path_dataset, 'train')
+path_valid = os.path.join(path_dataset, 'valid')
+path_test = os.path.join(path_dataset, 'test')
+
+# 2. DATA GENERATOR (Persiapan Gambar untuk CNN)
+datagen = ImageDataGenerator(rescale=1./255)
+
+print("\n[INFO] Menyiapkan Data Training...")
+train_generator = datagen.flow_from_directory(
+path_train, target_size=(224, 224), batch_size=32, class_mode='categorical')
+
+valid_generator = datagen.flow_from_directory(
+path_valid, target_size=(224, 224), batch_size=32, class_mode='categorical')
+
+test_generator = datagen.flow_from_directory(
+path_test, target_size=(224, 224), batch_size=32, class_mode='categorical', shuffle=False)
+
+class_names = list(train_generator.class_indices.keys())
+num_classes = len(class_names)
+
+# ---> SOLUSI DATA JOMPLANG: MENGHITUNG CLASS WEIGHTS <---
+class_weights_array = compute_class_weight(
+class_weight='balanced',
+classes=np.unique(train_generator.classes),
+y=train_generator.classes
+)
+class_weights_dict = dict(enumerate(class_weights_array))
+print("\n[INFO] Bobot Penyeimbang Data Jomplang (Class Weights):", class_weights_dict)
+
+# 3. MEMBANGUN DAN MELATIH MODEL CNN
+print("\n[INFO] Membangun Arsitektur CNN...")
+model_cnn = Sequential([
+Input(shape=(224, 224, 3)),
+Conv2D(32, (3,3), activation='relu'),
+MaxPooling2D(2, 2),
+Conv2D(64, (3,3), activation='relu'),
+MaxPooling2D(2,2),
+Conv2D(128, (3,3), activation='relu'),
+MaxPooling2D(2,2),
+Flatten(),
+Dense(128, activation='relu'),
+Dropout(0.5),
+Dense(num_classes, activation='softmax')
+])
+
+model_cnn.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+print("\n=== MEMULAI TRAINING MODEL CNN (15 EPOCHS) ===")
+history = model_cnn.fit(
+train_generator,
+epochs=15,
+validation_data=valid_generator,
+class_weight=class_weights_dict,
+verbose=1
+)
+
+# Evaluasi CNN
+test_generator.reset()
+pred_cnn_prob = model_cnn.predict(test_generator)
+pred_cnn_classes = np.argmax(pred_cnn_prob, axis=1)
+y_true_cnn = test_generator.classes
+acc_cnn = accuracy_score(y_true_cnn, pred_cnn_classes) * 100
+
+# 4. EKSTRAKSI FITUR GLCM & PELATIHAN SVM
+print("\n=== MEMULAI EKSTRAKSI FITUR GLCM UNTUK SVM ===")
+
+def ekstraksi_glcm(image_path):
+img = cv2.imread(image_path)
+if img is None: return None
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+gray = cv2.resize(gray, (224, 224))
+angles = [0, np.pi/4, np.pi/2, 3*np.pi/4]
+glcm = graycomatrix(gray, distances=[1], angles=angles, levels=256, symmetric=True, normed=True)
+contrast = np.mean(graycoprops(glcm, 'contrast'))
+correlation = np.mean(graycoprops(glcm, 'correlation'))
+energy = np.mean(graycoprops(glcm, 'energy'))
+homogeneity = np.mean(graycoprops(glcm, 'homogeneity'))
+return [contrast, correlation, energy, homogeneity]
+
+def load_data_glcm(path):
+X, y = [], []
+for label in sorted(os.listdir(path)):
+folder = os.path.join(path, label)
+if os.path.isdir(folder):
+for f in os.listdir(folder):
+fitur = ekstraksi_glcm(os.path.join(folder, f))
+if fitur:
+X.append(fitur)
+y.append(label)
+return np.array(X), np.array(y)
+
+X_train_glcm, y_train_glcm = load_data_glcm(path_train)
+X_test_glcm, y_test_glcm = load_data_glcm(path_test)
+
+print("\n[INFO] Melatih Model SVM dengan data GLCM...")
+model_svm = SVC(kernel='linear', class_weight='balanced', random_state=42)
+model_svm.fit(X_train_glcm, y_train_glcm)
+
+pred_svm = model_svm.predict(X_test_glcm)
+acc_glcm = accuracy_score(y_test_glcm, pred_svm) * 100
+
+# 5. HASIL AKHIR & CONFUSION MATRIX
+print("\n" + "="*50)
+print(f">>> AKURASI UJIAN AKHIR CNN MURNI : {acc_cnn:.2f}% <<<")
+print(f">>> AKURASI UJIAN AKHIR GLCM + SVM: {acc_glcm:.2f}% <<<")
+print("="*50)
+
+cm_cnn = confusion_matrix(y_true_cnn, pred_cnn_classes)
+cm_glcm = confusion_matrix(y_test_glcm, pred_svm)
+
+plt.figure(figsize=(12, 5))
+plt.subplot(1, 2, 1)
+sns.heatmap(cm_cnn, annot=True, fmt='d', cmap='Blues', xticklabels=class_names, yticklabels=class_names)
+plt.title(f'Confusion Matrix - CNN\n(Akurasi: {acc_cnn:.2f}%)')
+plt.xlabel('Tebakan Komputer')
+plt.ylabel('Kenyataan Asli')
+
+plt.subplot(1, 2, 2)
+sns.heatmap(cm_glcm, annot=True, fmt='d', cmap='Oranges', xticklabels=np.unique(y_test_glcm), yticklabels=np.unique(y_test_glcm))
+plt.title(f'Confusion Matrix - GLCM + SVM\n(Akurasi: {acc_glcm:.2f}%)')
+plt.xlabel('Tebakan Komputer')
+plt.ylabel('Kenyataan Asli')
+plt.tight_layout()
+plt.show()
+
+print("\n--- REPORT CNN ---")
+print(classification_report(y_true_cnn, pred_cnn_classes, target_names=class_names, zero_division=0))
+print("\n--- REPORT GLCM + SVM ---")
+print(classification_report(y_test_glcm, pred_svm, zero_division=0))
+
+
+Hasil nya sebagai berikut : 
+Drive already mounted at /content/drive; to attempt to forcibly remount, call drive.mount("/content/drive", force_remount=True). [INFO] Menyiapkan Data Training... Found 2087 images belonging to 3 classes. Found 261 images belonging to 3 classes. Found 261 images belonging to 3 classes. [INFO] Bobot Penyeimbang Data Jomplang (Class Weights): {0: np.float64(1.5992337164750958), 1: np.float64(0.7653098643197653), 2: np.float64(0.9362943023777479)} [INFO] Membangun Arsitektur CNN... === MEMULAI TRAINING MODEL CNN (15 EPOCHS) === Epoch 1/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 16s 191ms/step - accuracy: 0.4461 - loss: 1.1082 - val_accuracy: 0.5709 - val_loss: 0.9546 Epoch 2/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 136ms/step - accuracy: 0.5539 - loss: 0.9506 - val_accuracy: 0.5900 - val_loss: 0.8636 Epoch 3/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 135ms/step - accuracy: 0.6152 - loss: 0.8361 - val_accuracy: 0.6360 - val_loss: 0.7862 Epoch 4/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 10s 144ms/step - accuracy: 0.6531 - loss: 0.7607 - val_accuracy: 0.6322 - val_loss: 0.7856 Epoch 5/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 130ms/step - accuracy: 0.7034 - loss: 0.6377 - val_accuracy: 0.6284 - val_loss: 0.7553 Epoch 6/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 141ms/step - accuracy: 0.7628 - loss: 0.5434 - val_accuracy: 0.6130 - val_loss: 0.7934 Epoch 7/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 10s 146ms/step - accuracy: 0.7944 - loss: 0.4797 - val_accuracy: 0.7165 - val_loss: 0.7241 Epoch 8/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 128ms/step - accuracy: 0.8275 - loss: 0.4140 - val_accuracy: 0.6820 - val_loss: 0.8391 Epoch 9/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 140ms/step - accuracy: 0.8539 - loss: 0.3716 - val_accuracy: 0.7011 - val_loss: 0.8432 Epoch 10/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 140ms/step - accuracy: 0.8884 - loss: 0.2806 - val_accuracy: 0.6667 - val_loss: 0.9623 Epoch 11/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 8s 128ms/step - accuracy: 0.9094 - loss: 0.2269 - val_accuracy: 0.6935 - val_loss: 1.0582 Epoch 12/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 10s 144ms/step - accuracy: 0.8975 - loss: 0.2453 - val_accuracy: 0.6973 - val_loss: 0.9909 Epoch 13/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 136ms/step - accuracy: 0.9253 - loss: 0.1880 - val_accuracy: 0.6858 - val_loss: 1.1188 Epoch 14/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 129ms/step - accuracy: 0.9396 - loss: 0.1684 - val_accuracy: 0.7126 - val_loss: 1.1601 Epoch 15/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 137ms/step - accuracy: 0.9530 - loss: 0.1362 - val_accuracy: 0.7050 - val_loss: 1.2029 9/9 ━━━━━━━━━━━━━━━━━━━━ 2s 124ms/step === MEMULAI EKSTRAKSI FITUR GLCM UNTUK SVM === [INFO] Melatih Model SVM dengan data GLCM... ================================================== >>> AKURASI UJIAN AKHIR CNN MURNI : 72.03% <<< >>> AKURASI UJIAN AKHIR GLCM + SVM: 39.85% <<< ================================================== --- REPORT CNN --- precision recall f1-score support Mutu_I 0.52 0.60 0.55 47 Mutu_II 0.69 0.63 0.66 101 Tidak_Layak 0.84 0.85 0.85 113 accuracy 0.72 261 macro avg 0.68 0.69 0.69 261 weighted avg 0.72 0.72 0.72 261 --- REPORT GLCM + SVM --- precision recall f1-score support Mutu_I 0.18 0.36 0.24 47 Mutu_II 0.57 0.24 0.34 101 Tidak_Layak 0.50 0.56 0.53 113 accuracy 0.40 261 macro avg 0.42 0.39 0.37 261 weighted avg 0.47 0.40 0.40 261 
+# 3. Implementasi CNN
+model = Sequential([
+Input(shape=(224, 224, 3)),
+Conv2D(32, (3,3), activation='relu'),
+MaxPooling2D(2, 2),
+Conv2D(64, (3,3), activation='relu'),
+MaxPooling2D(2,2),
+Conv2D(128, (3,3), activation='relu'),
+MaxPooling2D(2,2),
+Flatten(),
+Dense(128, activation='relu'),
+Dropout(0.5),
+Dense(num_classes, activation='softmax')
+])
+
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+print("\n=== MEMULAI TRAINING CNN ===")
+history = model.fit(train_generator, epochs=15, validation_data=valid_generator, verbose=1)
+
+# Evaluasi CNN
+test_loss, test_acc = model.evaluate(test_generator, verbose=0)
+cnn_accuracy = test_acc * 100
+
+
+Hasil nya sebagai berikut :
+=== MEMULAI TRAINING CNN === Epoch 1/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 16s 187ms/step - accuracy: 0.4643 - loss: 1.1360 - val_accuracy: 0.5211 - val_loss: 0.9455 Epoch 2/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 8s 127ms/step - accuracy: 0.5544 - loss: 0.9293 - val_accuracy: 0.6475 - val_loss: 0.8188 Epoch 3/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 141ms/step - accuracy: 0.6172 - loss: 0.8430 - val_accuracy: 0.7165 - val_loss: 0.7326 Epoch 4/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 141ms/step - accuracy: 0.6766 - loss: 0.7297 - val_accuracy: 0.6973 - val_loss: 0.6495 Epoch 5/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 128ms/step - accuracy: 0.7010 - loss: 0.6701 - val_accuracy: 0.6897 - val_loss: 0.7421 Epoch 6/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 139ms/step - accuracy: 0.7341 - loss: 0.6210 - val_accuracy: 0.7050 - val_loss: 0.7168 Epoch 7/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 137ms/step - accuracy: 0.7652 - loss: 0.5378 - val_accuracy: 0.7050 - val_loss: 0.6970 Epoch 8/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 133ms/step - accuracy: 0.7997 - loss: 0.4689 - val_accuracy: 0.6973 - val_loss: 0.6778 Epoch 9/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 141ms/step - accuracy: 0.8424 - loss: 0.3960 - val_accuracy: 0.7011 - val_loss: 0.7921 Epoch 10/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 10s 149ms/step - accuracy: 0.8558 - loss: 0.3450 - val_accuracy: 0.7318 - val_loss: 0.7979 Epoch 11/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 135ms/step - accuracy: 0.8721 - loss: 0.3153 - val_accuracy: 0.6973 - val_loss: 0.9221 Epoch 12/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 141ms/step - accuracy: 0.8922 - loss: 0.2722 - val_accuracy: 0.7165 - val_loss: 1.1827 Epoch 13/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 9s 133ms/step - accuracy: 0.8999 - loss: 0.2556 - val_accuracy: 0.7088 - val_loss: 1.1458 Epoch 14/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 10s 150ms/step - accuracy: 0.9171 - loss: 0.1986 - val_accuracy: 0.7011 - val_loss: 1.2952 Epoch 15/15 66/66 ━━━━━━━━━━━━━━━━━━━━ 10s 144ms/step - accuracy: 0.9248 - loss: 0.2067 - val_accuracy: 0.7241 - val_loss: 1.1147 
+
+
+import joblib
+import os
+
+# Memastikan variabel model_svm atau models_comp tersedia
+if 'model_svm' in globals():
+joblib.dump(model_svm, '/content/drive/MyDrive/Model_SVM_GLCM.pkl')
+print("[INFO] Model SVM berhasil disimpan!")
+elif 'models_comp' in globals() and 'SVM' in models_comp:
+joblib.dump(models_comp['SVM'], '/content/drive/MyDrive/Model_SVM_GLCM.pkl')
+print("[INFO] Model SVM berhasil disimpan!")
+else:
+print("[ERROR] Model SVM tidak ditemukan di memori. Pastikan cell training (f34dac66 atau 7a4ff796) sudah dijalankan.")
+
+# 2. Menyimpan model CNN ke Google Drive
+if 'model' in globals():
+model.save('/content/drive/MyDrive/Model_CNN_Bawang_Final.h5')
+print("[INFO] Model CNN berhasil disimpan!")
+else:
+print("[ERROR] Model CNN tidak ditemukan di memori. Silakan jalankan ulang cell training CNN.")
+
+
+Hasil nya sebagai berikut :
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. [INFO] Model SVM berhasil disimpan! [INFO] Model CNN berhasil disimpan! 
+
+
+lalu untuk bagian outline yang saya punya machine learning nah kamu baca semua nya di pendoman lalu langkah selanjut nya kamu nyusun skripsi full dari semua prograem yang saya kasih ke kamu 
+
+“NOTE BUAT KAMU BIKIN SKRIPSI”
+
+JUDUL SKRIPSI:
+ PENERAPAN COMPUTER VISION UNTUK SORTASI MUTU BAWANG MERAH (ALLIUM ASCALONICUM L.) BERDASARKAN SNI 3159:2013 MENGGUNAKAN EKSTRAKSI FITUR GLCM DAN ALGORITMA CNN
+
+
+
+1. Kamu buat kan semua full skripsi dengan semua nya sudah di Turnitin
+2. Kamu bikin semua nya jangan lupa kutipan yang menurut kamu di tarukan yang terbaik 
+3. Jika ada hitung hitungan di masukan saja dan itu semua harus lengkap dan sesuai kebutuhan atau Keputusan yang tepat menurut kamu jika itu sanggat layak di masukan di skripsi 
+4. Tolong semua nya dari daftar isi yang kamu pikirkan semua nay di tuangkan dan di tuntaskan semua nya sampai finis 
+5. Tolong bab 2 nya kalua bisa di panjangin  dan untuk bab 3 sedikit lebih Panjang dan bab 4 agak Panjang .
+6. tolong untuk bagian gambar peletakan nya kamu bikin teks nya aja untuk bagian bagian bab 3 atau bab 4 jika boleh ada kemunan jika di butuh kan bab 2 juag boleh 
+7,bikin alu diagram nya juga beserta tentang nama2x gambar gambar nya biar saya lasung bikin secara senciri kamu hanaya kasih arahan nya aja dan harus lengkap sampai ahkir
+8. Kamu buat semua nya itu secara tuntas pok0 nya semua daftar isi harus di bikin semua nya jangan sampai terlewat 
+9.untuk masalah dosen pa dan lain bikin kolom nya aja dan intruksi siapa aja yang di isi 
+10. Tolong di bagian skripsi nay harus kamu bikin memenuhi standar S1 yang menunjang professional yang sanggat menutud hasil yang terbaik karena dosen penguji say aitu lulusan s3 dan s2 yang sanggat galak dan sanggat kopeten 
+11. Kamu bikin semua nya itu dengan prosedur paling pintar di ai mu yang sanggat pengalaman di dunia ai dan saya sanggat percaya ke kamu cloude sonnet karena banyak manusia atau Perusahaan atau apapun itu yang sanggat mengandalakan mu sebagai ai terbaik di dunia.
+12. bikin semua prosedur sebaik mungkin di program dan bikin semua nya di bab 2x yang menurut kamu yang layak di isi dan itu semua sesuai dengan hak akses prorgamyang kamu pegang saya butuh semua nya di masukan di skripsi saya buat skripsi ahkir atau tuggas saya 
+13. Jangan blunder Ketika kamu membaca pendoman dan hayati dengan baik karena saya sudah tidak banyak waktu lagi untuk mengerjakan skripsi karena sudah tanggal 27 juni tahun 2026 dan tanggal 28 juni tanggal 2026 itu hari saya ketemu dosen pa untuk mengoreksi semua nya hingga lengkap 
+14. Dan yang satu lagi link  data set juga kamu masukan di bab yang menurut kamu pas dan itu juga kamu cuman kasih intruksi kasih link data set dan lain lain hingga program jadi seperti program yang kita kerjakan di obrolan atas 
+15. Selebih nya saya memepercayakan ke kamu saya sudah pasrah hanya berharap kepada kamu
+ 
+tolong bikin skripsi full sesuai pengalaman mu di dunia karena saya yakin kamu sudah banyak mempelajari semua skripsi di bumi dan di dunia maupaun apapun yang kamu pelajari di antar bangsa dan negara saya menaruh harapan ke kamu cloude sonnet.
+
+

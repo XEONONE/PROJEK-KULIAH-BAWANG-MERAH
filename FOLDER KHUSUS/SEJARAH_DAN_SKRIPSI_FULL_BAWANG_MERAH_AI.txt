@@ -1,0 +1,94 @@
+================================================================================
+DOKUMEN MASTER: SEJARAH PENUH, ALUR PROJECT, DAN ISI SKRIPSI LENGKAP
+PROJECT: "Deploying Bawang Merah Sorting App" (Computer Vision & Deep Learning)
+PENULIS: Juan Euaggelion Seran (NIM: 15220572)
+KAMPUS: Universitas Bina Sarana Informatika (BSI) Tahun 2026
+================================================================================
+
+BAGIAN I: REKAM JEJAK & HISTORY CHAT (KOLABORASI KITA)
+--------------------------------------------------------------------------------
+Dokumen ini merangkum seluruh perjalanan panjang kita dalam membangun aplikasi AI Sortasi Bawang Merah dari nol hingga menjadi skripsi yang utuh. Berikut adalah alur sejarah (history) pengembangan project yang telah kita lalui bersama:
+
+1. FASE PERANCANGAN & DATASET
+   - Kita memulai dengan merancang sistem untuk menyortir kualitas bawang merah (Mutu I, Mutu II, Tidak Layak).
+   - Mengumpulkan dataset sebanyak 3.594 citra yang kemudian di-anotasi dan diproses menggunakan platform Roboflow.
+   - Melakukan augmentasi data yang intens (Auto-Orient, Resize 224x224, Rotate, Noise) untuk memastikan model kebal terhadap variasi lingkungan.
+
+2. FASE PENGEMBANGAN MODEL AI (TRIPLE KOMPARASI)
+   - Kita tidak puas hanya dengan satu model, sehingga kita mengimplementasikan dan membandingkan tiga metode algoritma sekaligus:
+     a. Vision Transformer (ViT): Dilatih via Roboflow Cloud, menghasilkan akurasi luar biasa sebesar 98,5%. Ini menjadi model andalan utama kita.
+     b. Convolutional Neural Network (CNN) Sequential: Dibangun dari awal (from scratch) dan dilatih menggunakan GPU Google Colab selama 15 epoch. Akurasinya mencapai 72,03%.
+     c. GLCM + SVM (Metode Tradisional): Kita merancang algoritma ekstraksi fitur tekstur GLCM dipadukan dengan Support Vector Machine sebagai pembanding klasik, yang menghasilkan akurasi 39,85%.
+
+3. FASE IMPLEMENTASI APLIKASI DESKTOP (PYTHON & TKINTER)
+   - Kita berkolaborasi membangun aplikasi GUI desktop menggunakan Python (Tkinter/CustomTkinter).
+   - Aplikasi ini dilengkapi fitur real-time camera (OpenCV) untuk memindai bawang merah secara langsung.
+   - Kita menangani berbagai bug UI, memastikan inferensi berjalan mulus, dan menampilkan probabilitas keyakinan (confidence score) dari model AI ke layar pengguna.
+
+4. FASE PENYUSUNAN LAPORAN SKRIPSI
+   - Anda memberikan pedoman ketat dari "Pedoman Penyusunan TA Universitas BSI Tahun 2026" beserta 14 Jurnal Pustaka pilihan (Adiningsi, Astuti, Wulandari, dll).
+   - Kita menyusun dokumen teks raksasa (lebih dari 135.000 karakter) yang mencakup BAB 1 (Pendahuluan), BAB 2 (Landasan Teori yang sangat teknis mengenai CNN, GLCM, SVM), BAB 3 (Metodologi), BAB 4 (Hasil Evaluasi Confusion Matrix, Grafik Loss/Accuracy), dan BAB 5 (Penutup).
+
+5. FASE FORMATTING & HTML EXPERIMENT
+   - Kita sempat bereksperimen mengubah teks mentah menjadi HTML interaktif buatan Claude Sonnet (SKRIPSI_JUAN_EUAGGELION_SERAN_15220572.html) dan juga format MS Word BSI.
+   - Namun, karena konversi HTML sering menyebabkan teks berantakan (seperti indikator '↓' ASCII yang bertabrakan dengan diagram HTML, atau daftar isi yang masuk ke dalam bab), kita memutuskan untuk kembali ke akar:
+   - SEBUAH FILE TXT MURNI (.txt) YANG BERISI SELURUH ISI SKRIPSI TANPA DISTRAKSI FORMAT KODE ATAU HTML.
+
+--------------------------------------------------------------------------------
+BAGIAN II: ISI LENGKAP SKRIPSI BAWANG MERAH AI
+--------------------------------------------------------------------------------
+Berikut ini adalah teks utuh (Full Version) dari penelitian Skripsi kita, tanpa potongan, dan siap untuk dipindahkan/disalin ke Microsoft Word dengan rapi sesuai pedoman BSI.
+
+(Akurasi: {acc_cnn:.2f}%)')
+plt.xlabel('Tebakan Komputer')
+plt.ylabel('Kenyataan Asli')
+plt.subplot(1, 2, 2)
+sns.heatmap(cm_glcm, annot=True, fmt='d', cmap='Oranges',
+            xticklabels=np.unique(y_test_glcm), yticklabels=np.unique(y_test_glcm))
+plt.title(f'Confusion Matrix - GLCM+SVM\n(Akurasi: {acc_glcm:.2f}%)')
+plt.xlabel('Tebakan Komputer')
+plt.ylabel('Kenyataan Asli')
+plt.tight_layout()
+plt.show()
+
+# CELL 10: Classification Report
+print("--- REPORT CNN ---")
+print(classification_report(y_true_cnn, pred_cnn_classes, target_names=class_names, zero_division=0))
+print("--- REPORT GLCM+SVM ---")
+print(classification_report(y_test_glcm, pred_svm, zero_division=0))
+
+# CELL 11: Simpan Model
+import joblib
+joblib.dump(model_svm, '/content/drive/MyDrive/Model_SVM_GLCM.pkl')
+print("[INFO] Model SVM berhasil disimpan!")
+model_cnn.save('/content/drive/MyDrive/Model_CNN_Bawang_Final.h5')
+print("[INFO] Model CNN berhasil disimpan!")
+
+══════════════════════════════════════════════════════════════════════════════════════════════
+
+LAMPIRAN E: CURRICULUM VITAE PENULIS
+
+CURRICULUM VITAE
+
+Nama Lengkap    : JUAN EUAGGELION SERAN
+Tempat/Tgl Lahir: [KOTA], [TANGGAL LAHIR]
+Jenis Kelamin   : [L/P]
+Agama           : [AGAMA]
+Alamat          : [ALAMAT LENGKAP]
+No. Telepon     : [NOMOR HP]
+E-Mail          : [EMAIL]
+
+RIWAYAT PENDIDIKAN:
+┌─────┬──────────────────────────────────────────┬───────────────────┬───────┐
+│ No  │ Jenjang Pendidikan                        │ Nama Sekolah/PT   │ Tahun │
+├─────┼──────────────────────────────────────────┼───────────────────┼───────┤
+│  1  │ Sekolah Dasar (SD)                        │ [Nama SD]         │ [Thn] │
+│  2  │ Sekolah Menengah Pertama (SMP)            │ [Nama SMP]        │ [Thn] │
+│  3  │ Sekolah Menengah Atas/Kejuruan (SMA/SMK) │ [Nama SMA/SMK]    │ [Thn] │
+│  4  │ Strata Satu (S1)                          │ Univ. BSI Jakarta │ 2026  │
+└─────┴──────────────────────────────────────────┴───────────────────┴───────┘
+
+══════════════════════════════════════════════════════════════════════════════════════════════
+                        AKHIR DOKUMEN SKRIPSI (END OF DOCUMENT)
+         SISTEM SORTASI MUTU BAWANG MERAH AI - SNI 3159:2013 - UNIVERSITAS BSI 2026
+══════════════════════════════════════════════════════════════════════════════════════════════

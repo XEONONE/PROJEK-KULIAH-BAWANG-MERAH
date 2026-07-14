@@ -1,0 +1,210 @@
+====================================================================================================
+BEDAH KODE PROGRAM: app.py (CORE APPLICATION)
+SISTEM SORTASI MUTU BAWANG MERAH AI - SNI 3159:2013
+====================================================================================================
+File ini adalah panduan lengkap membaca setiap bait kode (baris per baris) di dalam file app.py.
+Panduan ini dirancang khusus untuk mempermudah Anda memahami logika pemrograman dan 
+menjawab pertanyaan-pertanyaan saat sidang skripsi mengenai "Bagaimana program ini bekerja?".
+
+====================================================================================================
+BLOK 1: PENGATURAN LINGKUNGAN & IMPORT PUSTAKA
+====================================================================================================
+```python
+import os, sys, time, logging, threading, traceback
+import concurrent.futures
+
+# Mengabaikan peringatan OneDNN dari TensorFlow agar terminal latar belakang tetap bersih
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
+import numpy as np
+import cv2
+from PIL import Image, ImageTk
+import tkinter as tk
+from tkinter import filedialog, messagebox, ttk
+```
+PENJELASAN BAIT KODE:
+- `import os, sys, time...`: Mengimpor modul bawaan Python untuk berinteraksi dengan sistem operasi, menghitung waktu (speed timing), serta menjalankan kode paralel (threading & concurrent.futures).
+- `os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'`: Baris ini menyembunyikan tulisan-tulisan peringatan CPU dari library TensorFlow agar log sistem kita tidak penuh dengan tulisan yang tidak relevan.
+- `numpy`: Library untuk memproses angka dalam bentuk array (matriks gambar).
+- `cv2`: Library OpenCV untuk membaca gambar dari harddisk dan mengubah warnanya.
+- `PIL`: Pillow, digunakan untuk menampilkan gambar ke antarmuka Tkinter.
+- `tkinter`: Pustaka utama pembuat aplikasi desktop / jendela antarmuka (GUI).
+
+====================================================================================================
+BLOK 2: SISTEM LOGGING (PENCATATAN ERROR)
+====================================================================================================
+```python
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOG_FILE = os.path.join(BASE_DIR, "app_error.log")
+
+def setup_logger(): ...
+def log_info(msg): ...
+def log_error(msg, exc=None): ...
+```
+PENJELASAN BAIT KODE:
+- `BASE_DIR`: Mendeteksi secara otomatis di folder mana aplikasi ini tersimpan.
+- `LOG_FILE`: Menamai file teks tempat error disimpan ("app_error.log").
+- `setup_logger()`: Membuat file log tersebut. Semua kejadian penting (berhasil atau gagal) direkam ke file ini, termasuk fungsi `log_info` (untuk sukses) dan `log_error` (untuk gagal + melampirkan tulisan error aslinya dari komputer lewat `traceback.format_exc()`).
+
+====================================================================================================
+BLOK 3: PEMUATAN MODEL KECERDASAN BUATAN (AI)
+====================================================================================================
+```python
+from tensorflow.keras.models import load_model
+import joblib
+from skimage.feature import graycomatrix, graycoprops
+
+model_cnn = load_model("Model_CNN_Fixed.h5")
+model_svm = joblib.load("Model_SVM_GLCM.pkl")
+```
+PENJELASAN BAIT KODE:
+- `load_model("Model_CNN_Fixed.h5")`: Mengimpor "otak buatan" CNN (Keras) ke dalam RAM komputer. Otak ini akan menebak gambar berdasarkan piksel (Deep Learning).
+- `joblib.load("Model_SVM_GLCM.pkl")`: Mengimpor "otak buatan" SVM.
+- `graycomatrix, graycoprops`: Mengimpor fungsi ekstraksi fitur tekstur GLCM (kekasaran/kehalusan kulit bawang).
+
+====================================================================================================
+BLOK 4: VARIABEL GLOBAL SNI & PEWARNAAN
+====================================================================================================
+```python
+class_names = {0: "Kelas I", 1: "Kelas II", 2: "Tidak Layak"}
+class_labels = {
+    "Kelas I": "Kelas I - Mutu Baik",
+    "Kelas II": "Kelas II - Mutu Sedang",
+    "Tidak Layak": "Tidak Layak / Mutu Rendah"
+}
+class_colors = {"Kelas I": "#2ecc71", "Kelas II": "#f1c40f", "Tidak Layak": "#e74c3c"}
+```
+PENJELASAN BAIT KODE:
+AI tidak mengeluarkan teks, ia hanya mengeluarkan angka (0, 1, 2).
+- `class_names`: Menerjemahkan angka output AI menjadi teks (0 jadi Kelas I, dst).
+- `class_labels`: Menerjemahkan Kelas I menjadi teks panjang untuk ditampilkan di UI.
+- `class_colors`: Menerjemahkan hasil ke warna UI (Kelas I = Hijau #2ecc71, II = Kuning, Tidak Layak = Merah #e74c3c).
+
+====================================================================================================
+BLOK 5: FUNGSI BANTUAN UI (ANIMASI & TOOLTIP)
+====================================================================================================
+```python
+def ketik_animasi(widget, teks, delay=15, index=0, ...):
+    ...
+def buat_bar(nilai, batas):
+    ...
+class ToolTip:
+    ...
+```
+PENJELASAN BAIT KODE:
+- `ketik_animasi`: Meniru efek hacker di film-film di mana huruf muncul satu-persatu. Fungsi ini menggunakan `widget.after(delay, ...)` untuk mengulang dirinya sendiri (rekursif) menempelkan huruf tiap 15 milidetik ke terminal teks.
+- `buat_bar`: Mengubah angka persentase (misal 50%) menjadi bentuk gambar balok `[|||||    ]`.
+- `ToolTip`: Kelas jendela melayang (pop-up) saat mouse menyentuh sebuah gambar bawang di Mode 2. Jendela ini menggunakan perintah `.winfo_pointerx()` untuk mengejar arah kursor mouse agar pop-up tidak berkedip.
+
+====================================================================================================
+BLOK 6: FUNGSI INFERENSI/PREDIKSI AI (OTAK SISTEM)
+====================================================================================================
+```python
+def tugas_cnn_gpu(img_bgr):
+    img_rgb = cv2.cvtColor(cv2.resize(img_bgr, (224, 224)), cv2.COLOR_BGR2RGB)
+    pred_cnn = model_cnn.predict(np.expand_dims(img_rgb, axis=0))[0]
+    ...
+```
+PENJELASAN TUGAS CNN:
+- `cv2.resize`: Gambar dipaksa menjadi kotak 224x224 agar muat ke mulut AI.
+- `cvtColor`: Tkinter membaca BGR, AI CNN minta RGB, maka dikonversi warnanya.
+- `np.expand_dims`: Menambahkan sumbu batch (syarat mutlak input keras).
+- `predict()`: AI mengeluarkan array tebakan.
+- `np.argmax(pred_cnn)`: Mencari tebakan terbesar. Hasilnya kemudian dipasangkan ke dictionary warna/teks di Blok 4.
+
+```python
+def tugas_svm_cpu(img_bgr):
+    img_gray = cv2.cvtColor(cv2.resize(img_bgr, (224, 224)), cv2.COLOR_BGR2GRAY)
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    img_gray = clahe.apply(img_gray)
+    glcm = graycomatrix(img_gray, distances=[1], angles=[0], levels=256, symmetric=True, normed=True)
+    ...
+```
+PENJELASAN TUGAS GLCM+SVM:
+- Berbeda dari CNN, GLCM tidak butuh warna. Gambar diubah ke Grayscale.
+- `createCLAHE`: Gambar dinaikkan ketajamannya (Contrast Equalization) supaya urat-urat kulit bawang terlihat jelas oleh komputer.
+- `graycomatrix`: Mencari keterhubungan antar piksel sejauh 1 piksel (distances=1) pada sudut datar 0 derajat (angles=0).
+- `graycoprops`: Matriks GLCM diekstrak menjadi 4 nilai: Contrast, Correlation, Energy, dan Homogeneity.
+- Keempat nilai tekstur ini dilempar ke `model_svm.predict()` untuk digolongkan mutunya. Nilai kepastian probabilitas (Confidence) dihitung menggunakan jarak antar garis (decision_function).
+
+====================================================================================================
+BLOK 7: JENDELA UTAMA & TEMA (THEME)
+====================================================================================================
+```python
+root = tk.Tk()
+...
+def apply_tema(tema):
+    ...
+```
+PENJELASAN:
+- `tk.Tk()`: Menciptakan bingkai program utama.
+- `apply_tema()`: Fungsi sakti yang mengubah seluruh warna kotak, teks, dan tombol (dari putih terang ke abu-abu gelap cybernetic). Ini bekerja dengan cara "meloop" setiap widget di layar secara rekursif (`winfo_children()`) lalu mengubah argumen `bg` dan `fg` nya.
+
+====================================================================================================
+BLOK 8: MODE 1 (ANALISIS TUNGGAL / DETAIL)
+====================================================================================================
+```python
+def jalankan_prediksi_mode1(filepath):
+    t_total_mulai = time.time()
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        hasil_cnn = executor.submit(tugas_cnn_gpu, img_bgr).result()
+        hasil_svm = executor.submit(tugas_svm_cpu, img_bgr).result()
+    ...
+```
+PENJELASAN:
+- Fungsi `ThreadPoolExecutor` adalah pahlawannya. Ia melempar perintah otak AI ke luar "jalur antrian" utama UI agar jendela tidak "Not Responding" saat menghitung kalkulasi matematika.
+- `time.time()` digunakan mencatat detik, agar kita tahu berapa cepat sistem menganalisis satu bawang.
+- Hasil dari thread pool ini akan dimasukkan ke fungsi `ketik_animasi` agar terminal Biru dan Orange di layar menuliskan hasil tebakan secara elegan. 
+
+====================================================================================================
+BLOK 9: MODE 2 (ANALISIS MASSAL / BATCH SCANNER)
+====================================================================================================
+```python
+def proses_batch_mode2(filepaths):
+    for widget in grid_frame.winfo_children(): widget.destroy()
+    canvas_mode2.yview_moveto(0)
+    ...
+    for path in filepaths:
+        ...
+```
+PENJELASAN:
+- `winfo_children().destroy()`: Baris kritis! Berguna membersihkan memori gambar lama dari layar jika pengguna menekan "Pilih Folder Baru".
+- `yview_moveto(0)`: Mengembalikan guliran layar kembali ke atas.
+- Program memakai mekanisme "Grid Layout". Kolom bertambah (col_idx += 1). Jika kolom sudah lewat 3 buah, ia akan turun membuat barisan ke bawah (row_idx += 1). Hal ini terus berulang menghasilkan barisan galeri yang rapi.
+- Pada akhirnya, status bar di bagian bawah layar melaporkan rincian (Contoh: Total proses 55 gambar, waktu 12 detik, kecepatan rata-rata 0.2 detik). Semua parameter kecepatan ini ditulis ke Troubleshooter (log file).
+
+====================================================================================================
+BLOK 10: SCROLL MOUSE UNIVERSAL
+====================================================================================================
+```python
+def aktifkan_scroll(widget, ...):
+    widget.bind("<MouseWheel>", lambda e: _scroll_canvas(e, target_canvas), add="+")
+```
+PENJELASAN:
+- Sistem Tkinter bawaan kadang cacat saat scroll dengan mouse wheel jika kursor kita tidak mengenai batas luar kanvas (misal kursor menyentuh fotonya langsung).
+- Fungsi ini menempelkan (`bind`) detektor event `<MouseWheel>` secara paksa ke SELURUH widget dan frame yang tercipta secara rekursif. Sehingga di mana pun ujung kursor diletakkan, layar pasti tetap bisa tergulir ke atas dan ke bawah.
+
+====================================================================================================
+BLOK 11: TROUBLESHOOTER (DIAGNOSTIK LOG)
+====================================================================================================
+```python
+def buka_troubleshooter():
+    ...
+    def refresh_log(auto=False):
+        ...
+    def _auto_refresh_loop():
+        ...
+```
+PENJELASAN:
+- Toplevel window yang tampil dari Menu Bar -> Buka Troubleshooter.
+- Menampilkan teks log yang ditangkap dari file `app_error.log`.
+- `refresh_log`: Membaca baris teks, menyaring kata-kata kunci (seperti [ERROR], [SPEED]), dan mewarnainya sesuai aturan tag Tkinter (merah, emas, dll).
+- `_auto_refresh_loop`: Agar sistem canggih, layar otomatis menyegarkan diri secara live. Namun untuk menghemat RAM (Random Access Memory) mesin komputer Anda, fungsi ini akan berhenti otomatis secara mandiri (timeout ke Manual Mode) setelah berkedip selama 5 siklus berulang (sekitar 7 detik semenjak dibuka).
+
+====================================================================================================
+KESIMPULAN UMUM UNTUK PRESENTASI SIDANG
+====================================================================================================
+Program ini sangat utuh, kokoh, dan rapi secara prosedural. Keseluruhan antarmuka dibangun 
+dengan OOP dan prosedural programming tingkat lanjut, dibalut pencegah kebocoran memori (garbage collection)
+secara mekanis. Model kecerdasan buatan dirancang saling mem-backup: CNN mendeteksi bentuk secara buta
+berbasis kernel konvolusi 2D, sedangkan GLCM+SVM memastikan tekstur dan kekasaran kulit bawang diekstrak secara matematis lewat filter adaptif CLAHE. Dua kekuatan ini menghadirkan perbandingan AI yang layak dibahas mendalam untuk kesimpulan akhir naskah ilmiah Anda.
