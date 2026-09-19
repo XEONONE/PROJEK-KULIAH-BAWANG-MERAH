@@ -114,5 +114,4 @@ Berdasarkan masukan sidang skripsi, tiga arah pengembangan yang disarankan:
 
 ## 👤 Peneliti
 
-**Juan Euaggelion Seran** — Program Studi Informatika, Universitas Bina Sarana Informatika
-Dosen Pembimbing: Giatika Chrisnawati
+**Juan Euaggelion Seran** — Program Studi Informatika, Universitas Bina Sarana Informatika 
